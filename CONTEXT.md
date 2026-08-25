@@ -60,8 +60,31 @@ An earlier draft split this in two — a white recolouring section and a separat
 cream one for the artwork. That was wrong, and the client corrected it: one
 section, one ground, both paragraphs.
 
-**Reef** — the hand-drawn line work of turtles and kelp within the Story. Artwork,
-not a section: it has no copy of its own and no landmark.
+**Reef** — the hand-drawn line work of turtles and kelp on both cream sections,
+the Story and the Manifesto. Artwork, not a section: it has no copy of its own and
+no landmark. It drifts continuously rather than sitting still — water does not stop
+when the visitor stops scrolling.
+
+**Masterwork** — the three bands on what the marine work in the building means.
+They Stack.
+
+**Return** — the cream section after the Beliefs carrying the Story's passage a
+second time. Deliberate repetition, set differently so it reads as a return rather
+than as a block pasted twice.
+
+**Manifesto** — Frank J. Russo's statement of what the Castle is for. Travels
+through a Window, like the Story.
+
+**Descent** — the shared underwater ground beneath Explore Every Corner, the
+Beliefs and the Gallery. Two wrappers rather than one, because the Return between
+them is Paper and the water skips it.
+
+**Stack** — sections held sticky at the top of the viewport so each climbs over the
+one before it. Three screens of content costing one screen at a time.
+
+**Rail** — the Gallery's horizontal strip. It drifts on its own, pauses under the
+pointer, and can be dragged. Its photographs are rendered twice so the loop has no
+seam; anything added to it must be added to both passes.
 
 **Rooms** — the three-up row of interior frames, each labelled in caps *above* its
 image: Living and Dining Beneath the Waves; The Door of Perception – Master Chamber;
@@ -97,8 +120,10 @@ assistive technology.
 The digits are drawn as paths rather than typed, because a text node cannot be
 stroked on.
 
-**Divider** — a rule with a chess piece at its centre and wings tapering either
-side, set beneath section labels.
+**Divider** — a rule with a chess piece at its centre, diamonds either side. Used
+in the Intro only. It was set beneath every section heading and the client asked
+for those to go; the Intro's stays because it is not a heading but the closing beat
+of the arrival.
 
 **Corners** — gold brackets at the four corners of a band. Corners rather than a
 full border: a closed rectangle reads as a box drawn around content, corners read
