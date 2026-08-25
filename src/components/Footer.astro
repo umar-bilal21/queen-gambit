@@ -4,7 +4,6 @@ import { Image } from 'astro:assets';
 import { site, contactHref } from '../content/site';
 import type { Photo } from '../content/images';
 import Monogram from './Monogram.astro';
-import Divider from './ornament/Divider.astro';
 
 /**
  * The page's ending: the view the whole building is arranged around, running
@@ -48,7 +47,6 @@ const { photo } = Astro.props;
       <p class="footer__name u-eyebrow u-eyebrow--wide">The Queen’s Gambit Castle</p>
     </div>
 
-    <Divider piece="pawn" width="min(60vw, 11rem)" class="footer__crest" />
 
     <nav class="footer__nav" aria-label="Footer">
       <ul class="footer__nav-list">
@@ -144,10 +142,6 @@ const { photo } = Astro.props;
 
   .footer__name {
     color: var(--ink-muted);
-  }
-
-  .footer__crest {
-    color: var(--gold);
   }
 
   .footer__nav-list {

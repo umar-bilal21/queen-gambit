@@ -1,0 +1,59 @@
+# Builds the site and publishes it to GitHub Pages so the client can be sent a
+# link. Runs on every push to main, so the URL is always the current design.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Read the repo, write the Pages deployment, and mint the token Pages needs.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time. A queued run is allowed to finish rather than being
+# cancelled, so a push never leaves the site half-published.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # The lockfile is authoritative: a deploy should never silently resolve a
+      # different dependency tree than the one that was tested locally.
+      - run: pnpm install --frozen-lockfile
+
+      # Typecheck before publishing. The build itself does not typecheck, so
+      # without this a type error would reach the client as a broken page.
+      - run: pnpm check
+
+      - run: pnpm build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

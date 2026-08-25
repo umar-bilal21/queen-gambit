@@ -4,7 +4,6 @@ import { Image } from 'astro:assets';
 import { site } from '../content/site';
 import type { Photo } from '../content/images';
 import CrownedNumeral from './ornament/CrownedNumeral.astro';
-import Divider from './ornament/Divider.astro';
 import Corners from './ornament/Corners.astro';
 
 /**
@@ -55,7 +54,6 @@ const titleLines = [`${titleLead} BUILT`, titleRest.join(' BUILT ')];
     <p class="u-eyebrow u-eyebrow--wide beliefs__eyebrow" data-reveal>{site.beliefs.eyebrow}</p>
 
     <div class="beliefs__headline">
-      <Divider piece="queen" width="min(70vw, 13rem)" class="beliefs__crest" />
       <h2 class="beliefs__title" id="beliefs-title" data-reveal-heading>
         <span>{titleLines[0]}</span>{' '}
         <span class="beliefs__title-muted">{titleLines[1]}</span>
@@ -217,10 +215,6 @@ const titleLines = [`${titleLead} BUILT`, titleRest.join(' BUILT ')];
     display: grid;
     justify-items: start;
     gap: var(--space-s);
-  }
-
-  .beliefs__crest {
-    color: var(--gold);
   }
 
   /*

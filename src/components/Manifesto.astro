@@ -1,7 +1,6 @@
 ---
 import { site, contactHref } from '../content/site';
 import ReefArtwork from './ReefArtwork.astro';
-import Divider from './ornament/Divider.astro';
 
 /**
  * Frank J. Russo's statement of what the Castle is for.
@@ -45,7 +44,6 @@ import Divider from './ornament/Divider.astro';
       <h2 class="manifesto__title" id="manifesto-title" data-reveal-heading>
         {site.manifesto.title}
       </h2>
-      <Divider piece="queen" width="min(60vw, 12rem)" class="manifesto__crest" />
 
       <div class="manifesto__window" data-manifesto-window>
         <div class="manifesto__track" data-manifesto-track>
@@ -98,11 +96,6 @@ import Divider from './ornament/Divider.astro';
 
   .manifesto__title {
     font-size: var(--step-4);
-  }
-
-  .manifesto__crest {
-    color: var(--accent);
-    margin-block-end: var(--space-xs);
   }
 
   .manifesto__window {

@@ -3,7 +3,6 @@ import { Image } from 'astro:assets';
 
 import { site, contactHref } from '../content/site';
 import type { Photo } from '../content/images';
-import Divider from './ornament/Divider.astro';
 
 /**
  * The close: two photographs combined into one full-bleed field, an invitation,
@@ -48,7 +47,6 @@ const { left, right } = Astro.props;
 
   <div class="enter__inner u-container">
     <h2 class="enter__title" id="enter-title" data-reveal-heading>{site.enter.title}</h2>
-    <Divider piece="queen" width="min(60vw, 12rem)" class="enter__crest" />
     <p class="enter__subtitle u-eyebrow" data-reveal data-reveal-delay="0.12">
       {site.enter.subtitle}
     </p>
@@ -142,10 +140,6 @@ const { left, right } = Astro.props;
     font-size: var(--step-4);
     /* Cream display type over a bright sky needs more than a wash behind it. */
     text-shadow: 0 2px 24px color-mix(in srgb, var(--navy-deep) 85%, transparent);
-  }
-
-  .enter__crest {
-    color: var(--gold);
   }
 
   .enter__subtitle {

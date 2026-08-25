@@ -3,7 +3,6 @@ import { Image } from 'astro:assets';
 
 import { site } from '../content/site';
 import type { Photo } from '../content/images';
-import Divider from './ornament/Divider.astro';
 
 /**
  * The property, seen properly: a display title, then the photography travelling
@@ -32,16 +31,38 @@ const { photos } = Astro.props;
   <div class="gallery__head u-container">
     <p class="u-eyebrow u-eyebrow--wide gallery__eyebrow" data-reveal>{site.gallery.eyebrow}</p>
     <h2 class="gallery__title" id="gallery-title" data-reveal-heading>{site.gallery.title}</h2>
-    <Divider piece="bishop" width="min(60vw, 12rem)" class="gallery__crest" />
   </div>
 
   <ul class="gallery__rail" data-gallery-rail tabindex="0" aria-label="Castle photographs">
     {
       photos.map((image) => (
-        <li class="gallery__item u-cover" data-reveal-image>
+        <li class="gallery__item u-cover">
           <Image
             src={image.src}
             alt={image.alt}
+            widths={[600, 900, 1400]}
+            sizes="(min-width: 52rem) 52vw, 90vw"
+            loading="lazy"
+            quality={80}
+          />
+        </li>
+      ))
+    }
+    {/*
+      A second pass of the same photographs, so the rail can wrap without a
+      visible jump: when the travel passes the halfway mark it is rewound by
+      exactly one set and the visitor sees no seam.
+
+      Hidden from assistive technology and from the tab order — it is the same
+      eight pictures, and announcing them twice would be a bug rather than a
+      feature.
+    */}
+    {
+      photos.map((image) => (
+        <li class="gallery__item u-cover" aria-hidden="true" data-gallery-clone>
+          <Image
+            src={image.src}
+            alt=""
             widths={[600, 900, 1400]}
             sizes="(min-width: 52rem) 52vw, 90vw"
             loading="lazy"
@@ -69,16 +90,13 @@ const { photos } = Astro.props;
     color: var(--gold-light);
   }
 
-  .gallery__crest {
-    color: var(--gold);
-  }
-
   .gallery__title {
     font-size: var(--step-4);
   }
 
   .gallery__rail {
     display: flex;
+    cursor: grab;
     gap: clamp(0.75rem, 2vw, 1.75rem);
     list-style: none;
     margin: 0;
@@ -111,6 +129,17 @@ const { photos } = Astro.props;
     width: clamp(15rem, 36vw, 32rem);
     aspect-ratio: 4 / 3;
     align-self: center;
+  }
+
+  .gallery__rail[data-dragging='true'] {
+    cursor: grabbing;
+    /* Stops the browser turning a horizontal drag into a text selection or an
+       image drag halfway through the gesture. */
+    user-select: none;
+  }
+
+  .gallery__rail[data-dragging='true'] :global(img) {
+    pointer-events: none;
   }
 
   .gallery__item :global(img) {

@@ -1,6 +1,14 @@
 ---
 import { getImage } from 'astro:assets';
 
+/*
+ * Imported rather than hard-coded so the preload points at the same hashed file
+ * the stylesheet asks for. A literal path would go stale the moment the build
+ * fingerprints the font, and would break outright under a base path.
+ */
+import newsreaderUrl from '../assets/fonts/newsreader-latin.woff2?url';
+import instrumentUrl from '../assets/fonts/instrument-sans-latin.woff2?url';
+
 import { site } from '../content/site';
 import { images, HERO_IMAGE } from '../content/images';
 import '../styles/tokens.css';
@@ -50,14 +58,14 @@ const heroImage = await getImage({
     */}
     <link
       rel="preload"
-      href="/fonts/newsreader-latin.woff2"
+      href={newsreaderUrl}
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/instrument-sans-latin.woff2"
+      href={instrumentUrl}
       as="font"
       type="font/woff2"
       crossorigin

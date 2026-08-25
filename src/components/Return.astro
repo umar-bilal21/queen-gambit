@@ -1,7 +1,6 @@
 ---
 import { site } from '../content/site';
 import ReefArtwork from './ReefArtwork.astro';
-import Divider from './ornament/Divider.astro';
 
 /**
  * The Castle's opening passage, returning after the Beliefs.
@@ -22,7 +21,6 @@ import Divider from './ornament/Divider.astro';
 
 <section class="return u-on-cream" id="return" aria-labelledby="return-title">
   <div class="return__inner u-container">
-    <Divider piece="pawn" width="min(60vw, 11rem)" class="return__crest" />
 
     <div class="return__columns">
       <h2 class="return__lead" id="return-title" data-reveal-heading>
@@ -51,10 +49,6 @@ import Divider from './ornament/Divider.astro';
     display: grid;
     justify-items: center;
     gap: var(--space-l);
-  }
-
-  .return__crest {
-    color: var(--accent);
   }
 
   .return__columns {
