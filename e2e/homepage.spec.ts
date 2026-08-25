@@ -16,6 +16,23 @@ import { expect, test, type Page } from '@playwright/test';
 /** The Intro is a fixed ~3.5s timeline; this is comfortably past its end. */
 const INTRO_MS = 5000;
 
+/**
+ * Every section with a landmark, in document order. The page grew from eight to
+ * eleven with the castle direction, and listing them once means a new section
+ * cannot be added to the page without being added to the suite.
+ */
+const SECTIONS = [
+  'story',
+  'masterwork',
+  'rooms',
+  'beliefs',
+  'return',
+  'gallery',
+  'manifesto',
+  'enter',
+  'footer',
+] as const;
+
 async function skipIntro(page: Page): Promise<void> {
   await page.locator('[data-intro-skip]').click({ timeout: INTRO_MS });
   await expect(page.locator('[data-intro]')).toHaveCount(0, { timeout: INTRO_MS });
@@ -36,7 +53,7 @@ test.describe('the homepage', () => {
     ).toBeVisible();
     await expect(page.getByText('By Modern-Day Philosopher Frank J. Russo')).toBeVisible();
 
-    for (const id of ['story', 'rooms', 'beliefs', 'gallery', 'enter', 'footer']) {
+    for (const id of SECTIONS) {
       await expect(page.locator(`#${id}`)).toBeAttached();
     }
 
@@ -68,6 +85,57 @@ test.describe('the homepage', () => {
 
     await expect(page.getByRole('heading', { name: 'Our Gallery' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Enter The Queen’s Gambit' })).toBeVisible();
+
+    // The three sections added with the castle direction.
+    await expect(page.locator('#masterwork')).toContainText('Ocean-Inspired Masterwork');
+    await expect(page.locator('#masterwork')).toContainText('Oceanic Serenity');
+    await expect(page.locator('#masterwork')).toContainText('Worldwide Allure');
+    await expect(page.locator('#return')).toContainText('Along the Florida Coast');
+    await expect(page.locator('#manifesto')).toContainText('Frank J. Russo');
+    await expect(page.locator('#manifesto')).toContainText('Visionary & Creator');
+  });
+
+  test('the two new controls go somewhere real', async ({ page }) => {
+    await page.goto('/');
+    await skipIntro(page);
+
+    const learnMore = page
+      .locator('#masterwork')
+      .getByRole('link', { name: 'LEARN MORE ABOUT US' });
+    await expect(learnMore).toHaveAttribute('href', '#manifesto');
+    // The destination has to exist, or the anchor is decoration.
+    await expect(page.locator('#manifesto')).toBeAttached();
+
+    const talk = page.locator('#manifesto').getByRole('link', { name: 'TALK TO US TODAY' });
+    expect(await talk.getAttribute('href')).toContain('mailto:');
+  });
+
+  test('the footer promises nothing that does not exist', async ({ page }) => {
+    await page.goto('/');
+    await skipIntro(page);
+
+    const footer = page.locator('#footer');
+
+    /*
+     * The client's mockup shows EXPERIENCE, LEGACY and two social icons. There
+     * are no such pages and no social account appears in any material supplied,
+     * so the footer must not render them — a dead link at the end of the page
+     * is where a pitch springs its leak.
+     */
+    await expect(footer).not.toContainText('EXPERIENCE');
+    await expect(footer).not.toContainText('LEGACY');
+
+    const external = await footer.locator('a[href^="http"]').count();
+    expect(external, 'footer should link nowhere off this page').toBe(0);
+
+    // Every in-page link resolves to a section that is actually there.
+    const hrefs = await footer.locator('a[href^="#"]').evaluateAll((nodes) =>
+      nodes.map((n) => n.getAttribute('href')!),
+    );
+    expect(hrefs.length).toBeGreaterThan(0);
+    for (const href of hrefs) {
+      await expect(page.locator(href), `${href} should exist`).toBeAttached();
+    }
   });
 
   test('says Castle, never Landmark', async ({ page }) => {
@@ -137,12 +205,19 @@ test.describe('the homepage', () => {
     const cta = page.locator('#enter').getByRole('link', { name: 'CONTACT US' });
     await expect(cta).toHaveCount(1);
 
+    /*
+     * Across every section, not just the one that happened to catch it. The
+     * castle direction added far more reveals than the page had before, and
+     * this bug was originally found by accident rather than by test.
+     */
     const hidden = await page
-      .locator('#enter [data-reveal], #enter [data-reveal-heading]')
+      .locator('[data-reveal], [data-reveal-heading], [data-reveal-group]')
       .evaluateAll((nodes) =>
-        nodes.filter((n) => getComputedStyle(n).visibility === 'hidden').length,
+        nodes
+          .filter((n) => getComputedStyle(n).visibility === 'hidden')
+          .map((n) => n.className || n.tagName),
       );
-    expect(hidden).toBe(0);
+    expect(hidden, 'reveals must never hide content from assistive technology').toEqual([]);
   });
 
   test('nothing errors on the console', async ({ page }) => {
@@ -240,7 +315,7 @@ test.describe('small screens', () => {
     await page.goto('/');
     await skipIntro(page);
 
-    for (const id of ['story', 'rooms', 'beliefs', 'gallery', 'enter', 'footer']) {
+    for (const id of SECTIONS) {
       await page.locator(`#${id}`).scrollIntoViewIfNeeded();
       await page.waitForTimeout(400);
 

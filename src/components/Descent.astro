@@ -10,9 +10,20 @@ import type { Photo } from '../content/images';
  * photograph is fixed behind both, deepening as the visitor travels, and the
  * sections lay themselves over it with their own imagery intact.
  *
- * Fixed rather than scrolling with the content: a ground that moves with what
- * is on it is just a background image, whereas one that stays put reads as
- * something the page is descending through.
+ * Held still rather than scrolling with the content: a ground that moves with
+ * what sits on it is just a background image, whereas one that stays put reads
+ * as something the page is descending through.
+ *
+ * It is `sticky`, not `fixed`. A fixed element is positioned against the
+ * viewport and is *not* clipped by an ancestor's overflow unless that ancestor
+ * happens to be a containing block for it — so a first version of this painted
+ * the reef across the Hero, the Story and the Masterwork as well, at every
+ * scroll position. Sticky is clipped by its scroll ancestor for free, which is
+ * exactly the behaviour wanted, and it avoids fixed backgrounds' well-known
+ * jank on mobile besides.
+ *
+ * The negative block margin takes the ground back out of layout, so it holds
+ * the viewport without occupying a screen's worth of the wrapper.
  *
  * Graded hard toward navy. This is texture under type, not a picture anyone is
  * meant to look at, and everything laid over it has to stay readable.
@@ -47,20 +58,19 @@ const { photo } = Astro.props;
   }
 
   .descent__ground {
-    position: absolute;
-    inset: 0;
+    position: sticky;
+    inset-block-start: 0;
     z-index: -1;
-    /* `clip` rather than `hidden` so the fixed child is clipped to the wrapper
-       without turning it into a scroll container. */
+    height: 100svh;
+    /* Out of layout: the ground holds the viewport without occupying a
+       screen's worth of the wrapper's height. */
+    margin-block-end: -100svh;
     overflow: clip;
   }
 
   .descent__ground :global(img) {
-    position: fixed;
-    inset-block-start: 0;
-    inset-inline-start: 0;
-    width: 100vw;
-    height: 100svh;
+    width: 100%;
+    height: 100%;
   }
 
   .descent__veil {
