@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 
 import { site, contactHref } from '../content/site';
 import type { Photo } from '../content/images';
+import Divider from './ornament/Divider.astro';
 
 /**
  * The close: two photographs combined into one full-bleed field, an invitation,
@@ -47,6 +48,7 @@ const { left, right } = Astro.props;
 
   <div class="enter__inner u-container">
     <h2 class="enter__title" id="enter-title" data-reveal-heading>{site.enter.title}</h2>
+    <Divider piece="queen" width="min(60vw, 12rem)" class="enter__crest" />
     <p class="enter__subtitle u-eyebrow" data-reveal data-reveal-delay="0.12">
       {site.enter.subtitle}
     </p>
@@ -142,17 +144,21 @@ const { left, right } = Astro.props;
     text-shadow: 0 2px 24px color-mix(in srgb, var(--navy-deep) 85%, transparent);
   }
 
+  .enter__crest {
+    color: var(--gold);
+  }
+
   .enter__subtitle {
     max-width: 42ch;
-    color: color-mix(in srgb, var(--cream) 92%, transparent);
+    color: var(--gold-light);
     text-shadow: 0 1px 16px color-mix(in srgb, var(--navy-deep) 80%, transparent);
   }
 
   .enter__cta {
     margin-block-start: var(--space-s);
     padding: 1.1rem 2.6rem;
-    background: var(--cream);
-    color: var(--navy);
+    background: var(--gold);
+    color: var(--navy-abyss);
     transition:
       background-color 0.35s var(--ease-out),
       color 0.35s var(--ease-out),
@@ -160,7 +166,7 @@ const { left, right } = Astro.props;
   }
 
   .enter__cta:hover {
-    background: var(--aqua);
+    background: var(--gold-light);
     transform: translateY(-2px);
   }
 </style>

@@ -10,6 +10,7 @@ import Rooms from '../components/Rooms.astro';
 import Beliefs from '../components/Beliefs.astro';
 import Return from '../components/Return.astro';
 import Gallery from '../components/Gallery.astro';
+import Manifesto from '../components/Manifesto.astro';
 import Enter from '../components/Enter.astro';
 import Footer from '../components/Footer.astro';
 import { images } from '../content/images';
@@ -43,8 +44,9 @@ import { images } from '../content/images';
 
     <Return />
     <Gallery photos={images.gallery} />
+    <Manifesto />
     <Enter left={images.enter.left} right={images.enter.right} />
   </main>
 
-  <Footer />
+  <Footer photo={images.poolToOcean} />
 </Base>

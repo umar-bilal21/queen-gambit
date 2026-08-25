@@ -1,38 +1,83 @@
 ---
-import { site } from '../content/site';
+import { Image } from 'astro:assets';
+
+import { site, contactHref } from '../content/site';
+import type { Photo } from '../content/images';
 import Monogram from './Monogram.astro';
+import Divider from './ornament/Divider.astro';
 
 /**
- * Cream ground, monogram alone, the practical details.
+ * The page's ending: the view the whole building is arranged around, running
+ * down into navy.
  *
- * No telephone number and no social links: neither exists anywhere in the
- * client's materials, and inventing them would be worse than omitting them.
+ * The pool photograph bleeds into the ground beneath it rather than stopping at
+ * an edge, so the page closes on a fade rather than a full stop.
+ *
+ * Navigation carries only what resolves. The client's mockup also shows
+ * EXPERIENCE, LEGACY and two social icons; there are no such pages and no
+ * social account appears anywhere in the material supplied, so they are omitted
+ * rather than rendered dead.
  *
  * The email reads "landmark" directly beneath copy reading "Castle". That is
  * the client's real working address; the inconsistency is deliberate and
- * reported to them rather than hidden behind an invented one (ADR 0004).
+ * reported to them (ADR 0004). It is not tidied away with an invented one.
  */
+interface Props {
+  photo: Photo;
+}
+
+const { photo } = Astro.props;
 ---
 
-<footer class="footer u-on-cream" id="footer">
+<footer class="footer u-on-navy" id="footer">
+  <div class="footer__view" aria-hidden="true">
+    <Image
+      src={photo.src}
+      alt=""
+      widths={[900, 1400, 2048]}
+      sizes="100vw"
+      loading="lazy"
+      quality={78}
+    />
+    <div class="footer__fade"></div>
+  </div>
+
   <div class="footer__inner u-container" data-reveal-group>
     <div class="footer__mark">
-      <Monogram size="4.5rem" label={null} />
+      <Monogram size="4rem" label={null} />
       <p class="footer__name u-eyebrow u-eyebrow--wide">The Queen’s Gambit Castle</p>
     </div>
+
+    <Divider piece="pawn" width="min(60vw, 11rem)" class="footer__crest" />
+
+    <nav class="footer__nav" aria-label="Footer">
+      <ul class="footer__nav-list">
+        {
+          site.footer.nav.map((item) => (
+            <li>
+              <a class="footer__nav-link u-eyebrow" href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a class="footer__nav-link u-eyebrow" href={contactHref}>
+            Contact
+          </a>
+        </li>
+      </ul>
+    </nav>
 
     <address class="footer__address">
       {site.contact.address.map((line) => <span>{line}</span>)}
     </address>
 
-    <div class="footer__contact">
-      <a class="footer__email" href={`mailto:${site.contact.email}`}>
-        {site.contact.email}
-      </a>
-    </div>
+    <a class="footer__email" href={`mailto:${site.contact.email}`}>
+      {site.contact.email}
+    </a>
 
-    <button class="footer__top" type="button" data-back-to-top>
-      <span class="u-visually-hidden">{site.footer.backToTop}</span>
+    <button class="footer__top" type="button" data-back-to-top aria-label={site.footer.backToTop}>
       <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none">
         <path
           d="M12 20V4M12 4L5 11M12 4l7 7"
@@ -49,13 +94,44 @@ import Monogram from './Monogram.astro';
 
 <style>
   .footer {
-    padding-block: var(--space-xl) var(--space-l);
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* The view, running down into the ground beneath it. */
+  .footer__view {
+    position: relative;
+    height: clamp(18rem, 46vw, 34rem);
+    overflow: clip;
+  }
+
+  .footer__view :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /**
+   * The fade has to reach solid navy before the photograph's own edge, or a
+   * hairline of un-faded image shows against the ground below it.
+   */
+  .footer__fade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--navy-deep) 30%, transparent) 0%,
+      color-mix(in srgb, var(--navy-deep) 62%, transparent) 45%,
+      color-mix(in srgb, var(--navy) 96%, transparent) 88%,
+      var(--navy) 100%
+    );
   }
 
   .footer__inner {
     display: grid;
     justify-items: center;
     gap: var(--space-m);
+    padding-block: var(--space-xl) var(--space-l);
     text-align: center;
   }
 
@@ -63,10 +139,34 @@ import Monogram from './Monogram.astro';
     display: grid;
     justify-items: center;
     gap: var(--space-s);
+    color: var(--gold-light);
   }
 
   .footer__name {
-    color: color-mix(in srgb, var(--navy) 72%, transparent);
+    color: var(--ink-muted);
+  }
+
+  .footer__crest {
+    color: var(--gold);
+  }
+
+  .footer__nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(1.25rem, 4vw, 3rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .footer__nav-link {
+    color: var(--ink-muted);
+    transition: color 0.3s var(--ease-out);
+  }
+
+  .footer__nav-link:hover {
+    color: var(--gold-light);
   }
 
   .footer__address {
@@ -75,18 +175,19 @@ import Monogram from './Monogram.astro';
     font-style: normal;
     font-size: var(--step--1);
     letter-spacing: 0.04em;
-    color: color-mix(in srgb, var(--navy) 70%, transparent);
+    color: var(--ink-muted);
   }
 
   .footer__email {
     font-size: var(--step-0);
-    border-block-end: 1px solid color-mix(in srgb, var(--navy) 30%, transparent);
+    color: var(--gold-light);
+    border-block-end: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
     padding-block-end: 2px;
     transition: border-color 0.3s var(--ease-out);
   }
 
   .footer__email:hover {
-    border-color: var(--navy);
+    border-color: var(--gold);
   }
 
   .footer__top {
@@ -94,20 +195,25 @@ import Monogram from './Monogram.astro';
     place-items: center;
     width: 3.25rem;
     height: 3.25rem;
-    margin-block-start: var(--space-s);
+    margin-block-start: var(--space-2xs);
     border-radius: 50%;
-    background: var(--navy);
-    color: var(--cream);
-    transition: transform 0.35s var(--ease-out);
+    border: 1px solid color-mix(in srgb, var(--gold) 50%, transparent);
+    color: var(--gold-light);
+    transition:
+      transform 0.35s var(--ease-out),
+      background-color 0.35s var(--ease-out),
+      color 0.35s var(--ease-out);
   }
 
   .footer__top:hover {
     transform: translateY(-4px);
+    background: var(--gold);
+    color: var(--navy-abyss);
   }
 
   .footer__credit {
-    margin-block-start: var(--space-m);
+    margin-block-start: var(--space-s);
     font-size: var(--step--1);
-    color: color-mix(in srgb, var(--navy) 55%, transparent);
+    color: color-mix(in srgb, var(--cream) 50%, transparent);
   }
 </style>

@@ -144,6 +144,27 @@ export const site = {
     ] as const satisfies readonly Belief[],
   },
 
+  /**
+   * Frank J. Russo's statement of what the Castle is for — the longest piece of
+   * writing on the site and the one that has to persuade.
+   */
+  manifesto: {
+    title: 'The Queen’s Gambit Castle',
+    paragraphs: [
+      'The Queen’s Gambit Castle is more than an extraordinary residence. It is a living expression of imagination, artistry, and purpose, created to inspire and ultimately be shared with the public.',
+      'From the beginning, the vision extended far beyond a single audience. The Castle was conceived as a place where people of all ages and backgrounds can experience architecture, art, storytelling, and creativity in an environment unlike any other. Local officials, cultural organizations, art centers, and schools have been invited to become part of that vision, helping shape the Castle into a meaningful cultural destination.',
+      'At its heart is a commitment to the next generation. The Queen’s Gambit Castle is intended to inspire children, students with special needs, emerging artists, and young creators by giving them an opportunity to experience what is possible when imagination is given space to flourish.',
+      'The Castle brings together traditional artistic expression with architecture, storytelling, technology, and emerging creative tools such as artificial intelligence. It is a place where young minds can explore freely, experiment boldly, and discover new ways of expressing their ideas.',
+      'Every room, detail, and experience has been designed to encourage curiosity and expand what people believe they can create. The goal is for The Queen’s Gambit Castle to grow into a nationally recognized cultural destination, shaped not simply by the property itself, but by the people who experience it.',
+      'A place where art meets imagination. Where technology meets human creativity. And where possibility is meant to be shared for generations to come.',
+    ],
+    signature: {
+      name: 'Frank J. Russo',
+      role: 'Visionary & Creator',
+    },
+    cta: 'TALK TO US TODAY',
+  },
+
   gallery: {
     eyebrow: 'THE CASTLE',
     title: 'Our Gallery',
@@ -171,6 +192,17 @@ export const site = {
   },
 
   footer: {
+    /*
+     * Only anchors that resolve. The client's mockup also shows EXPERIENCE,
+     * LEGACY and two social icons; there are no such pages and no account
+     * appears anywhere in the material supplied, so they are omitted rather
+     * than rendered dead. Confirmed with the client.
+     */
+    nav: [
+      { label: 'The Story', href: '#story' },
+      { label: 'Our Beliefs', href: '#beliefs' },
+      { label: 'Gallery', href: '#gallery' },
+    ],
     backToTop: 'Back to top',
     credit: '© 2026 The Queen’s Gambit Castle. All rights reserved.',
   },

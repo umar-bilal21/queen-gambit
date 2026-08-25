@@ -1,0 +1,190 @@
+---
+import { site, contactHref } from '../content/site';
+import TortoiseArtwork from './TortoiseArtwork.astro';
+import Divider from './ornament/Divider.astro';
+
+/**
+ * Frank J. Russo's statement of what the Castle is for.
+ *
+ * Six paragraphs travelling through a fixed window — the device established on
+ * the Story — so the longest writing on the site costs one screen rather than
+ * many.
+ *
+ * That trade is worth naming, because it is the one thing here that could be
+ * wrong. A manifesto is meant to be read at the reader's pace, and binding it
+ * to scroll position takes that control away. The client chose it knowing so.
+ * The pacing is therefore deliberately slower than the Story's: the window is
+ * taller, the travel is longer, and a visitor who stops scrolling can always
+ * finish the sentence in front of them because nothing moves unless they do.
+ *
+ * Cream ground with land tortoises rather than the Story's sea turtles — the
+ * client's explicit instruction, confirmed when the distinction was put to them.
+ *
+ * As on the Story, the fixed window is switched on by the island rather than the
+ * stylesheet. Without JavaScript a fixed height would clip the statement with
+ * nothing able to scroll it, so by default the section is its natural height and
+ * the whole thing is simply readable.
+ */
+---
+
+<section class="manifesto u-on-cream" id="manifesto" aria-labelledby="manifesto-title" data-manifesto>
+  <div class="manifesto__stage">
+    <div class="manifesto__art manifesto__art--left" aria-hidden="true">
+      <TortoiseArtwork side="left" />
+    </div>
+    <div class="manifesto__art manifesto__art--right" aria-hidden="true">
+      <TortoiseArtwork side="right" />
+    </div>
+
+    <div class="manifesto__inner u-container">
+      <h2 class="manifesto__title" id="manifesto-title" data-reveal-heading>
+        {site.manifesto.title}
+      </h2>
+      <Divider piece="queen" width="min(60vw, 12rem)" class="manifesto__crest" />
+
+      <div class="manifesto__window" data-manifesto-window>
+        <div class="manifesto__track" data-manifesto-track>
+          {site.manifesto.paragraphs.map((para) => <p class="manifesto__para">{para}</p>)}
+
+          <p class="manifesto__signature">
+            <span class="manifesto__name">{site.manifesto.signature.name}</span>
+            <span class="manifesto__role u-eyebrow">{site.manifesto.signature.role}</span>
+          </p>
+        </div>
+      </div>
+
+      <a class="manifesto__cta u-eyebrow" href={contactHref}>{site.manifesto.cta}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .manifesto {
+    position: relative;
+  }
+
+  .manifesto[data-manifesto-pinned='true'] {
+    height: 260svh;
+  }
+
+  .manifesto__stage {
+    display: grid;
+    place-items: center;
+    padding-block: var(--space-2xl);
+    padding-inline: var(--gutter);
+    overflow: clip;
+    isolation: isolate;
+  }
+
+  .manifesto[data-manifesto-pinned='true'] .manifesto__stage {
+    position: sticky;
+    inset-block-start: 0;
+    height: 100svh;
+    padding-block: 0;
+  }
+
+  .manifesto__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-s);
+    max-width: 58rem;
+    text-align: center;
+  }
+
+  .manifesto__title {
+    font-size: var(--step-4);
+  }
+
+  .manifesto__crest {
+    color: var(--accent);
+    margin-block-end: var(--space-xs);
+  }
+
+  .manifesto__window {
+    width: 100%;
+  }
+
+  .manifesto[data-manifesto-pinned='true'] .manifesto__window {
+    /* Taller than the Story's, because there is far more to read and the
+       reader should see several sentences at once rather than a line at a
+       time. */
+    height: clamp(16rem, 46svh, 26rem);
+    overflow: clip;
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 13%,
+      black 87%,
+      transparent 100%
+    );
+  }
+
+  .manifesto__track {
+    display: grid;
+    gap: 1.15em;
+    will-change: transform;
+  }
+
+  .manifesto__para {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.62;
+    text-wrap: pretty;
+  }
+
+  .manifesto__signature {
+    display: grid;
+    gap: 0.3rem;
+    margin-block-start: 0.8em;
+  }
+
+  .manifesto__name {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-style: italic;
+  }
+
+  .manifesto__role {
+    color: var(--ink-muted);
+  }
+
+  .manifesto__cta {
+    margin-block-start: var(--space-s);
+    padding: 1.05rem 2.6rem;
+    background: var(--navy-deep);
+    color: var(--gold-light);
+    transition:
+      background-color 0.35s var(--ease-out),
+      transform 0.35s var(--ease-out);
+  }
+
+  .manifesto__cta:hover {
+    background: var(--navy-abyss);
+    transform: translateY(-2px);
+  }
+
+  .manifesto__art {
+    position: absolute;
+    inset-block-end: 0;
+    z-index: -1;
+    width: clamp(9rem, 21vw, 17rem);
+    height: min(96%, 34rem);
+    pointer-events: none;
+  }
+
+  .manifesto__art--left {
+    inset-inline-start: 0;
+  }
+
+  .manifesto__art--right {
+    inset-inline-end: 0;
+  }
+
+  @media (max-width: 52rem) {
+    .manifesto__art {
+      width: 44vw;
+      height: 11rem;
+      opacity: 0.55;
+    }
+  }
+</style>

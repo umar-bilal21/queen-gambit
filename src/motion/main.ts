@@ -15,6 +15,7 @@ import './sections/header';
 import './sections/menu';
 import './sections/hero';
 import './sections/story';
+import './sections/manifesto';
 import './sections/reef';
 import './sections/beliefs';
 import './sections/gallery';
