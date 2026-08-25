@@ -49,14 +49,14 @@ const titleLines = [`${titleLead} BUILT`, titleRest.join(' BUILT ')];
 
 <section class="beliefs u-on-navy" id="beliefs" aria-labelledby="beliefs-title" data-beliefs>
   <div class="beliefs__head u-container">
-    <p class="u-eyebrow u-eyebrow--wide beliefs__eyebrow">{site.beliefs.eyebrow}</p>
+    <p class="u-eyebrow u-eyebrow--wide beliefs__eyebrow" data-reveal>{site.beliefs.eyebrow}</p>
 
     <div class="beliefs__headline">
-      <h2 class="beliefs__title" id="beliefs-title">
+      <h2 class="beliefs__title" id="beliefs-title" data-reveal-heading>
         <span>{titleLines[0]}</span>{' '}
         <span class="beliefs__title-muted">{titleLines[1]}</span>
       </h2>
-      <p class="beliefs__intro">{site.beliefs.intro}</p>
+      <p class="beliefs__intro" data-reveal data-reveal-delay="0.15">{site.beliefs.intro}</p>
     </div>
   </div>
 

@@ -24,19 +24,19 @@ const { photos } = Astro.props;
 
 <section class="gallery" id="gallery" aria-labelledby="gallery-title" data-gallery>
   <div class="gallery__head u-container">
-    <p class="u-eyebrow u-eyebrow--wide gallery__eyebrow">{site.gallery.eyebrow}</p>
-    <h2 class="gallery__title" id="gallery-title">{site.gallery.title}</h2>
+    <p class="u-eyebrow u-eyebrow--wide gallery__eyebrow" data-reveal>{site.gallery.eyebrow}</p>
+    <h2 class="gallery__title" id="gallery-title" data-reveal-heading>{site.gallery.title}</h2>
   </div>
 
   <ul class="gallery__rail" data-gallery-rail tabindex="0" aria-label="Castle photographs">
     {
       photos.map((image) => (
-        <li class="gallery__item u-cover">
+        <li class="gallery__item u-cover" data-reveal-image>
           <Image
             src={image.src}
             alt={image.alt}
-            widths={[400, 700, 1000]}
-            sizes="(min-width: 52rem) 34vw, 80vw"
+            widths={[600, 900, 1400]}
+            sizes="(min-width: 52rem) 52vw, 90vw"
             loading="lazy"
             quality={80}
           />
@@ -83,20 +83,33 @@ const { photos } = Astro.props;
     display: none;
   }
 
+  /*
+   * Wide landscape frames, as in the reference. The rail reads as a strip of
+   * views along a coast rather than a row of cards, and a wider frame is also
+   * what this photography wants — almost all of it is horizon.
+   */
   .gallery__item {
     flex: none;
-    width: clamp(15rem, 34vw, 30rem);
-    aspect-ratio: 4 / 3;
+    width: clamp(20rem, 52vw, 46rem);
+    aspect-ratio: 16 / 9;
     overflow: clip;
     background: var(--cream-deep);
   }
 
-  /* A tall frame every third image, so the rail has rhythm rather than reading
-     as a filmstrip of identical rectangles. */
+  /* A slightly shorter frame every third image, so the rail has rhythm without
+     breaking the horizontal reading. */
   .gallery__item:nth-child(3n) {
-    width: clamp(11rem, 24vw, 21rem);
-    aspect-ratio: 3 / 4;
+    width: clamp(15rem, 36vw, 32rem);
+    aspect-ratio: 4 / 3;
     align-self: center;
+  }
+
+  .gallery__item :global(img) {
+    transition: transform 1.2s var(--ease-out);
+  }
+
+  .gallery__item:hover :global(img) {
+    transform: scale(1.04);
   }
 
   </style>

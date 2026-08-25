@@ -23,14 +23,16 @@ const { photos } = Astro.props;
 
 <section class="rooms u-on-navy" id="rooms" aria-labelledby="rooms-title">
   <div class="rooms__inner u-container">
-    <h2 class="rooms__heading" id="rooms-title">{site.rooms.heading}</h2>
+    <h2 class="rooms__heading" id="rooms-title" data-reveal-heading>{site.rooms.heading}</h2>
 
     <ul class="rooms__list">
       {
         site.rooms.items.map((room, index) => (
-          <li class="rooms__item" data-room>
-            <p class="rooms__name u-eyebrow">{room.name}</p>
-            <div class="rooms__frame u-cover">
+          <li class="rooms__item">
+            <p class="rooms__name u-eyebrow" data-reveal data-reveal-delay={0.1 * index}>
+              {room.name}
+            </p>
+            <div class="rooms__frame u-cover" data-reveal-image>
               <Image
                 src={photos[index].src}
                 alt={photos[index].alt}

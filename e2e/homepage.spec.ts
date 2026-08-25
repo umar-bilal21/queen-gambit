@@ -123,6 +123,28 @@ test.describe('the homepage', () => {
     expect(href).toContain('subject=');
   });
 
+  /**
+   * Regression guard. The entrance reveals were first written with GSAP's
+   * `autoAlpha`, which also sets `visibility: hidden` — so everything below the
+   * fold was out of the accessibility tree and out of tab order until somebody
+   * scrolled to it. The contact button was unreachable.
+   */
+  test('reveals never hide content from assistive technology', async ({ page }) => {
+    await page.goto('/');
+    await skipIntro(page);
+
+    // Deliberately without scrolling anywhere near the Enter section.
+    const cta = page.locator('#enter').getByRole('link', { name: 'CONTACT US' });
+    await expect(cta).toHaveCount(1);
+
+    const hidden = await page
+      .locator('#enter [data-reveal], #enter [data-reveal-heading]')
+      .evaluateAll((nodes) =>
+        nodes.filter((n) => getComputedStyle(n).visibility === 'hidden').length,
+      );
+    expect(hidden).toBe(0);
+  });
+
   test('nothing errors on the console', async ({ page }) => {
     const errors: string[] = [];
     page.on('console', (message) => {

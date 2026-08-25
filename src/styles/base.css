@@ -48,13 +48,30 @@ video {
  * however closely their own reference sets it that way — one page, one voice
  * for headings, and small letterspaced labels (`.u-eyebrow`) carry the sans.
  */
+/**
+ * Every heading is the display face, roman, and cut for display.
+ *
+ * That last part is not cosmetic. Newsreader is a variable font with an optical
+ * size axis running 6–72, and by default the browser picks a value from the
+ * rendered size — so a 109px hero got the display cut with fine hairlines while
+ * a 48px heading got the sturdier text cut. Same family, same weight, visibly
+ * different letterforms, which is exactly what it looked like: two fonts.
+ *
+ * Pinning `opsz` to 72 makes every heading the shape the Hero is. Note that
+ * `font-variation-settings` overrides `font-weight`, so the weight is restated
+ * here — change one and you must change the other.
+ */
 h1,
 h2,
-h3 {
+h3,
+.u-display {
   font-family: var(--font-display);
-  /* Roman, never italic. Sections must not set their own heading style. */
   font-style: normal;
   font-weight: 300;
+  font-optical-sizing: none;
+  font-variation-settings:
+    'opsz' 72,
+    'wght' 300;
   line-height: 1.02;
   letter-spacing: -0.015em;
   text-wrap: balance;

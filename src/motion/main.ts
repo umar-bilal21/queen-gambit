@@ -9,11 +9,11 @@ import { initAnchors } from './anchors';
  */
 
 import './sections/intro';
+import './sections/reveal';
 import './sections/header';
 import './sections/menu';
 import './sections/hero';
 import './sections/story';
-import './sections/rooms';
 import './sections/beliefs';
 import './sections/gallery';
 

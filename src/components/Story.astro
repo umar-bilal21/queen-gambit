@@ -41,7 +41,10 @@ const words = (text: string) => text.split(/\s+/).filter(Boolean);
           site.story.paragraphs.map((paragraph, index) => {
             const Tag = index === 0 ? 'h2' : 'p';
             return (
-              <Tag class="story__para" id={index === 0 ? 'story-title' : undefined}>
+              <Tag
+                class="story__para u-display"
+                id={index === 0 ? 'story-title' : undefined}
+              >
                 {words(paragraph).map((word) => (
                   <>
                     <span class="story__word" data-story-word>
@@ -126,9 +129,7 @@ const words = (text: string) => text.split(/\s+/).filter(Boolean);
    * appearance says so, because visually it is simply where the passage starts.
    */
   .story__para {
-    font-family: var(--font-display);
     font-size: var(--step-3);
-    font-weight: 300;
     line-height: 1.28;
     letter-spacing: -0.01em;
     text-wrap: pretty;
