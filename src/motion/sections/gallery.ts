@@ -16,8 +16,12 @@ import { gsap, registerSection, type MotionContext } from '../index';
  * it is rewound by exactly one set, so the loop has no seam and no end.
  */
 
-/** Pixels per second. Slow enough to read as drift rather than as a carousel. */
-const SPEED = 26;
+/**
+ * Pixels per second. Fast enough that the rail is visibly moving when a visitor
+ * arrives at it, slow enough that it still reads as drift rather than as a
+ * carousel demanding to be watched.
+ */
+const SPEED = 44;
 
 function initGallery({ reduced }: MotionContext): void {
   const rail = document.querySelector<HTMLElement>('[data-gallery-rail]');

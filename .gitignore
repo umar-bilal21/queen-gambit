@@ -11,3 +11,6 @@ playwright-report/
 
 # Local screenshot helpers.
 *.mjs
+
+# Screen-recording scratch output.
+.reel/

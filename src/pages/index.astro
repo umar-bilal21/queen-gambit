@@ -34,8 +34,10 @@ import { images } from '../content/images';
     <Story />
     <Masterwork photos={images.masterwork} />
     {/*
-      Rooms and Beliefs share one fixed underwater ground so scrolling between
-      them never crosses a seam. The wrapper exists only to own that ground.
+      Rooms, Beliefs and the Gallery all sit on the same underwater ground.
+      Two wrappers rather than one, because the Return between them is cream —
+      the water has to skip that section and pick up again on the far side,
+      which is what a second wrapper does naturally.
     */}
     <Descent photo={images.descent}>
       <Rooms photos={images.rooms} />
@@ -43,7 +45,10 @@ import { images } from '../content/images';
     </Descent>
 
     <Return />
-    <Gallery photos={images.gallery} />
+
+    <Descent photo={images.descent}>
+      <Gallery photos={images.gallery} />
+    </Descent>
     <Manifesto />
     <Enter left={images.enter.left} right={images.enter.right} />
   </main>

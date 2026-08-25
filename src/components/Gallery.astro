@@ -123,14 +123,6 @@ const { photos } = Astro.props;
     background: color-mix(in srgb, var(--cream) 8%, transparent);
   }
 
-  /* A slightly shorter frame every third image, so the rail has rhythm without
-     breaking the horizontal reading. */
-  .gallery__item:nth-child(3n) {
-    width: clamp(15rem, 36vw, 32rem);
-    aspect-ratio: 4 / 3;
-    align-self: center;
-  }
-
   .gallery__rail[data-dragging='true'] {
     cursor: grabbing;
     /* Stops the browser turning a horizontal drag into a text selection or an
