@@ -1,9 +1,12 @@
 ---
 import { site } from '../content/site';
+import ReefArtwork from './ReefArtwork.astro';
 
 /**
- * The section where the visitor's reading pace and the page's motion become the
- * same thing: the words recolour one by one from navy to aqua, bound to scroll
+ * One cream beige section: the reef line work, and both paragraphs of the
+ * Castle's story.
+ *
+ * The lead sentence recolours word by word from navy to aqua, bound to scroll
  * position rather than played on a timer, so scrolling back up runs it
  * backwards and the effect is never spent.
  *
@@ -14,6 +17,9 @@ import { site } from '../content/site';
  *
  * Each word is wrapped, not each character: per-character recolouring reads as
  * a glitch at this size, and it multiplies the element count by five.
+ *
+ * The section's top edge is a straight line. The client's earlier mockup had a
+ * wavy divider here and asked explicitly for it to go.
  */
 
 const words = (text: string) => text.split(/\s+/).filter(Boolean);
@@ -21,7 +27,14 @@ const words = (text: string) => text.split(/\s+/).filter(Boolean);
 const leadWords = words(site.story.lead);
 ---
 
-<section class="story" id="story" aria-labelledby="story-title">
+<section class="story u-on-cream" id="story" aria-labelledby="story-title">
+  <div class="story__art story__art--left" aria-hidden="true">
+    <ReefArtwork side="left" />
+  </div>
+  <div class="story__art story__art--right" aria-hidden="true">
+    <ReefArtwork side="right" />
+  </div>
+
   <div class="story__inner u-container">
     <span class="story__mark" aria-hidden="true">✦</span>
 
@@ -36,20 +49,26 @@ const leadWords = words(site.story.lead);
         ))
       }
     </h2>
+
+    <p class="story__body">{site.story.body}</p>
   </div>
 </section>
 
 <style>
   .story {
-    background: var(--white);
-    color: var(--navy);
+    position: relative;
+    /* Straight top edge — no wavy divider. */
     padding-block: var(--space-2xl);
+    overflow: clip;
+    isolation: isolate;
   }
 
   .story__inner {
     display: grid;
+    justify-items: center;
     gap: var(--space-l);
-    max-width: 72rem;
+    max-width: 68rem;
+    text-align: center;
   }
 
   .story__mark {
@@ -61,7 +80,15 @@ const leadWords = words(site.story.lead);
     font-size: var(--step-3);
     line-height: 1.3;
     letter-spacing: -0.01em;
-    max-width: 26ch;
+    max-width: 22ch;
+  }
+
+  .story__body {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.55;
+    max-width: 34ch;
+    text-wrap: balance;
   }
 
   /**
@@ -69,7 +96,7 @@ const leadWords = words(site.story.lead);
    *
    * That matters: if the island never boots, or the visitor has reduced motion
    * on, every word stays at full contrast and the passage is completely
-   * legible. The animation's job is to fade words *away* ahead of the read, not
+   * legible. The animation's job is to fade words *away* behind the reader, not
    * to fade them in — so the accessible state is also the default state.
    */
   .story__word {
@@ -80,6 +107,37 @@ const leadWords = words(site.story.lead);
   @media (prefers-reduced-motion: reduce) {
     .story__word {
       color: var(--navy) !important;
+    }
+  }
+
+  .story__art {
+    position: absolute;
+    inset-block-end: 0;
+    z-index: -1;
+    width: clamp(10rem, 24vw, 20rem);
+    height: min(100%, 40rem);
+    pointer-events: none;
+  }
+
+  .story__art--left {
+    inset-inline-start: 0;
+  }
+
+  .story__art--right {
+    inset-inline-end: 0;
+  }
+
+  /* On a phone the artwork would sit behind the copy and cost contrast, so it
+     retreats to a band at the foot of the section instead. */
+  @media (max-width: 52rem) {
+    .story {
+      padding-block-end: calc(var(--space-2xl) + 7rem);
+    }
+
+    .story__art {
+      width: 45vw;
+      height: 13rem;
+      opacity: 0.6;
     }
   }
 </style>

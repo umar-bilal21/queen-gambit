@@ -5,8 +5,8 @@
  * one edit in one file, not a hunt through nine templates. Nothing in
  * `src/components` or `src/pages` should contain prose.
  *
- * Vocabulary follows CONTEXT.md: Intro, Hero, Story, Reef, Rooms, Beliefs,
- * Gallery, Enter, Footer. "Castle" is canonical throughout (ADR 0004).
+ * Vocabulary follows CONTEXT.md: Intro, Hero, Story, Rooms, Beliefs, Gallery,
+ * Enter, Footer. "Castle" is canonical throughout (ADR 0004).
  */
 
 export interface Belief {
@@ -50,23 +50,20 @@ export const site = {
   },
 
   /**
-   * One passage, recoloured word by word from navy to aqua as it scrolls. It is
-   * deliberately a single string: the effect splits it at render time, and
-   * pre-splitting it here would put presentation into the content module.
+   * One section, both paragraphs.
+   *
+   * Deliberately whole strings: the recolour splits the lead into words at
+   * render time, and pre-splitting it here would put presentation into the
+   * content module.
+   *
+   * An earlier draft split these across a white recolouring section and a
+   * separate cream one carrying the artwork, reading the brief's "background to
+   * be white" as applying to the ground rather than to the reference image it
+   * described. The client corrected it: this is a single beige section holding
+   * the reef artwork and both paragraphs.
    */
   story: {
     lead: 'Along the Florida Coast, Where Ocean Winds Bend Palms and Salt Clings to the Air, Rose The Queen’s Gambit Castle',
-  },
-
-  /**
-   * The brief attached both story paragraphs to the coral section while also
-   * specifying a white ground for the recolouring text. Split rather than
-   * choose: the lead sentence scrubs on white, and this paragraph sits on cream
-   * among the turtle line work — because it is the paragraph that names the
-   * ceramic turtles, so the words and the artwork reinforce each other instead
-   * of merely sharing a page.
-   */
-  reef: {
     body: 'Stepping through the grand entrance, visitors enter a sea of motion frozen in art. Ceramic turtles, each hand-sculpted and unique, meander across the floor, traveling toward the horizon of time.',
   },
 

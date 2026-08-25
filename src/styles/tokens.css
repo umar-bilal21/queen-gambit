@@ -65,6 +65,15 @@
   --aqua-deep: #4a9aa6;
   --coral: #e0846b;
 
+  /*
+   * Where the Story's words land once they have been read. Pure --aqua is the
+   * client's "light aqua blue", but on cream rather than white it drops to
+   * roughly 1.5:1 — the trailing half of the passage becomes hard to make out
+   * rather than gently receding. Pulled a little deeper to keep the effect and
+   * the words.
+   */
+  --aqua-faded: color-mix(in srgb, var(--aqua) 62%, var(--aqua-deep));
+
   /* Semantic roles. */
   --ground: var(--white);
   --ink: var(--navy);

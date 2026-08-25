@@ -36,15 +36,16 @@ test.describe('the homepage', () => {
     ).toBeVisible();
     await expect(page.getByText('By Modern-Day Philosopher Frank J. Russo')).toBeVisible();
 
-    for (const id of ['story', 'reef', 'rooms', 'beliefs', 'gallery', 'enter', 'footer']) {
+    for (const id of ['story', 'rooms', 'beliefs', 'gallery', 'enter', 'footer']) {
       await expect(page.locator(`#${id}`)).toBeAttached();
     }
 
     // The Story's sentence is split into one element per word for the
     // recolour, so it is asserted through the accessible name rather than as
     // a contiguous text node.
+    // One beige section carries both paragraphs.
     await expect(page.locator('#story')).toContainText('Along the Florida Coast');
-    await expect(page.locator('#reef')).toContainText('Ceramic turtles');
+    await expect(page.locator('#story')).toContainText('Ceramic turtles');
 
     await expect(page.getByRole('heading', { name: 'Explore Every Corner' })).toBeVisible();
     /*
@@ -208,7 +209,7 @@ test.describe('small screens', () => {
     await page.goto('/');
     await skipIntro(page);
 
-    for (const id of ['story', 'reef', 'rooms', 'beliefs', 'gallery', 'enter', 'footer']) {
+    for (const id of ['story', 'rooms', 'beliefs', 'gallery', 'enter', 'footer']) {
       await page.locator(`#${id}`).scrollIntoViewIfNeeded();
       await page.waitForTimeout(400);
 

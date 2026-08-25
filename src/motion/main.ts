@@ -13,7 +13,6 @@ import './sections/header';
 import './sections/menu';
 import './sections/hero';
 import './sections/story';
-import './sections/reef';
 import './sections/rooms';
 import './sections/beliefs';
 import './sections/gallery';

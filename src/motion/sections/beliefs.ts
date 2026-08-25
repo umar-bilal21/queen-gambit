@@ -21,7 +21,6 @@ function initBeliefs(_context: MotionContext): void {
 
   const list = section.querySelector<HTMLElement>('[data-beliefs-list]');
   const rows = Array.from(section.querySelectorAll<HTMLElement>('[data-belief]'));
-  const photos = Array.from(section.querySelectorAll<HTMLElement>('[data-belief-photo]'));
   if (rows.length === 0) return;
 
   let progress = 0;
@@ -33,11 +32,13 @@ function initBeliefs(_context: MotionContext): void {
     if (index === painted) return;
     painted = index;
 
+    /*
+     * One flag per row. The photograph now lives inside its row, so the
+     * stylesheet reveals it from the row's own state — there is no second list
+     * to keep in step, and no way for a row and its photograph to disagree.
+     */
     rows.forEach((row, i) => {
       row.dataset.active = String(i === index);
-    });
-    photos.forEach((photo, i) => {
-      photo.dataset.active = String(i === index);
     });
   };
 

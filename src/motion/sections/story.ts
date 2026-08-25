@@ -18,6 +18,31 @@ function initStory({ reduced }: MotionContext): void {
   const section = document.querySelector<HTMLElement>('#story');
   if (!section) return;
 
+  /*
+   * The reef line work strokes itself in as the visitor arrives — the same
+   * DrawSVG technique as the Queen in the Intro, which is what stops the Intro
+   * reading as a preamble bolted onto the front of the site.
+   *
+   * A reveal, not a scrub: tying the drawing to scroll speed means a visitor
+   * flicking past sees it snap rather than draw.
+   */
+  gsap.utils.toArray<HTMLElement>('[data-reef-art]', section).forEach((art) => {
+    const parts = gsap.utils.toArray<SVGElement>('[data-reef-part]', art);
+    if (parts.length === 0) return;
+
+    gsap.fromTo(
+      parts,
+      { drawSVG: '0%' },
+      {
+        drawSVG: '100%',
+        duration: 1.4,
+        stagger: 0.06,
+        ease: 'power1.inOut',
+        scrollTrigger: { trigger: section, start: 'top 75%', once: true },
+      },
+    );
+  });
+
   const words = gsap.utils.toArray<HTMLElement>('[data-story-word]', section);
   if (words.length === 0) return;
 
@@ -25,7 +50,7 @@ function initStory({ reduced }: MotionContext): void {
     words,
     { color: 'var(--navy)' },
     {
-      color: 'var(--aqua)',
+      color: 'var(--aqua-faded)',
       ease: 'none',
       stagger: 1,
       scrollTrigger: {

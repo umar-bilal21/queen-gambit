@@ -42,13 +42,17 @@ purpose-drawn outline, not the Monogram and not the client's ChatGPT reference i
 photograph, the display line "Where the Ocean Meets Imagination", and attribution to
 Frank J. Russo.
 
-**Story** — the white section whose sentence recolours word by word from navy to
-light aqua as it scrolls. Opens "Along the Florida Coast...".
+**Story** — the single cream-beige section carrying the Castle's two opening
+paragraphs and the Reef artwork. Its lead sentence recolours word by word from navy
+to light aqua as it scrolls. Its upper edge is a straight line, never the wavy
+divider from the earlier mockup.
 
-**Reef** — the cream-beige section carrying hand-drawn coral, seaweed and turtle
-line art. Named for its subject rather than its content, because the copy it holds
-may change while the treatment persists. Its upper edge is a straight line, never
-the wavy divider from the earlier mockup.
+An earlier draft split this in two — a white recolouring section and a separate
+cream one for the artwork. That was wrong, and the client corrected it: one
+section, one ground, both paragraphs.
+
+**Reef** — the hand-drawn line work of turtles and kelp within the Story. Artwork,
+not a section: it has no copy of its own and no landmark.
 
 **Rooms** — the three-up row of interior frames, each labelled in caps *above* its
 image: Living and Dining Beneath the Waves; The Door of Perception – Master Chamber;

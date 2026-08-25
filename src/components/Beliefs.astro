@@ -5,8 +5,20 @@ import { site } from '../content/site';
 import type { Photo } from '../content/images';
 
 /**
- * Five convictions on deep navy, with a photograph washing in behind whichever
- * one the visitor is reading.
+ * Five convictions, each a wide band that fills with photography as you reach
+ * it.
+ *
+ * The composition follows the client's reference closely, and two things in it
+ * matter more than they look:
+ *
+ * 1. The photograph belongs to the *row*, clipped inside its band — not to the
+ *    section. A single backdrop behind all five rows reads as one dim image the
+ *    page happens to be sitting on; a photograph bounded by the row reads as
+ *    that conviction having a place attached to it, and the hard band edges are
+ *    most of what makes the effect land.
+ * 2. The title is the largest thing in the row by a wide margin. At label size
+ *    the row is a list item; at display size it is a statement, which is what
+ *    the section is for.
  *
  * Scroll-driven first, hover second. The brief said "when you hover over it
  * photo appear as you scroll down", which is two triggers in one sentence; the
@@ -25,106 +37,70 @@ interface Props {
 }
 
 const { photos } = Astro.props;
+
+/*
+ * The reference sets the heading over two lines with the second muted. Split
+ * here rather than in the content module: it is a typographic decision about
+ * this composition, not a change to what the sentence says.
+ */
+const [titleLead, ...titleRest] = site.beliefs.title.split(' BUILT ');
+const titleLines = [`${titleLead} BUILT`, titleRest.join(' BUILT ')];
 ---
 
 <section class="beliefs u-on-navy" id="beliefs" aria-labelledby="beliefs-title" data-beliefs>
-  <div class="beliefs__backdrop" aria-hidden="true">
-    {
-      site.beliefs.items.map((_, index) => (
-        <div
-            class="beliefs__photo u-cover"
-            data-belief-photo
-            data-active={index === 0 ? 'true' : 'false'}
-          >
-          <Image
-            src={photos[index].src}
-            alt=""
-            widths={[900, 1400, 1920]}
-            sizes="100vw"
-            loading="lazy"
-            quality={72}
-          />
-        </div>
-      ))
-    }
-    <div class="beliefs__scrim"></div>
+  <div class="beliefs__head u-container">
+    <p class="u-eyebrow u-eyebrow--wide beliefs__eyebrow">{site.beliefs.eyebrow}</p>
+
+    <div class="beliefs__headline">
+      <h2 class="beliefs__title" id="beliefs-title">
+        <span>{titleLines[0]}</span>{' '}
+        <span class="beliefs__title-muted">{titleLines[1]}</span>
+      </h2>
+      <p class="beliefs__intro">{site.beliefs.intro}</p>
+    </div>
   </div>
 
-  <div class="beliefs__inner u-container">
-    <header class="beliefs__head">
-      <p class="u-eyebrow u-eyebrow--wide beliefs__eyebrow">{site.beliefs.eyebrow}</p>
-      <h2 class="beliefs__title" id="beliefs-title">{site.beliefs.title}</h2>
-      <p class="beliefs__intro">{site.beliefs.intro}</p>
-    </header>
+  <ol class="beliefs__list" data-beliefs-list>
+    {
+      site.beliefs.items.map((belief, index) => (
+        <li class="beliefs__row" data-belief data-active={index === 0 ? 'true' : 'false'}>
+          <div class="beliefs__photo u-cover" aria-hidden="true">
+            <Image
+              src={photos[index].src}
+              alt=""
+              widths={[900, 1400, 1920]}
+              sizes="100vw"
+              loading="lazy"
+              quality={74}
+            />
+          </div>
+          <div class="beliefs__veil" aria-hidden="true" />
 
-    <ol class="beliefs__list" data-beliefs-list>
-      {
-        site.beliefs.items.map((belief, index) => (
-          <li
-            class="beliefs__row"
-            data-belief
-            data-active={index === 0 ? 'true' : 'false'}
-          >
-            <span class="beliefs__index u-eyebrow" aria-hidden="true">
+          <div class="beliefs__row-inner u-container">
+            <span class="beliefs__index" aria-hidden="true">
               {String(index + 1).padStart(2, '0')}
             </span>
-            <h3 class="beliefs__row-title u-eyebrow">{belief.title}</h3>
             <p class="beliefs__row-body">{belief.body}</p>
-          </li>
-        ))
-      }
-    </ol>
-  </div>
+            <h3 class="beliefs__row-title">{belief.title}</h3>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
 </section>
 
 <style>
   .beliefs {
-    position: relative;
-    padding-block: var(--space-2xl);
+    padding-block: var(--space-2xl) 0;
     overflow: clip;
-    isolation: isolate;
   }
 
-  .beliefs__backdrop {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-  }
-
-  .beliefs__photo {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 0.7s var(--ease-out);
-  }
-
-  /* Set by the motion island. Exactly one row is Active at a time, so exactly
-     one photograph is ever visible. */
-  .beliefs__photo[data-active='true'] {
-    opacity: 1;
-  }
-
-    /**
-   * The effect must never cost the visitor the words. This scrim is heavy
-   * enough that the row copy clears contrast requirements against any
-   * photograph we put behind it, and it is part of the design rather than an
-   * apology — the photographs are meant to read as submerged.
-   */
-  .beliefs__scrim {
-    position: absolute;
-    inset: 0;
-    background: color-mix(in srgb, var(--navy) 88%, transparent);
-  }
-
-  .beliefs__inner {
-    display: grid;
-    gap: var(--space-xl);
-  }
+  /* Heading ---------------------------------------------------------------- */
 
   .beliefs__head {
     display: grid;
-    gap: var(--space-s);
-    max-width: 54rem;
+    gap: var(--space-m);
+    margin-block-end: var(--space-xl);
   }
 
   .beliefs__eyebrow {
@@ -135,63 +111,142 @@ const { photos } = Astro.props;
     font-family: var(--font-sans);
     font-size: var(--step-3);
     font-weight: 500;
-    letter-spacing: 0.02em;
-    line-height: 1.15;
+    letter-spacing: 0.01em;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  /* The second line drops back, as in the reference — the phrase reads as one
+     thought arriving in two beats rather than as a solid block. */
+  .beliefs__title-muted {
+    color: color-mix(in srgb, var(--cream) 45%, transparent);
   }
 
   .beliefs__intro {
     max-width: var(--measure);
+    margin-block-start: var(--space-s);
     color: color-mix(in srgb, var(--cream) 78%, transparent);
   }
+
+  @media (min-width: 60rem) {
+    .beliefs__head {
+      grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+      align-items: start;
+      gap: clamp(2rem, 6vw, 6rem);
+    }
+  }
+
+  /* Rows ------------------------------------------------------------------- */
 
   .beliefs__list {
     list-style: none;
     margin: 0;
     padding: 0;
-    border-block-start: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
+    border-block-start: 1px solid color-mix(in srgb, var(--cream) 16%, transparent);
   }
 
   .beliefs__row {
+    position: relative;
+    display: grid;
+    align-items: center;
+    min-height: clamp(9rem, 17vw, 14rem);
+    padding-block: var(--space-m);
+    border-block-end: 1px solid color-mix(in srgb, var(--cream) 16%, transparent);
+    overflow: clip;
+    isolation: isolate;
+  }
+
+  /* The photograph is bounded by the row. That hard edge is the effect. */
+  .beliefs__photo {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    opacity: 0;
+    transform: scale(1.08);
+    transition:
+      opacity 0.75s var(--ease-out),
+      transform 1.4s var(--ease-out);
+  }
+
+  .beliefs__row[data-active='true'] .beliefs__photo {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /**
+   * Weighted to the left, where the number and paragraph sit, and lighter under
+   * the title on the right. A flat wash heavy enough for small body copy would
+   * have flattened the photograph out of existence.
+   */
+  .beliefs__veil {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--navy) 92%, transparent) 0%,
+      color-mix(in srgb, var(--navy) 74%, transparent) 40%,
+      color-mix(in srgb, var(--navy) 40%, transparent) 100%
+    );
+  }
+
+  .beliefs__row-inner {
     display: grid;
     gap: var(--space-xs);
-    padding-block: clamp(1.75rem, 4vw, 3rem);
-    border-block-end: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
-    opacity: 0.5;
-    transition: opacity 0.5s var(--ease-out);
-  }
-
-  .beliefs__row[data-active='true'] {
-    opacity: 1;
-  }
-
-  /* Without the island — no JavaScript, or reduced motion — every row reads at
-     full strength rather than half of them looking broken. */
-  @media (prefers-reduced-motion: reduce) {
-    .beliefs__row {
-      opacity: 1;
-    }
   }
 
   .beliefs__index {
+    font-family: var(--font-sans);
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-caps);
     color: var(--aqua);
   }
 
   .beliefs__row-title {
-    font-size: var(--step-1);
-    font-weight: 500;
-    letter-spacing: 0.12em;
+    font-family: var(--font-sans);
+    font-size: clamp(1.6rem, 5.2vw, 3.6rem);
+    font-weight: 300;
+    line-height: 1.02;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    text-wrap: balance;
   }
 
   .beliefs__row-body {
-    max-width: var(--measure);
-    color: color-mix(in srgb, var(--cream) 80%, transparent);
+    max-width: 38ch;
+    font-size: var(--step--1);
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--cream) 82%, transparent);
+    opacity: 0.45;
+    transition: opacity 0.5s var(--ease-out);
   }
 
-  @media (min-width: 52rem) {
-    .beliefs__row {
-      grid-template-columns: 4rem minmax(0, 26ch) minmax(0, 1fr);
-      align-items: baseline;
+  .beliefs__row[data-active='true'] .beliefs__row-body {
+    opacity: 1;
+  }
+
+  @media (min-width: 60rem) {
+    .beliefs__row-inner {
+      grid-template-columns: 3.5rem minmax(0, 34ch) minmax(0, 1fr);
+      align-items: center;
       gap: clamp(1.5rem, 4vw, 4rem);
+    }
+
+    .beliefs__row-title {
+      text-align: right;
+    }
+  }
+
+  /**
+   * Without the island — no JavaScript, or reduced motion — every row reads at
+   * full strength rather than four of five looking half-lit. The photographs
+   * stay hidden: with nothing driving the Active state they would all show at
+   * once, five images stacked in five bands with no relationship to what is
+   * being read.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .beliefs__row-body {
+      opacity: 1;
     }
   }
 </style>
