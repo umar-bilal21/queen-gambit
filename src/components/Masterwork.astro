@@ -6,22 +6,24 @@ import type { Photo } from '../content/images';
 import Divider from './ornament/Divider.astro';
 
 /**
- * What the marine work in the building means — three cards that turn to reveal
- * their text.
+ * What the marine work in the building means — three full-width bands that
+ * stack over one another as the visitor scrolls.
  *
- * This replaced three stacked full-width bands. Those were the client's first
- * instruction and they were built that way, but at the width the client
- * actually browses at each band was a screen of photograph carrying four lines
- * of copy, and three of them in a row made the page feel padded rather than
- * considered. Cards say the same three things in a third of the height.
+ * The bands are the client's original instruction and the arrangement they
+ * preferred. An intermediate version turned them into flip cards to save
+ * height; the client rejected it, and they were right — three cards in a row is
+ * a features grid, and this copy is three consecutive thoughts rather than
+ * three options.
  *
- * The turn is on hover where there is a pointer, and on tap where there is not.
- * A card that only responds to hover is inert on a phone, and these carry real
- * copy rather than decoration — the back of the card is not optional content.
+ * What the cards were solving was the height, and the stack solves it properly:
+ * each band is sticky at the top of the viewport, so the next one climbs over
+ * the last rather than pushing it down the page. Three screens of content
+ * occupy one screen at a time, and the movement is the point rather than a
+ * side effect — this is the behaviour of the reference the client pointed at.
  *
- * Each card is a button rather than a div: it is interactive, it holds content
- * that is otherwise hidden, and a keyboard visitor has to be able to reach it.
- * `aria-expanded` says which way it is facing.
+ * Every band has to be fully opaque, or the band beneath shows through as it is
+ * covered. That is why each carries its own veil rather than relying on a
+ * shared ground.
  */
 interface Props {
   /** In the same order as the blocks. */
@@ -31,126 +33,60 @@ interface Props {
 const { photos } = Astro.props;
 ---
 
-<section class="masterwork u-on-navy" id="masterwork" aria-labelledby="masterwork-title">
-  <div class="masterwork__head u-container">
-    <h2 class="masterwork__heading" id="masterwork-title" data-reveal-heading>
-      Ocean-Inspired Masterwork
-    </h2>
-    <Divider piece="queen" width="min(70vw, 14rem)" class="masterwork__crest" />
-  </div>
+<section class="masterwork" id="masterwork" aria-labelledby="masterwork-title" data-stack>
+  {
+    site.masterwork.blocks.map((block, index) => (
+      <div class="masterwork__band u-on-navy" data-stack-band>
+        <div class="masterwork__media u-cover" aria-hidden="true">
+          <Image
+            src={photos[index].src}
+            alt=""
+            widths={[1200, 1800, 2400]}
+            sizes="100vw"
+            loading="lazy"
+            quality={76}
+          />
+        </div>
+        <div class="masterwork__veil" aria-hidden="true" />
 
-  <ul class="masterwork__grid u-container">
-    {
-      site.masterwork.blocks.map((block, index) => (
-        <li class="masterwork__cell">
-          <button
-            class="masterwork__card"
-            type="button"
-            aria-expanded="false"
-            data-flip-card
+        <div class="masterwork__inner u-container">
+          <h2
+            class="masterwork__title"
+            id={index === 0 ? 'masterwork-title' : undefined}
           >
-            <span class="masterwork__face masterwork__face--front">
-              <span class="masterwork__media u-cover" aria-hidden="true">
-                <Image
-                  src={photos[index].src}
-                  alt=""
-                  widths={[600, 900, 1200]}
-                  sizes="(min-width: 64rem) 32vw, 90vw"
-                  loading="lazy"
-                  quality={76}
-                />
-              </span>
-              <span class="masterwork__scrim" aria-hidden="true" />
-              <span class="masterwork__title">{block.title}</span>
-              <span class="masterwork__hint u-eyebrow" aria-hidden="true">Read more</span>
-            </span>
+            {block.title}
+          </h2>
+          <Divider piece={index === 1 ? 'queen' : 'pawn'} width="min(70vw, 14rem)" />
+          <p class="masterwork__body">{block.body}</p>
 
-            <span class="masterwork__face masterwork__face--back">
-              <span class="masterwork__back-title u-eyebrow">{block.title}</span>
-              <span class="masterwork__body">{block.body}</span>
-            </span>
-          </button>
-        </li>
-      ))
-    }
-  </ul>
-
-  <div class="masterwork__foot">
-    <a class="masterwork__cta u-eyebrow" href={site.masterwork.ctaHref}>
-      {site.masterwork.cta}
-    </a>
-  </div>
+          {
+            index === site.masterwork.blocks.length - 1 && (
+              <a class="masterwork__cta u-eyebrow" href={site.masterwork.ctaHref}>
+                {site.masterwork.cta}
+              </a>
+            )
+          }
+        </div>
+      </div>
+    ))
+  }
 </section>
 
 <style>
   .masterwork {
-    padding-block: var(--space-2xl);
-  }
-
-  .masterwork__head {
-    display: grid;
-    justify-items: center;
-    gap: var(--space-s);
-    margin-block-end: var(--space-xl);
-    text-align: center;
-  }
-
-  .masterwork__heading {
-    font-size: var(--step-4);
-  }
-
-  .masterwork__crest {
-    color: var(--gold);
-  }
-
-  .masterwork__grid {
-    display: grid;
-    gap: clamp(1.25rem, 2.5vw, 2.25rem);
-    list-style: none;
-    margin: 0;
-    padding-inline: var(--gutter);
-  }
-
-  @media (min-width: 64rem) {
-    .masterwork__grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  .masterwork__cell {
-    /* The perspective lives on the cell, not the card: on the card itself the
-       rotation is flattened and the turn reads as a wipe. */
-    perspective: 1400px;
-  }
-
-  .masterwork__card {
     position: relative;
-    display: block;
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    padding: 0;
-    text-align: left;
-    transform-style: preserve-3d;
-    transition: transform 0.85s var(--ease-in-out);
   }
 
-  .masterwork__card[aria-expanded='true'] {
-    transform: rotateY(180deg);
-  }
-
-  .masterwork__face {
-    position: absolute;
-    inset: 0;
+  .masterwork__band {
+    position: sticky;
+    inset-block-start: 0;
     display: grid;
+    place-items: center;
+    min-height: 100svh;
+    padding-block: var(--space-xl);
     overflow: clip;
-    backface-visibility: hidden;
-    border: 1px solid color-mix(in srgb, var(--gold) 38%, transparent);
-  }
-
-  .masterwork__face--front {
-    align-content: end;
-    gap: var(--space-2xs);
-    padding: var(--space-m);
+    isolation: isolate;
+    text-align: center;
   }
 
   .masterwork__media {
@@ -159,54 +95,45 @@ const { photos } = Astro.props;
     z-index: -2;
   }
 
-  .masterwork__scrim {
+  /**
+   * Opaque enough that the band underneath never shows through as this one
+   * climbs over it, and heavy enough that body copy sits on a real ground
+   * rather than a tint — one of the three photographs is a sunrise that is
+   * already dark, so the shadow on the type does the rest of the work.
+   */
+  .masterwork__veil {
     position: absolute;
     inset: 0;
     z-index: -1;
     background: linear-gradient(
-      to top,
-      color-mix(in srgb, var(--navy-abyss) 92%, transparent) 0%,
-      color-mix(in srgb, var(--navy-deep) 55%, transparent) 55%,
-      color-mix(in srgb, var(--navy-deep) 25%, transparent) 100%
+      to bottom,
+      color-mix(in srgb, var(--navy-deep) 76%, transparent),
+      color-mix(in srgb, var(--navy-abyss) 68%, transparent)
     );
   }
 
-  .masterwork__title {
-    font-family: var(--font-display);
-    font-size: var(--step-2);
-    line-height: 1.12;
-    color: var(--cream);
-  }
-
-  .masterwork__hint {
-    color: var(--gold-light);
-  }
-
-  .masterwork__face--back {
-    align-content: center;
+  .masterwork__inner {
+    display: grid;
+    justify-items: center;
     gap: var(--space-s);
-    padding: clamp(1.5rem, 3vw, 2.5rem);
-    background: var(--navy-deep);
-    transform: rotateY(180deg);
+    max-width: 60rem;
   }
 
-  .masterwork__back-title {
-    color: var(--gold-light);
+  .masterwork__title {
+    font-size: var(--step-4);
+    text-shadow: 0 2px 26px color-mix(in srgb, var(--navy-abyss) 72%, transparent);
   }
 
   .masterwork__body {
-    font-size: var(--step-0);
-    line-height: 1.7;
-    color: var(--ink-muted);
-  }
-
-  .masterwork__foot {
-    display: grid;
-    place-items: center;
-    margin-block-start: var(--space-xl);
+    max-width: 56ch;
+    font-size: var(--step-1);
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--cream) 92%, transparent);
+    text-shadow: 0 1px 18px color-mix(in srgb, var(--navy-abyss) 85%, transparent);
   }
 
   .masterwork__cta {
+    margin-block-start: var(--space-m);
     padding: 1.05rem 2.6rem;
     color: var(--gold-light);
     border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent);
@@ -222,29 +149,15 @@ const { photos } = Astro.props;
     color: var(--navy-abyss);
   }
 
-  /**
-   * Without the turn, both faces have to be readable — a card that cannot flip
-   * must not be a card with its content hidden behind it.
+  /*
+   * No stack without motion. Sticky stacking is movement by definition, and a
+   * visitor who has asked for less of it should get three ordinary sections.
    */
   @media (prefers-reduced-motion: reduce) {
-    .masterwork__card {
-      aspect-ratio: auto;
-      transform: none !important;
-      transform-style: flat;
-    }
-
-    .masterwork__face {
+    .masterwork__band {
       position: static;
-      backface-visibility: visible;
-      transform: none !important;
-    }
-
-    .masterwork__face--front {
-      aspect-ratio: 4 / 3;
-    }
-
-    .masterwork__hint {
-      display: none;
+      min-height: auto;
+      padding-block: var(--space-2xl);
     }
   }
 </style>

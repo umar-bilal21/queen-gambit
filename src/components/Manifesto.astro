@@ -1,6 +1,6 @@
 ---
 import { site, contactHref } from '../content/site';
-import TortoiseArtwork from './TortoiseArtwork.astro';
+import ReefArtwork from './ReefArtwork.astro';
 import Divider from './ornament/Divider.astro';
 
 /**
@@ -17,8 +17,13 @@ import Divider from './ornament/Divider.astro';
  * taller, the travel is longer, and a visitor who stops scrolling can always
  * finish the sentence in front of them because nothing moves unless they do.
  *
- * Cream ground with land tortoises rather than the Story's sea turtles — the
- * client's explicit instruction, confirmed when the distinction was put to them.
+ * Cream ground with the same reef line work as the Story.
+ *
+ * An intermediate version drew land tortoises here instead — domed shells,
+ * pillar legs — on the client's instruction to use "turtles, not sea turtles".
+ * Seeing it on the page they asked for the Story's artwork back, which is the
+ * right call: two different creatures across two cream panels of an ocean-themed
+ * site read as an inconsistency rather than a distinction.
  *
  * As on the Story, the fixed window is switched on by the island rather than the
  * stylesheet. Without JavaScript a fixed height would clip the statement with
@@ -30,10 +35,10 @@ import Divider from './ornament/Divider.astro';
 <section class="manifesto u-on-cream" id="manifesto" aria-labelledby="manifesto-title" data-manifesto>
   <div class="manifesto__stage">
     <div class="manifesto__art manifesto__art--left" aria-hidden="true">
-      <TortoiseArtwork side="left" />
+      <ReefArtwork side="left" />
     </div>
     <div class="manifesto__art manifesto__art--right" aria-hidden="true">
-      <TortoiseArtwork side="right" />
+      <ReefArtwork side="right" />
     </div>
 
     <div class="manifesto__inner u-container">
