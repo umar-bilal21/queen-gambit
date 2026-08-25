@@ -97,9 +97,16 @@ const { photo } = Astro.props;
     gap: clamp(1rem, 2.5vh, 1.75rem);
   }
 
+  /*
+   * Cream, not gold. The subtitle sits mid-frame where the scrim is at its
+   * lightest and the photograph at its brightest; gold small-caps there falls
+   * to roughly 2:1 against the building behind it. Gold is used on this section
+   * where the ground is dark — the attribution over the lawn, the scroll cue —
+   * and for ornament, which carries no reading obligation.
+   */
   .hero__subtitle {
     max-width: 46ch;
-    color: color-mix(in srgb, var(--cream) 92%, transparent);
+    color: color-mix(in srgb, var(--cream) 94%, transparent);
     /* The subtitle is small, letterspaced and lands mid-frame where the
        photograph is at its brightest — the scrim alone does not carry it. */
     text-shadow: 0 1px 14px color-mix(in srgb, var(--navy-deep) 75%, transparent);
@@ -119,6 +126,7 @@ const { photo } = Astro.props;
     display: grid;
     gap: 0.2rem;
     margin-block-start: var(--space-2xs);
+    color: var(--gold-light);
   }
 
   .hero__author {
@@ -135,7 +143,7 @@ const { photo } = Astro.props;
     display: flex;
     align-items: center;
     gap: var(--space-xs);
-    color: color-mix(in srgb, var(--cream) 65%, transparent);
+    color: color-mix(in srgb, var(--gold-light) 78%, transparent);
   }
 
   .hero__cue-rule {

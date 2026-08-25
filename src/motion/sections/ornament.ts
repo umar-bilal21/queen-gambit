@@ -16,7 +16,16 @@ import { gsap, registerSection, type MotionContext } from '../index';
 function initOrnament({ reduced }: MotionContext): void {
   if (reduced) return;
 
-  gsap.utils.toArray<SVGElement>('[data-ornament]').forEach((mark) => {
+  /*
+   * Everything except the Intro's. The Intro is a fixed overlay removed before
+   * the visitor has scrolled at all, so a scroll trigger there would either
+   * fire instantly and fight the Intro's own timeline, or outlive the element
+   * it was watching. Its divider is drawn by that timeline instead.
+   */
+  gsap.utils
+    .toArray<SVGElement>('[data-ornament]')
+    .filter((mark) => !mark.closest('[data-intro]'))
+    .forEach((mark) => {
     const parts = gsap.utils.toArray<SVGElement>('[data-ornament-part]', mark);
     if (parts.length === 0) return;
 

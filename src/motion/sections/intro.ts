@@ -71,6 +71,9 @@ function initIntro({ reduced }: MotionContext): void {
   locked = true;
 
   const parts = gsap.utils.toArray<SVGElement>('[data-queen] [data-queen-part]');
+  const ruleParts = gsap.utils.toArray<SVGElement>(
+    '[data-intro] [data-ornament-part]',
+  );
   const line = root.querySelector<HTMLElement>('[data-intro-line]');
   const skip = root.querySelector<HTMLElement>('[data-intro-skip]');
   const queen = root.querySelector<SVGElement>('[data-queen]');
@@ -93,6 +96,7 @@ function initIntro({ reduced }: MotionContext): void {
     .set(root, { autoAlpha: 1 })
     .set(parts, { drawSVG: '0%' })
     .set(line, { autoAlpha: 0, y: 14 })
+    .set(ruleParts, { drawSVG: '0%' })
     .set(skip, { autoAlpha: 0 })
     .to(parts, {
       drawSVG: '100%',
@@ -102,6 +106,11 @@ function initIntro({ reduced }: MotionContext): void {
     })
     .to(queen, { scale: 1.015, duration: 1.1, ease: 'sine.inOut' }, '-=0.5')
     .to(line, { autoAlpha: 1, y: 0, duration: 0.7 }, '-=0.75')
+    .to(
+      ruleParts,
+      { drawSVG: '100%', duration: 0.6, stagger: 0.05, ease: 'power2.inOut' },
+      '-=0.45',
+    )
     .to(skip, { autoAlpha: 1, duration: 0.3 }, '-=0.5')
     // The reading hold.
     .to({}, { duration: 0.65 })

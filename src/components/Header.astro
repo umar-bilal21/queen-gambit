@@ -87,8 +87,9 @@ import Monogram from './Monogram.astro';
 
   /* Set by the motion island once the Hero has passed. */
   .header[data-condensed='true'] {
-    background: color-mix(in srgb, var(--navy) 92%, transparent);
+    background: color-mix(in srgb, var(--navy-deep) 94%, transparent);
     backdrop-filter: blur(10px);
+    box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--gold) 30%, transparent);
   }
 
   .header__inner {
@@ -105,6 +106,7 @@ import Monogram from './Monogram.astro';
     display: flex;
     flex: none;
     margin-inline-end: auto;
+    color: var(--gold-light);
   }
 
   .header__nav {
@@ -132,7 +134,7 @@ import Monogram from './Monogram.astro';
     inset-block-end: 0;
     inset-inline: 0;
     height: 1px;
-    background: currentColor;
+    background: var(--gold);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.4s var(--ease-out);
