@@ -37,6 +37,16 @@ import galleryElevation from '../assets/images/gallery-castle-elevation.jpg';
 import enterColonnade from '../assets/images/enter-ocean-colonnade.jpg';
 import enterEvening from '../assets/images/enter-castle-evening.jpg';
 
+// The castle direction's photography, supplied by the client.
+import crownedTurtle from '../assets/images/crowned-turtle-mural.jpg';
+import sunCeiling from '../assets/images/sun-ceiling-chandelier.jpg';
+import clamShell from '../assets/images/giant-clam-shell.jpg';
+import marlinSunrise from '../assets/images/marlin-at-sunrise.jpg';
+import mantaRay from '../assets/images/manta-ray-mosaic.jpg';
+import coralWall from '../assets/images/coral-reef-wall.jpg';
+import seaGod from '../assets/images/sea-god-mural.jpg';
+import poolToOcean from '../assets/images/pool-to-ocean.jpg';
+
 /**
  * How the Hero photograph is generated.
  *
@@ -139,6 +149,56 @@ export const images = {
       "The Castle's ocean elevation seen at an angle, its terraces, columns and blue-tiled roofs stepping down to the lawn.",
     ),
   ] as const satisfies readonly Photo[],
+
+  /**
+   * The photographs the castle direction is built from.
+   *
+   * Two notes worth carrying:
+   *
+   * The sea god mural was shot sideways and has been rotated upright in source
+   * rather than with a CSS transform, so nothing downstream has to know.
+   *
+   * The crowned turtle is the most on-brand image anyone has supplied and also
+   * the smallest at 1290×716. Behind a full-width band it will be visibly soft
+   * on a large display. Raised with the client and accepted — do not upscale it
+   * and do not quietly substitute another photograph.
+   */
+  castle: {
+    crownedTurtle: photo(
+      crownedTurtle,
+      'A painted sea turtle wearing a jewelled crown, its shell patterned in green and gold, swimming through deep blue water.',
+    ),
+    sunCeiling: photo(
+      sunCeiling,
+      'A ceiling painted with a blazing orange sun, from whose centre a cascading chandelier of pale blue crystal falls.',
+    ),
+    clamShell: photo(
+      clamShell,
+      'A giant clam shell in close view, its mantle rippling in bands of gold, cream and deep blue.',
+    ),
+    marlinSunrise: photo(
+      marlinSunrise,
+      'A tall blue glass marlin sculpture on a mosaic plinth, standing against a balustrade as the sun rises over the ocean behind it.',
+    ),
+    mantaRay: photo(
+      mantaRay,
+      'A mosaic of a manta ray gliding through deep blue water beneath a shoal of small silver fish.',
+    ),
+    coralWall: photo(
+      coralWall,
+      'A mosaic wall of a coral reef in full colour: yellow and white fish moving among red, orange and green corals against blue.',
+    ),
+    seaGod: photo(
+      seaGod,
+      'A mural of a sea god with long flowing hair rising through turquoise water, framed like a doorway, small tropical fish drifting past.',
+    ),
+  },
+
+  /** The view the page closes on. */
+  poolToOcean: photo(
+    poolToOcean,
+    'The swimming pool, sea turtles set in mosaic across its floor, running between tiled columns straight out to the open Atlantic.',
+  ),
 
   /** The two photographs combined into the Enter section's single field. */
   enter: {
