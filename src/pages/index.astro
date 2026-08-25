@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import Story from '../components/Story.astro';
 import Masterwork from '../components/Masterwork.astro';
+import Descent from '../components/Descent.astro';
 import Rooms from '../components/Rooms.astro';
 import Beliefs from '../components/Beliefs.astro';
 import Gallery from '../components/Gallery.astro';
@@ -30,8 +31,14 @@ import { images } from '../content/images';
     <Hero photo={images.hero} />
     <Story />
     <Masterwork photos={images.masterwork} />
-    <Rooms photos={images.rooms} />
-    <Beliefs photos={images.beliefs} />
+    {/*
+      Rooms and Beliefs share one fixed underwater ground so scrolling between
+      them never crosses a seam. The wrapper exists only to own that ground.
+    */}
+    <Descent photo={images.descent}>
+      <Rooms photos={images.rooms} />
+      <Beliefs photos={images.beliefs} />
+    </Descent>
     <Gallery photos={images.gallery} />
     <Enter left={images.enter.left} right={images.enter.right} />
   </main>

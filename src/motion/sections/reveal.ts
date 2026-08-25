@@ -123,6 +123,58 @@ function initReveals({ reduced }: MotionContext): void {
     }
   });
 
+  /*
+   * Frames that open as they rise.
+   *
+   * The reference the client pointed at scales its image frames on scroll
+   * rather than drifting them around, and that is what this does: the frame
+   * begins inset and widens toward its full width as it travels up the
+   * viewport, the photograph inside easing back from a slight over-scale at the
+   * same time.
+   *
+   * Scrubbed, unlike everything else in this module, because it is tied to
+   * where the frame is rather than to it having arrived. It runs after the
+   * uncover reveal above rather than replacing it — the frame is revealed, then
+   * it opens.
+   */
+  gsap.utils.toArray<HTMLElement>('[data-expand]').forEach((frame) => {
+    const image = frame.querySelector('img');
+
+    gsap.fromTo(
+      frame,
+      { scaleX: 0.82, scaleY: 0.9 },
+      {
+        scaleX: 1,
+        scaleY: 1,
+        transformOrigin: '50% 50%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: frame,
+          start: 'top bottom',
+          end: 'center center',
+          scrub: 0.6,
+        },
+      },
+    );
+
+    if (image) {
+      gsap.fromTo(
+        image,
+        { scale: 1.22 },
+        {
+          scale: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: frame,
+            start: 'top bottom',
+            end: 'center center',
+            scrub: 0.6,
+          },
+        },
+      );
+    }
+  });
+
   gsap.utils.toArray<HTMLElement>('[data-reveal-group]').forEach((group) => {
     const children = Array.from(group.children) as HTMLElement[];
     if (children.length === 0) return;

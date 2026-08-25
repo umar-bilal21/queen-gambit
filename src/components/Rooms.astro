@@ -32,7 +32,7 @@ const { photos } = Astro.props;
             <p class="rooms__name u-eyebrow" data-reveal data-reveal-delay={0.1 * index}>
               {room.name}
             </p>
-            <div class="rooms__frame u-cover" data-reveal-image>
+            <div class="rooms__frame u-cover" data-reveal-image data-expand>
               <Image
                 src={photos[index].src}
                 alt={photos[index].alt}
@@ -52,6 +52,7 @@ const { photos } = Astro.props;
 <style>
   .rooms {
     padding-block: var(--space-2xl);
+    position: relative;
   }
 
   .rooms__inner {
@@ -88,6 +89,9 @@ const { photos } = Astro.props;
     aspect-ratio: 3 / 4;
     overflow: clip;
     background: color-mix(in srgb, var(--cream) 8%, transparent);
+    /* The frame is scaled on scroll, so it needs its own compositing layer or
+       the photograph inside re-rasterises every frame. */
+    will-change: transform;
   }
 
   .rooms__frame :global(img) {

@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets';
+import type { Photo } from '../content/images';
+
+/**
+ * The ground that Explore Every Corner and Our Beliefs share.
+ *
+ * Before this the two sat on separate flat navy grounds and scrolling between
+ * them crossed a visible seam — two slabs rather than one descent. A single
+ * photograph is fixed behind both, deepening as the visitor travels, and the
+ * sections lay themselves over it with their own imagery intact.
+ *
+ * Fixed rather than scrolling with the content: a ground that moves with what
+ * is on it is just a background image, whereas one that stays put reads as
+ * something the page is descending through.
+ *
+ * Graded hard toward navy. This is texture under type, not a picture anyone is
+ * meant to look at, and everything laid over it has to stay readable.
+ */
+interface Props {
+  photo: Photo;
+}
+
+const { photo } = Astro.props;
+---
+
+<div class="descent" data-descent>
+  <div class="descent__ground u-cover" aria-hidden="true">
+    <Image
+      src={photo.src}
+      alt=""
+      widths={[1200, 1800, 2400]}
+      sizes="100vw"
+      loading="lazy"
+      quality={62}
+    />
+    <div class="descent__veil"></div>
+  </div>
+
+  <slot />
+</div>
+
+<style>
+  .descent {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .descent__ground {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    /* `clip` rather than `hidden` so the fixed child is clipped to the wrapper
+       without turning it into a scroll container. */
+    overflow: clip;
+  }
+
+  .descent__ground :global(img) {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    width: 100vw;
+    height: 100svh;
+  }
+
+  .descent__veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--navy) 92%, transparent) 0%,
+      color-mix(in srgb, var(--navy-deep) 88%, transparent) 55%,
+      color-mix(in srgb, var(--navy-abyss) 92%, transparent) 100%
+    );
+  }
+
+  /*
+   * The sections inside declare their own navy ground. They must not, or the
+   * shared one is never seen — this is the one place a section's surface is
+   * overridden, and it is why the wrapper exists.
+   */
+  .descent :global(.rooms),
+  .descent :global(.beliefs) {
+    background: transparent;
+  }
+</style>

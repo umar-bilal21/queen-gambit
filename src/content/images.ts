@@ -218,6 +218,19 @@ export const images = {
     ),
   ] as const satisfies readonly Photo[],
 
+  /**
+   * The ground beneath Explore Every Corner and the Beliefs heading.
+   *
+   * A photograph rather than a flat colour so the two sections read as one
+   * descent instead of two slabs — which is the whole point of it spanning
+   * them. Graded hard toward navy in the component: it is texture under type,
+   * not a picture anyone is meant to look at.
+   */
+  descent: photo(
+    coralWall,
+    'A mosaic wall of a coral reef: fish moving among red, orange and green corals in deep blue water.',
+  ),
+
   /** The view the page closes on. */
   poolToOcean: photo(
     poolToOcean,
