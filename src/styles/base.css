@@ -43,10 +43,17 @@ video {
   max-width: 100%;
 }
 
+/*
+ * Every heading is the display face. Sections must not reach for the sans here
+ * however closely their own reference sets it that way — one page, one voice
+ * for headings, and small letterspaced labels (`.u-eyebrow`) carry the sans.
+ */
 h1,
 h2,
 h3 {
   font-family: var(--font-display);
+  /* Roman, never italic. Sections must not set their own heading style. */
+  font-style: normal;
   font-weight: 300;
   line-height: 1.02;
   letter-spacing: -0.015em;

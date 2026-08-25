@@ -51,6 +51,11 @@ set identically and both recolour, so the effect runs unbroken from the first wo
 to the last. It is not a headline followed by body copy, and treating it as one was
 a correction the client had to make twice.
 
+**Window** — the fixed-height frame the Passage travels through while the Story is
+held still. It exists so a long piece of writing costs a predictable amount of
+screen rather than however many lines it happens to run to. Its edges are masked,
+so text arrives and leaves rather than being cut.
+
 An earlier draft split this in two — a white recolouring section and a separate
 cream one for the artwork. That was wrong, and the client corrected it: one
 section, one ground, both paragraphs.

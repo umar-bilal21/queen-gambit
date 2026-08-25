@@ -93,14 +93,23 @@ test.describe('the homepage', () => {
 
   test('a click dismisses the Intro early', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('[data-intro]')).toBeVisible();
+    const intro = page.locator('[data-intro]');
+    await expect(intro).toBeVisible();
 
+    /*
+     * Click the overlay itself rather than the skip button. The button fades in
+     * partway through the timeline, so `click()` would wait for it to become
+     * actionable — and timing the dismissal from before that wait measures how
+     * long the Intro takes to offer the button, not how long skipping takes.
+     */
+    await intro.click({ position: { x: 10, y: 10 } });
     const started = Date.now();
-    await skipIntro(page);
+
+    await expect(intro).toHaveCount(0, { timeout: INTRO_MS });
 
     // Skipping fast-forwards rather than cutting, so it is not instant — but it
     // must be meaningfully shorter than sitting through the whole thing.
-    expect(Date.now() - started).toBeLessThan(2500);
+    expect(Date.now() - started).toBeLessThan(2000);
   });
 
   test('the contact button carries a working mailto', async ({ page }) => {

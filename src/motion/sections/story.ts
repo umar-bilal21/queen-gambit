@@ -1,31 +1,36 @@
-import { gsap, registerSection, type MotionContext } from '../index';
+import { gsap, ScrollTrigger, registerSection, type MotionContext } from '../index';
 
 /**
- * The Story's words recolour from navy to aqua, scrubbed by scroll.
+ * The Story's passage travels through a fixed window while the section is held
+ * still, and its words recolour from navy to aqua behind the reader.
  *
- * Bound to position rather than played on a timer, so scrolling back up runs it
- * backwards and the effect is never spent. The words are already real elements
- * in the HTML — split at build time, not here — so this only animates them.
+ * The travel is what keeps the section's cost predictable: a long passage laid
+ * out down the page consumes however many lines it happens to run to, whereas
+ * this consumes one screen no matter how much writing is in it.
  *
- * Note the direction: words start navy and fade *to* aqua as they pass. The
- * legible state is therefore also the default state, which is what makes the
- * no-JavaScript and reduced-motion paths correct without any extra work.
+ * Everything is bound to scroll position rather than played on a timer, so
+ * scrolling back up runs it backwards and the effect is never spent.
+ *
+ * The reef line work strokes itself in on arrival — the same DrawSVG technique
+ * as the Queen in the Intro, which is what stops the Intro reading as a
+ * preamble bolted onto the front of the site.
  */
 
 function initStory({ reduced }: MotionContext): void {
-  if (reduced) return;
-
-  const section = document.querySelector<HTMLElement>('#story');
+  const section = document.querySelector<HTMLElement>('[data-story]');
   if (!section) return;
 
   /*
-   * The reef line work strokes itself in as the visitor arrives — the same
-   * DrawSVG technique as the Queen in the Intro, which is what stops the Intro
-   * reading as a preamble bolted onto the front of the site.
-   *
-   * A reveal, not a scrub: tying the drawing to scroll speed means a visitor
-   * flicking past sees it snap rather than draw.
+   * Under reduced motion nothing here runs — which also means the pinning flag
+   * below is never set, so the section lays out at its natural height and the
+   * whole passage is simply readable.
    */
+  if (reduced) return;
+
+  const track = section.querySelector<HTMLElement>('[data-story-track]');
+  const windowEl = section.querySelector<HTMLElement>('[data-story-window]');
+  const words = gsap.utils.toArray<HTMLElement>('[data-story-word]', section);
+
   gsap.utils.toArray<HTMLElement>('[data-reef-art]', section).forEach((art) => {
     const parts = gsap.utils.toArray<SVGElement>('[data-reef-part]', art);
     if (parts.length === 0) return;
@@ -43,9 +48,44 @@ function initStory({ reduced }: MotionContext): void {
     );
   });
 
-  const words = gsap.utils.toArray<HTMLElement>('[data-story-word]', section);
-  if (words.length === 0) return;
+  if (!track || !windowEl || words.length === 0) return;
 
+  /*
+   * Only now is the fixed-height window switched on. Until this point the
+   * passage has been at its natural height, so a visitor whose JavaScript never
+   * arrived reads all of it rather than a clipped fragment of it.
+   */
+  section.dataset.storyPinned = 'true';
+
+  /*
+   * How far the passage has to move for its last line to reach the top of the
+   * window. Measured rather than assumed: the passage reflows with the
+   * viewport, and a hard-coded distance would leave the closing words either
+   * stranded below the fold or scrolled past before the section ends.
+   */
+  const travel = (): number => Math.max(0, track.scrollHeight - windowEl.clientHeight);
+
+  gsap.fromTo(
+    track,
+    { y: 0 },
+    {
+      y: () => -travel(),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.4,
+        invalidateOnRefresh: true,
+      },
+    },
+  );
+
+  /*
+   * The recolour runs over the same range, so a word fading is a word leaving.
+   * `stagger: 1` spreads the tweens evenly across the scrub, which lines up
+   * with the travel closely enough that the two read as one effect.
+   */
   gsap.fromTo(
     words,
     { color: 'var(--navy)' },
@@ -55,21 +95,17 @@ function initStory({ reduced }: MotionContext): void {
       stagger: 1,
       scrollTrigger: {
         trigger: section,
-        /*
-         * The range spans the passage's whole journey up the viewport, not
-         * just the part of it around the centre line. On a phone the section
-         * is barely taller than the screen, and the tighter range meant the
-         * scrub reached its end while the passage was still being read — the
-         * entire paragraph sat pale aqua on white, which is close to
-         * unreadable. Measuring from where it enters to where it is nearly
-         * gone keeps the words the reader is on at full navy.
-         */
-        start: 'top bottom-=15%',
-        end: 'bottom top+=30%',
-        scrub: 0.6,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.4,
       },
     },
   );
+
+  // The passage reflows on resize, so the distance it must travel changes.
+  ScrollTrigger.addEventListener('refreshInit', () => {
+    gsap.set(track, { y: 0 });
+  });
 }
 
 registerSection(initStory);

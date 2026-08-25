@@ -5,21 +5,19 @@ import ReefArtwork from './ReefArtwork.astro';
 /**
  * One cream beige section: the reef line work, and the Castle's opening passage.
  *
- * The passage is two paragraphs but one piece of text — both set the same, both
- * recolouring, so the effect runs straight through from the first word to the
- * last rather than stopping at a headline and handing over to body copy. That
- * is what the reference does, and it is what the client asked for.
+ * The passage does not lay itself out down the page. It travels through a fixed
+ * window while the section is held still, so a long piece of writing costs a
+ * predictable amount of screen rather than however many lines it happens to
+ * run to. Words fade from navy to aqua behind the reader as they go, and the
+ * window's edges are masked so text arrives and leaves rather than being cut.
  *
- * The recolour is bound to scroll position rather than played on a timer, so
- * scrolling back up runs it backwards and the effect is never spent.
+ * Two paragraphs, but one piece of text: both set identically, both
+ * recolouring, so the effect runs unbroken from the first word to the last.
  *
  * Splitting happens here at build time rather than in the browser. Doing it in
  * markup means the words are real text in the HTML — selectable, searchable,
  * and read in the right order by a screen reader — and it means the section
- * renders correctly at full contrast when the motion island never boots.
- *
- * Each word is wrapped, not each character: per-character recolouring reads as
- * a glitch at this size, and it multiplies the element count by five.
+ * renders correctly when the motion island never boots.
  *
  * The section's top edge is a straight line. The client's earlier mockup had a
  * wavy divider here and asked explicitly for it to go.
@@ -28,34 +26,34 @@ import ReefArtwork from './ReefArtwork.astro';
 const words = (text: string) => text.split(/\s+/).filter(Boolean);
 ---
 
-<section class="story u-on-cream" id="story" aria-labelledby="story-title">
-  <div class="story__art story__art--left" aria-hidden="true">
-    <ReefArtwork side="left" />
-  </div>
-  <div class="story__art story__art--right" aria-hidden="true">
-    <ReefArtwork side="right" />
-  </div>
+<section class="story u-on-cream" id="story" aria-labelledby="story-title" data-story>
+  <div class="story__stage">
+    <div class="story__art story__art--left" aria-hidden="true">
+      <ReefArtwork side="left" />
+    </div>
+    <div class="story__art story__art--right" aria-hidden="true">
+      <ReefArtwork side="right" />
+    </div>
 
-  <div class="story__inner u-container">
-    <span class="story__mark" aria-hidden="true">✦</span>
-
-    <div class="story__passage">
-      {
-        site.story.paragraphs.map((paragraph, index) => {
-          const Tag = index === 0 ? 'h2' : 'p';
-          return (
-            <Tag class="story__para" id={index === 0 ? 'story-title' : undefined}>
-              {words(paragraph).map((word) => (
-                <>
-                  <span class="story__word" data-story-word>
-                    {word}
-                  </span>{' '}
-                </>
-              ))}
-            </Tag>
-          );
-        })
-      }
+    <div class="story__window" data-story-window>
+      <div class="story__passage" data-story-track>
+        {
+          site.story.paragraphs.map((paragraph, index) => {
+            const Tag = index === 0 ? 'h2' : 'p';
+            return (
+              <Tag class="story__para" id={index === 0 ? 'story-title' : undefined}>
+                {words(paragraph).map((word) => (
+                  <>
+                    <span class="story__word" data-story-word>
+                      {word}
+                    </span>{' '}
+                  </>
+                ))}
+              </Tag>
+            );
+          })
+        }
+      </div>
     </div>
   </div>
 </section>
@@ -64,33 +62,62 @@ const words = (text: string) => text.split(/\s+/).filter(Boolean);
   .story {
     position: relative;
     /* Straight top edge — no wavy divider. */
+  }
+
+  /*
+   * The scroll distance the passage travels over. Only meaningful once the
+   * island has pinned the stage; without it the section is its natural height.
+   */
+  .story[data-story-pinned='true'] {
+    height: 195svh;
+  }
+
+  .story__stage {
+    display: grid;
+    place-items: center;
     padding-block: var(--space-2xl);
+    padding-inline: var(--gutter);
     overflow: clip;
     isolation: isolate;
   }
 
-  .story__inner {
-    display: grid;
-    justify-items: center;
-    gap: var(--space-l);
-    max-width: 68rem;
-    text-align: center;
+  .story[data-story-pinned='true'] .story__stage {
+    position: sticky;
+    inset-block-start: 0;
+    height: 100svh;
+    padding-block: 0;
   }
 
-  .story__mark {
-    font-size: var(--step-1);
-    color: var(--aqua-deep);
-  }
-
-  /*
-   * The measure is set in rem, not ch. This wrapper inherits the body's font
-   * size rather than the passage's, so a ch-based measure here resolves
-   * against ~1rem and squeezes the display text to three words a line.
+  /**
+   * The window the passage moves through.
+   *
+   * Its height is fixed only once the island is driving the travel. Without
+   * JavaScript a fixed height would simply clip the writing and there would be
+   * nothing to scroll it — so by default it is whatever the passage needs.
    */
+  .story__window {
+    width: 100%;
+    max-width: min(100%, 44rem);
+  }
+
+  .story[data-story-pinned='true'] .story__window {
+    height: clamp(15rem, 44svh, 24rem);
+    overflow: clip;
+    /* Text arrives and leaves rather than being cut off at a hard edge. */
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 14%,
+      black 86%,
+      transparent 100%
+    );
+  }
+
   .story__passage {
     display: grid;
-    gap: clamp(1.5rem, 3vw, 2.5rem);
-    max-width: min(100%, 44rem);
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+    text-align: center;
+    will-change: transform;
   }
 
   /*
@@ -143,16 +170,10 @@ const words = (text: string) => text.split(/\s+/).filter(Boolean);
     inset-inline-end: 0;
   }
 
-  /* On a phone the artwork would sit behind the copy and cost contrast, so it
-     retreats to a band at the foot of the section instead. */
   @media (max-width: 52rem) {
-    .story {
-      padding-block-end: calc(var(--space-2xl) + 7rem);
-    }
-
     .story__art {
-      width: 45vw;
-      height: 13rem;
+      width: 42vw;
+      height: 12rem;
       opacity: 0.6;
     }
   }
