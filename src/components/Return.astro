@@ -41,20 +41,33 @@ import ReefArtwork from './ReefArtwork.astro';
 <style>
   .return {
     position: relative;
-    padding-block: var(--space-xl) 0;
+    /* The same opening as Explore Every Corner, Our Beliefs and the Gallery.
+       This section used the smaller step and sat visibly higher than its
+       neighbours against an otherwise regular rhythm. */
+    padding-block: var(--space-2xl);
     overflow: clip;
   }
 
+  /**
+   * Stretched, not centred.
+   *
+   * Centring a narrower block inside the container pushed this section's text
+   * 72px right of every other left-aligned section on the page — close enough
+   * to look like a mistake rather than a choice, and the kind of misalignment
+   * that is only obvious once you see two sections at the same time.
+   *
+   * The columns now span the container, so the lead starts on the same vertical
+   * as the Rooms, Beliefs and Gallery headings.
+   */
   .return__inner {
     display: grid;
-    justify-items: center;
+    justify-items: stretch;
     gap: var(--space-l);
   }
 
   .return__columns {
     display: grid;
     gap: var(--space-l);
-    max-width: 72rem;
   }
 
   .return__lead {
@@ -90,6 +103,7 @@ import ReefArtwork from './ReefArtwork.astro';
     grid-template-columns: 1fr 1fr;
     height: clamp(11rem, 22vw, 20rem);
     margin-block-start: var(--space-l);
+    margin-block-end: calc(var(--space-2xl) * -0.35);
     opacity: 0.85;
   }
 </style>

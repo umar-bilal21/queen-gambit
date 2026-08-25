@@ -92,7 +92,13 @@ const titleLines = [`${titleLead} BUILT`, titleRest.join(' BUILT ')];
 
 <style>
   .beliefs {
-    padding-block: var(--space-2xl) 0;
+    /*
+     * Closes with the same step it opens with. It used to end flush against the
+     * section below — the last row's border was the boundary, so the cream
+     * began with no water beneath it while every other junction on the page had
+     * a clear 208px.
+     */
+    padding-block: var(--space-2xl);
     overflow: clip;
   }
 
