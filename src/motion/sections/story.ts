@@ -30,11 +30,17 @@ function initStory({ reduced }: MotionContext): void {
       stagger: 1,
       scrollTrigger: {
         trigger: section,
-        // Starting once the passage is comfortably on screen and ending before
-        // it leaves means the recolour happens while the visitor is reading it,
-        // rather than beginning while it is still below the fold.
-        start: 'top center',
-        end: 'bottom center+=20%',
+        /*
+         * The range spans the passage's whole journey up the viewport, not
+         * just the part of it around the centre line. On a phone the section
+         * is barely taller than the screen, and the tighter range meant the
+         * scrub reached its end while the passage was still being read — the
+         * entire paragraph sat pale aqua on white, which is close to
+         * unreadable. Measuring from where it enters to where it is nearly
+         * gone keeps the words the reader is on at full navy.
+         */
+        start: 'top bottom-=15%',
+        end: 'bottom top+=30%',
         scrub: 0.6,
       },
     },

@@ -36,6 +36,16 @@ function initHeader(_context: MotionContext): void {
     toggle.setAttribute('aria-expanded', String(open));
     menu.hidden = !open;
     /*
+     * The open menu is a navy panel; without this the bar above it stays
+     * transparent over the Hero photograph and the monogram and toggle sit on
+     * bright sky. Only forced on while open — closing hands the condensed
+     * state back to the scroll trigger.
+     */
+    if (open) header?.setAttribute('data-condensed', 'true');
+    else if (window.scrollY < window.innerHeight * 0.8) {
+      header?.setAttribute('data-condensed', 'false');
+    }
+    /*
      * The menu covers the page, so the page must not scroll behind it. Same
      * reasoning as the Intro: what is underneath is not reachable, so it should
      * not move.
