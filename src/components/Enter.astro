@@ -70,12 +70,11 @@ const { left, right } = Astro.props;
     position: absolute;
     inset: 0;
     z-index: -2;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
   }
 
   .enter__pane {
-    position: relative;
+    position: absolute;
+    inset-block: 0;
     overflow: clip;
   }
 
@@ -85,22 +84,52 @@ const { left, right } = Astro.props;
     object-fit: cover;
   }
 
-  /* The two photographs must read as one field, not as a diptych with a seam
-     down the middle. Feathering the inner edge of each pane does it. */
-  .enter__pane--left {
-    mask-image: linear-gradient(to right, black 62%, transparent 100%);
-  }
-
+  /**
+   * The two photographs must read as one field, not as a diptych with a seam.
+   *
+   * Feathering both inward edges does not work: across the overlap neither
+   * pane is fully opaque, their opacities sum to less than one, and the
+   * background shows through as a pale vertical band — the exact seam the
+   * feathering was meant to remove. So the right photograph lies full-width
+   * underneath, and only the left one is masked, dissolving into it.
+   */
   .enter__pane--right {
-    margin-inline-start: -12%;
-    mask-image: linear-gradient(to left, black 62%, transparent 100%);
+    inset-inline: 0;
   }
 
+  .enter__pane--left {
+    inset-inline-start: 0;
+    width: 62%;
+    /* Above the full-width right pane, which is earlier in paint order, so the
+       left photograph is the one that dissolves into the other. */
+    z-index: 1;
+    mask-image: linear-gradient(to right, black 55%, transparent 100%);
+  }
+
+  /**
+   * Both available photographs are bright daylight with a great deal of sky,
+   * and cream display type over sky is unreadable at any weight. Two layers
+   * solve it: a flat wash that lowers the whole field, and a soft ellipse that
+   * puts real ground behind the type block without flattening the corners of
+   * the photograph.
+   */
   .enter__scrim {
     position: absolute;
     inset: 0;
-    z-index: -1;
-    background: color-mix(in srgb, var(--navy-deep) 62%, transparent);
+    /*
+     * Positive, not negative. A negative z-index here would place the scrim
+     * behind its sibling panes rather than over them — the whole `.enter__media`
+     * layer is already behind the copy, so within it the scrim must sit on top.
+     */
+    z-index: 2;
+    background:
+      radial-gradient(
+        ellipse 62% 50% at 50% 46%,
+        color-mix(in srgb, var(--navy-deep) 72%, transparent) 0%,
+        color-mix(in srgb, var(--navy-deep) 30%, transparent) 68%,
+        transparent 100%
+      ),
+      color-mix(in srgb, var(--navy-deep) 58%, transparent);
   }
 
   .enter__inner {
@@ -112,11 +141,14 @@ const { left, right } = Astro.props;
   .enter__title {
     font-size: var(--step-4);
     font-style: italic;
+    /* Cream display type over a bright sky needs more than a wash behind it. */
+    text-shadow: 0 2px 24px color-mix(in srgb, var(--navy-deep) 85%, transparent);
   }
 
   .enter__subtitle {
     max-width: 42ch;
-    color: color-mix(in srgb, var(--cream) 82%, transparent);
+    color: color-mix(in srgb, var(--cream) 92%, transparent);
+    text-shadow: 0 1px 16px color-mix(in srgb, var(--navy-deep) 80%, transparent);
   }
 
   .enter__cta {

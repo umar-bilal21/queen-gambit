@@ -47,5 +47,13 @@ const { title = site.meta.title, description = site.meta.description } = Astro.p
   <body>
     <a class="u-skip-link" href="#hero">Skip to content</a>
     <slot />
+
+    {/*
+      The single client island. Everything that ships JavaScript starts here;
+      no other component has a script tag.
+    */}
+    <script>
+      import '../motion/main';
+    </script>
   </body>
 </html>

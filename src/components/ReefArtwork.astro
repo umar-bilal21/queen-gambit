@@ -1,10 +1,22 @@
 ---
 /**
- * Hand-authored reef line work: coral fans, seaweed and turtles.
+ * Hand-authored reef line work: turtles among kelp.
  *
  * Single consistent stroke weight throughout, matching the Queen in the Intro,
  * so the two sections read as one hand rather than two sources. Every path is
  * strokable so DrawSVG can draw the reef in as the visitor arrives.
+ *
+ * The subject is deliberately narrow. Earlier drafts included a sea fan and
+ * brain coral and both read as dead twigs at this stroke weight — branching
+ * structures need either far more detail or far more skill than a few paths
+ * allow. Turtles and kelp are made of long smooth curves, which is what line
+ * work of this weight is actually good at, and turtles are what the copy beside
+ * this artwork names.
+ *
+ * A note on the turtle, because it is easy to get wrong: an oval with an inner
+ * oval and radiating spokes reads as a ship's wheel. What makes it a turtle is
+ * the plated carapace — a grid of scutes rather than spokes — the small head
+ * clear of the shell, and four paddle flippers swept back.
  *
  * Decorative: it carries nothing the copy does not already say, so it is hidden
  * from assistive technology entirely.
@@ -20,7 +32,7 @@ const { side, class: className } = Astro.props;
 
 <svg
   class:list={['reef-art', `reef-art--${side}`, className]}
-  viewBox="0 0 220 420"
+  viewBox="0 0 220 460"
   fill="none"
   role="presentation"
   aria-hidden="true"
@@ -29,65 +41,101 @@ const { side, class: className } = Astro.props;
 >
   <g
     stroke="currentColor"
-    stroke-width="2.2"
+    stroke-width="2.4"
     stroke-linecap="round"
     stroke-linejoin="round"
   >
-    {/* Branching coral. */}
-    <path d="M60 420 C58 380 52 356 44 334" data-reef-part></path>
-    <path d="M44 334 C38 316 40 300 50 288" data-reef-part></path>
-    <path d="M44 334 C34 326 22 328 16 340" data-reef-part></path>
-    <path d="M50 288 C46 272 50 258 60 250" data-reef-part></path>
-    <path d="M50 288 C62 284 72 290 74 302" data-reef-part></path>
-    <path d="M60 250 C56 238 62 228 72 224" data-reef-part></path>
-    <path d="M60 250 C50 244 40 248 36 258" data-reef-part></path>
-
-    {/* A second, shorter coral behind it. */}
-    <path d="M104 420 C102 392 98 372 92 356" data-reef-part></path>
-    <path d="M92 356 C88 342 92 330 102 324" data-reef-part></path>
-    <path d="M92 356 C82 350 72 354 68 364" data-reef-part></path>
-    <path d="M102 324 C100 312 106 302 116 300" data-reef-part></path>
-
-    {/* Seaweed. */}
-    <path d="M150 420 C158 392 146 372 154 344 C160 322 150 306 156 286" data-reef-part
+    {/* Kelp: three stems of long S-curves, hung with blades. */}
+    <path d="M36 458 C26 408 50 372 38 326 C30 292 48 262 40 228" data-reef-part
     ></path>
-    <path d="M172 420 C178 398 168 382 174 360 C179 342 171 330 176 314" data-reef-part
+    <path d="M38 404 C22 398 16 384 27 379 C36 375 41 393 38 404" data-reef-part
     ></path>
-    <path d="M192 420 C197 402 189 390 194 374" data-reef-part></path>
+    <path d="M44 356 C60 352 68 338 57 332 C48 327 42 345 44 356" data-reef-part
+    ></path>
+    <path d="M34 306 C18 302 11 288 22 282 C31 277 37 295 34 306" data-reef-part
+    ></path>
+    <path d="M42 258 C58 254 66 240 55 234 C46 229 40 247 42 258" data-reef-part
+    ></path>
+
+    <path d="M84 458 C76 420 92 392 84 358 C78 332 90 310 85 288" data-reef-part
+    ></path>
+    <path d="M86 418 C102 414 110 400 99 394 C90 389 84 407 86 418" data-reef-part
+    ></path>
+    <path d="M82 366 C66 362 59 348 70 342 C79 337 85 355 82 366" data-reef-part
+    ></path>
+    <path d="M88 318 C104 314 112 300 101 294 C92 289 86 307 88 318" data-reef-part
+    ></path>
+
+    <path d="M186 458 C180 424 194 402 187 374 C182 353 192 336 188 318" data-reef-part
+    ></path>
+    <path d="M188 424 C172 420 165 406 176 400 C185 395 191 413 188 424" data-reef-part
+    ></path>
+    <path d="M185 378 C201 374 209 360 198 354 C189 349 183 367 185 378" data-reef-part
+    ></path>
 
     {/* Sea floor. */}
-    <path d="M0 418 C40 410 78 414 118 410 C158 406 190 412 220 408" data-reef-part
+    <path d="M0 457 C40 449 78 453 118 449 C158 445 190 451 220 447" data-reef-part
     ></path>
 
     {/*
-      A turtle, seen from above — the one the copy names. Drawn at the top of
-      the composition so it reads as travelling across the section rather than
-      sitting in the coral.
+      The turtles the copy names, travelling up the frame. The larger leads;
+      the smaller follows below and behind, which is what makes the pair read
+      as moving rather than as two drawings of the same thing.
     */}
-    <g data-reef-part="turtle" transform="translate(96 92) rotate(-12)">
-      <ellipse cx="0" cy="0" rx="30" ry="25" data-reef-part></ellipse>
-      <ellipse cx="0" cy="0" rx="18" ry="14" data-reef-part></ellipse>
-      <path d="M0 -25 L0 -14 M0 25 L0 14 M-30 0 L-18 0 M30 0 L18 0" data-reef-part
-      ></path>
-      <path d="M-13 -20 L-8 -11 M13 -20 L8 -11 M-13 20 L-8 11 M13 20 L8 11" data-reef-part
+    <g transform="translate(112 116) rotate(-14)">
+      <path
+        d="M0 -30 C19 -30 31 -15 31 3 C31 21 18 33 0 33 C-18 33 -31 21 -31 3 C-31 -15 -19 -30 0 -30 Z"
+        data-reef-part></path>
+      <path
+        d="M0 -23 C14 -23 24 -11 24 3 C24 16 13 25 0 25 C-13 25 -24 16 -24 3 C-24 -11 -14 -23 0 -23 Z"
+        data-reef-part></path>
+
+      {/* Scutes: a plated grid, not spokes. */}
+      <path d="M-9 -22 C-11 -6 -11 8 -9 23" data-reef-part></path>
+      <path d="M9 -22 C11 -6 11 8 9 23" data-reef-part></path>
+      <path d="M-11 -5 C-4 -3 4 -3 11 -5" data-reef-part></path>
+      <path d="M-11 10 C-4 12 4 12 11 10" data-reef-part></path>
+
+      {/* Head, clear of the shell. */}
+      <path d="M-8 -29 C-11 -40 -6 -47 0 -47 C6 -47 11 -40 8 -29" data-reef-part
       ></path>
 
-      {/* Head. */}
-      <path d="M-30 -6 C-40 -10 -46 -6 -45 0 C-44 6 -37 8 -30 5" data-reef-part></path>
+      {/* Four paddle flippers, swept back. */}
+      <path d="M-25 -16 C-40 -30 -51 -25 -48 -13 C-45 -4 -34 -5 -27 -10" data-reef-part
+      ></path>
+      <path d="M25 -16 C40 -30 51 -25 48 -13 C45 -4 34 -5 27 -10" data-reef-part
+      ></path>
+      <path d="M-21 21 C-31 33 -27 43 -18 41 C-11 39 -9 32 -12 25" data-reef-part
+      ></path>
+      <path d="M21 21 C31 33 27 43 18 41 C11 39 9 32 12 25" data-reef-part></path>
+    </g>
 
-      {/* Flippers. */}
-      <path d="M-16 -22 C-24 -34 -20 -44 -10 -42 C-3 -40 -2 -30 -6 -23" data-reef-part
+    <g transform="translate(146 250) rotate(10) scale(0.58)">
+      <path
+        d="M0 -30 C19 -30 31 -15 31 3 C31 21 18 33 0 33 C-18 33 -31 21 -31 3 C-31 -15 -19 -30 0 -30 Z"
+        data-reef-part></path>
+      <path
+        d="M0 -23 C14 -23 24 -11 24 3 C24 16 13 25 0 25 C-13 25 -24 16 -24 3 C-24 -11 -14 -23 0 -23 Z"
+        data-reef-part></path>
+      <path d="M-9 -22 C-11 -6 -11 8 -9 23" data-reef-part></path>
+      <path d="M9 -22 C11 -6 11 8 9 23" data-reef-part></path>
+      <path d="M-11 -5 C-4 -3 4 -3 11 -5" data-reef-part></path>
+      <path d="M-11 10 C-4 12 4 12 11 10" data-reef-part></path>
+      <path d="M-8 -29 C-11 -40 -6 -47 0 -47 C6 -47 11 -40 8 -29" data-reef-part
       ></path>
-      <path d="M14 -21 C22 -32 32 -30 33 -21 C34 -13 24 -10 18 -14" data-reef-part
+      <path d="M-25 -16 C-40 -30 -51 -25 -48 -13 C-45 -4 -34 -5 -27 -10" data-reef-part
       ></path>
-      <path d="M-14 22 C-22 32 -18 41 -9 40 C-3 39 -2 31 -5 24" data-reef-part></path>
-      <path d="M15 20 C24 28 33 26 34 18 C35 11 26 8 20 12" data-reef-part></path>
+      <path d="M25 -16 C40 -30 51 -25 48 -13 C45 -4 34 -5 27 -10" data-reef-part
+      ></path>
+      <path d="M-21 21 C-31 33 -27 43 -18 41 C-11 39 -9 32 -12 25" data-reef-part
+      ></path>
+      <path d="M21 21 C31 33 27 43 18 41 C11 39 9 32 12 25" data-reef-part></path>
     </g>
 
     {/* Bubbles. */}
-    <circle cx="176" cy="252" r="4" data-reef-part></circle>
-    <circle cx="190" cy="230" r="2.6" data-reef-part></circle>
-    <circle cx="180" cy="212" r="1.8" data-reef-part></circle>
+    <circle cx="196" cy="300" r="4" data-reef-part></circle>
+    <circle cx="205" cy="276" r="2.6" data-reef-part></circle>
+    <circle cx="197" cy="256" r="1.8" data-reef-part></circle>
   </g>
 </svg>
 
@@ -95,7 +143,7 @@ const { side, class: className } = Astro.props;
   .reef-art {
     width: 100%;
     height: 100%;
-    color: color-mix(in srgb, var(--navy) 26%, transparent);
+    color: color-mix(in srgb, var(--navy) 42%, transparent);
   }
 
   .reef-art--right {

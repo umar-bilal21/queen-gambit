@@ -86,9 +86,10 @@ const { photo } = Astro.props;
     background:
       linear-gradient(
         to top,
-        color-mix(in srgb, var(--navy-deep) 82%, transparent) 0%,
-        color-mix(in srgb, var(--navy-deep) 38%, transparent) 42%,
-        transparent 70%
+        color-mix(in srgb, var(--navy-deep) 88%, transparent) 0%,
+        color-mix(in srgb, var(--navy-deep) 72%, transparent) 30%,
+        color-mix(in srgb, var(--navy-deep) 44%, transparent) 55%,
+        transparent 82%
       ),
       linear-gradient(
         to bottom,
@@ -104,7 +105,10 @@ const { photo } = Astro.props;
 
   .hero__subtitle {
     max-width: 46ch;
-    color: color-mix(in srgb, var(--cream) 82%, transparent);
+    color: color-mix(in srgb, var(--cream) 92%, transparent);
+    /* The subtitle is small, letterspaced and lands mid-frame where the
+       photograph is at its brightest — the scrim alone does not carry it. */
+    text-shadow: 0 1px 14px color-mix(in srgb, var(--navy-deep) 75%, transparent);
   }
 
   .hero__title {

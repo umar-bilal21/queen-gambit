@@ -75,13 +75,15 @@ import QueenSilhouette from './QueenSilhouette.astro';
   /**
    * Two fallbacks, both deliberate.
    *
-   * Reduced motion: the Intro never appears at all. A visitor who has asked the
-   * system to avoid motion should not be held for three and a half seconds by
-   * an animation, and there is nothing in it they need.
+   * Reduced motion: the Intro never appears. A visitor who has asked the system
+   * to avoid motion should not be held for three and a half seconds by an
+   * animation, and there is nothing in it they need.
    *
-   * No JavaScript: the island never boots, so nothing would ever remove the
-   * overlay. This keyframe dismisses it on the same schedule the timeline would
-   * have, so the page is still reachable.
+   * No working island: if the bundle never loads, nothing would ever remove
+   * this overlay and the Castle would be unreachable behind a navy screen. So
+   * the overlay dismisses itself on a timer by default, and the island's first
+   * act is to set `data-intro-state="running"`, which cancels it and hands
+   * control to the timeline.
    */
   @media (prefers-reduced-motion: reduce) {
     .intro {
@@ -91,8 +93,11 @@ import QueenSilhouette from './QueenSilhouette.astro';
 
   @media (prefers-reduced-motion: no-preference) {
     .intro {
-      animation: intro-failsafe 0.4s var(--ease-out) calc(var(--intro-duration) + 2s)
-        forwards;
+      animation: intro-failsafe 0.5s var(--ease-out) 3.2s forwards;
+    }
+
+    .intro[data-intro-state='running'] {
+      animation: none;
     }
   }
 
