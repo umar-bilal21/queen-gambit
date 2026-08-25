@@ -45,7 +45,14 @@ const { side, class: className } = Astro.props;
     stroke-linecap="round"
     stroke-linejoin="round"
   >
-    {/* Kelp: three stems of long S-curves, hung with blades. */}
+    {/*
+      Kelp: three stems of long S-curves, hung with blades.
+
+      Each stem is wrapped so the motion layer can sway one element rather than
+      six, and so the sway pivots at the sea floor where the stem is anchored
+      rather than at the middle of its own bounding box.
+    */}
+    <g data-reef-kelp style="transform-origin: 40px 458px">
     <path d="M36 458 C26 408 50 372 38 326 C30 292 48 262 40 228" data-reef-part
     ></path>
     <path d="M38 404 C22 398 16 384 27 379 C36 375 41 393 38 404" data-reef-part
@@ -65,13 +72,16 @@ const { side, class: className } = Astro.props;
     ></path>
     <path d="M88 318 C104 314 112 300 101 294 C92 289 86 307 88 318" data-reef-part
     ></path>
+    </g>
 
+    <g data-reef-kelp style="transform-origin: 187px 458px">
     <path d="M186 458 C180 424 194 402 187 374 C182 353 192 336 188 318" data-reef-part
     ></path>
     <path d="M188 424 C172 420 165 406 176 400 C185 395 191 413 188 424" data-reef-part
     ></path>
     <path d="M185 378 C201 374 209 360 198 354 C189 349 183 367 185 378" data-reef-part
     ></path>
+    </g>
 
     {/* Sea floor. */}
     <path d="M0 457 C40 449 78 453 118 449 C158 445 190 451 220 447" data-reef-part
@@ -82,7 +92,7 @@ const { side, class: className } = Astro.props;
       the smaller follows below and behind, which is what makes the pair read
       as moving rather than as two drawings of the same thing.
     */}
-    <g transform="translate(112 116) rotate(-14)">
+    <g data-reef-turtle><g transform="translate(112 116) rotate(-14)">
       <path
         d="M0 -30 C19 -30 31 -15 31 3 C31 21 18 33 0 33 C-18 33 -31 21 -31 3 C-31 -15 -19 -30 0 -30 Z"
         data-reef-part></path>
@@ -108,9 +118,9 @@ const { side, class: className } = Astro.props;
       <path d="M-21 21 C-31 33 -27 43 -18 41 C-11 39 -9 32 -12 25" data-reef-part
       ></path>
       <path d="M21 21 C31 33 27 43 18 41 C11 39 9 32 12 25" data-reef-part></path>
-    </g>
+    </g></g>
 
-    <g transform="translate(146 250) rotate(10) scale(0.58)">
+    <g data-reef-turtle><g transform="translate(146 250) rotate(10) scale(0.58)">
       <path
         d="M0 -30 C19 -30 31 -15 31 3 C31 21 18 33 0 33 C-18 33 -31 21 -31 3 C-31 -15 -19 -30 0 -30 Z"
         data-reef-part></path>
@@ -130,12 +140,12 @@ const { side, class: className } = Astro.props;
       <path d="M-21 21 C-31 33 -27 43 -18 41 C-11 39 -9 32 -12 25" data-reef-part
       ></path>
       <path d="M21 21 C31 33 27 43 18 41 C11 39 9 32 12 25" data-reef-part></path>
-    </g>
+    </g></g>
 
     {/* Bubbles. */}
-    <circle cx="196" cy="300" r="4" data-reef-part></circle>
-    <circle cx="205" cy="276" r="2.6" data-reef-part></circle>
-    <circle cx="197" cy="256" r="1.8" data-reef-part></circle>
+    <circle cx="196" cy="300" r="4" data-reef-part data-reef-bubble></circle>
+    <circle cx="205" cy="276" r="2.6" data-reef-part data-reef-bubble></circle>
+    <circle cx="197" cy="256" r="1.8" data-reef-part data-reef-bubble></circle>
   </g>
 </svg>
 
@@ -143,7 +153,7 @@ const { side, class: className } = Astro.props;
   .reef-art {
     width: 100%;
     height: 100%;
-    color: color-mix(in srgb, var(--navy) 42%, transparent);
+    color: color-mix(in srgb, var(--accent) 78%, transparent);
   }
 
   .reef-art--right {

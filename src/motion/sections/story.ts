@@ -10,10 +10,6 @@ import { gsap, ScrollTrigger, registerSection, type MotionContext } from '../ind
  *
  * Everything is bound to scroll position rather than played on a timer, so
  * scrolling back up runs it backwards and the effect is never spent.
- *
- * The reef line work strokes itself in on arrival — the same DrawSVG technique
- * as the Queen in the Intro, which is what stops the Intro reading as a
- * preamble bolted onto the front of the site.
  */
 
 function initStory({ reduced }: MotionContext): void {
@@ -30,23 +26,6 @@ function initStory({ reduced }: MotionContext): void {
   const track = section.querySelector<HTMLElement>('[data-story-track]');
   const windowEl = section.querySelector<HTMLElement>('[data-story-window]');
   const words = gsap.utils.toArray<HTMLElement>('[data-story-word]', section);
-
-  gsap.utils.toArray<HTMLElement>('[data-reef-art]', section).forEach((art) => {
-    const parts = gsap.utils.toArray<SVGElement>('[data-reef-part]', art);
-    if (parts.length === 0) return;
-
-    gsap.fromTo(
-      parts,
-      { drawSVG: '0%' },
-      {
-        drawSVG: '100%',
-        duration: 1.4,
-        stagger: 0.06,
-        ease: 'power1.inOut',
-        scrollTrigger: { trigger: section, start: 'top 75%', once: true },
-      },
-    );
-  });
 
   if (!track || !windowEl || words.length === 0) return;
 
@@ -80,6 +59,20 @@ function initStory({ reduced }: MotionContext): void {
       },
     },
   );
+
+  /*
+   * The words arrive as well as leave. The recolour below fades them behind the
+   * reader; this lifts them in as the passage first appears, so the writing is
+   * alive at the moment it is read rather than only on its way out.
+   */
+  gsap.from(words, {
+    y: 14,
+    opacity: 0,
+    duration: 0.7,
+    ease: 'power2.out',
+    stagger: 0.012,
+    scrollTrigger: { trigger: section, start: 'top 70%', once: true },
+  });
 
   /*
    * The recolour runs over the same range, so a word fading is a word leaving.
