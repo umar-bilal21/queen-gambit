@@ -42,10 +42,14 @@ purpose-drawn outline, not the Monogram and not the client's ChatGPT reference i
 photograph, the display line "Where the Ocean Meets Imagination", and attribution to
 Frank J. Russo.
 
-**Story** — the single cream-beige section carrying the Castle's two opening
-paragraphs and the Reef artwork. Its lead sentence recolours word by word from navy
-to light aqua as it scrolls. Its upper edge is a straight line, never the wavy
-divider from the earlier mockup.
+**Story** — the single cream-beige section carrying the Castle's opening passage
+and the Reef artwork. Its upper edge is a straight line, never the wavy divider
+from the earlier mockup.
+
+**Passage** — the Story's text: two paragraphs, but one piece of writing. Both are
+set identically and both recolour, so the effect runs unbroken from the first word
+to the last. It is not a headline followed by body copy, and treating it as one was
+a correction the client had to make twice.
 
 An earlier draft split this in two — a white recolouring section and a separate
 cream one for the artwork. That was wrong, and the client corrected it: one

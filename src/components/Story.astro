@@ -3,12 +3,15 @@ import { site } from '../content/site';
 import ReefArtwork from './ReefArtwork.astro';
 
 /**
- * One cream beige section: the reef line work, and both paragraphs of the
- * Castle's story.
+ * One cream beige section: the reef line work, and the Castle's opening passage.
  *
- * The lead sentence recolours word by word from navy to aqua, bound to scroll
- * position rather than played on a timer, so scrolling back up runs it
- * backwards and the effect is never spent.
+ * The passage is two paragraphs but one piece of text — both set the same, both
+ * recolouring, so the effect runs straight through from the first word to the
+ * last rather than stopping at a headline and handing over to body copy. That
+ * is what the reference does, and it is what the client asked for.
+ *
+ * The recolour is bound to scroll position rather than played on a timer, so
+ * scrolling back up runs it backwards and the effect is never spent.
  *
  * Splitting happens here at build time rather than in the browser. Doing it in
  * markup means the words are real text in the HTML — selectable, searchable,
@@ -23,8 +26,6 @@ import ReefArtwork from './ReefArtwork.astro';
  */
 
 const words = (text: string) => text.split(/\s+/).filter(Boolean);
-
-const leadWords = words(site.story.lead);
 ---
 
 <section class="story u-on-cream" id="story" aria-labelledby="story-title">
@@ -38,19 +39,24 @@ const leadWords = words(site.story.lead);
   <div class="story__inner u-container">
     <span class="story__mark" aria-hidden="true">✦</span>
 
-    <h2 class="story__lead" id="story-title">
+    <div class="story__passage">
       {
-        leadWords.map((word) => (
-          <>
-            <span class="story__word" data-story-word>
-              {word}
-            </span>{' '}
-          </>
-        ))
+        site.story.paragraphs.map((paragraph, index) => {
+          const Tag = index === 0 ? 'h2' : 'p';
+          return (
+            <Tag class="story__para" id={index === 0 ? 'story-title' : undefined}>
+              {words(paragraph).map((word) => (
+                <>
+                  <span class="story__word" data-story-word>
+                    {word}
+                  </span>{' '}
+                </>
+              ))}
+            </Tag>
+          );
+        })
       }
-    </h2>
-
-    <p class="story__body">{site.story.body}</p>
+    </div>
   </div>
 </section>
 
@@ -76,19 +82,29 @@ const leadWords = words(site.story.lead);
     color: var(--aqua-deep);
   }
 
-  .story__lead {
-    font-size: var(--step-3);
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-    max-width: 22ch;
+  /*
+   * The measure is set in rem, not ch. This wrapper inherits the body's font
+   * size rather than the passage's, so a ch-based measure here resolves
+   * against ~1rem and squeezes the display text to three words a line.
+   */
+  .story__passage {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    max-width: min(100%, 44rem);
   }
 
-  .story__body {
+  /*
+   * Both paragraphs, identically set. The first is an h2 for the document
+   * outline — it is the section's heading in structure — but nothing about its
+   * appearance says so, because visually it is simply where the passage starts.
+   */
+  .story__para {
     font-family: var(--font-display);
-    font-size: var(--step-2);
-    line-height: 1.55;
-    max-width: 34ch;
-    text-wrap: balance;
+    font-size: var(--step-3);
+    font-weight: 300;
+    line-height: 1.28;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
   }
 
   /**

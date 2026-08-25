@@ -63,8 +63,15 @@ export const site = {
    * the reef artwork and both paragraphs.
    */
   story: {
-    lead: 'Along the Florida Coast, Where Ocean Winds Bend Palms and Salt Clings to the Air, Rose The Queen’s Gambit Castle',
-    body: 'Stepping through the grand entrance, visitors enter a sea of motion frozen in art. Ceramic turtles, each hand-sculpted and unique, meander across the floor, traveling toward the horizon of time.',
+    /*
+     * One passage in two paragraphs, not a headline followed by body copy.
+     * Both are set the same and both recolour, so the effect runs straight
+     * through from the first word to the last.
+     */
+    paragraphs: [
+      'Along the Florida Coast, Where Ocean Winds Bend Palms and Salt Clings to the Air, Rose The Queen’s Gambit Castle',
+      'Stepping through the grand entrance, visitors enter a sea of motion frozen in art. Ceramic turtles, each hand-sculpted and unique, meander across the floor, traveling toward the horizon of time.',
+    ],
   },
 
   rooms: {
