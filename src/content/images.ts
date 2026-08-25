@@ -194,6 +194,30 @@ export const images = {
     ),
   },
 
+  /**
+   * The three sealife grounds behind the Masterwork bands.
+   *
+   * Two are drawn from the listing shoot rather than the client's folder,
+   * because the pairing is better: "the ocean seeking its way to the stars
+   * above" belongs over the painted solar system, and "marine mosaics shimmer"
+   * belongs over the painted reef wall. The client's folder is spent on the
+   * Beliefs, where they were asked for.
+   */
+  masterwork: [
+    photo(
+      beliefCreativity,
+      'A hand-painted wall of turquoise water in which starfish, shells and a diving whale drift across the surface.',
+    ),
+    photo(
+      beliefCuriosity,
+      'A ceiling painted as the solar system: planets, a golden sun and a burst of white light spreading across deep blue.',
+    ),
+    photo(
+      marlinSunrise,
+      'A tall blue glass marlin sculpture standing against a balustrade as the sun rises over the ocean behind it.',
+    ),
+  ] as const satisfies readonly Photo[],
+
   /** The view the page closes on. */
   poolToOcean: photo(
     poolToOcean,

@@ -8,3 +8,6 @@ dist/
 .scratch/
 test-results/
 playwright-report/
+
+# Local screenshot helpers.
+*.mjs

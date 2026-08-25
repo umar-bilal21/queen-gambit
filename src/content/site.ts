@@ -74,6 +74,34 @@ export const site = {
     ],
   },
 
+  /**
+   * What the marine work in the building means. Three headed blocks and an
+   * invitation, in the client's own words.
+   *
+   * The third is one line against two substantial paragraphs. That imbalance is
+   * in the copy as written and is not padded out — a short statement given air
+   * reads as deliberate; a padded one reads as filler.
+   */
+  masterwork: {
+    blocks: [
+      {
+        title: 'Ocean-Inspired Masterwork',
+        body: 'Along the walls, marine mosaics shimmer—flying fish leap between rooms, their silver bodies suspend in perpetual flight, bridging the realms of water and air. They are the philosophers of the deep, creatures who refuse confinement, carrying the ocean’s breath into the heavens.',
+      },
+      {
+        title: 'Oceanic Serenity',
+        body: 'It is as though the ocean itself breached the doors, seeking its way to the stars above. Each turn reveals new depths of color and meaning—the house breathing in rhythm with the tides, alive with the pulse of creation, wisdom, and vision.',
+      },
+      {
+        title: 'Worldwide Allure',
+        body: 'Welcoming guests from around the world.',
+      },
+    ],
+    cta: 'LEARN MORE ABOUT US',
+    /** The manifesto is literally the "about us" content, so the link is honest. */
+    ctaHref: '#manifesto',
+  },
+
   rooms: {
     heading: 'Explore Every Corner',
     items: [

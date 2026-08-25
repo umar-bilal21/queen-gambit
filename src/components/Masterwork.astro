@@ -1,0 +1,154 @@
+---
+import { Image } from 'astro:assets';
+
+import { site } from '../content/site';
+import type { Photo } from '../content/images';
+import Divider from './ornament/Divider.astro';
+
+/**
+ * What the marine work in the building actually means — three full-width bands,
+ * each on its own sealife ground, and then an invitation to read further.
+ *
+ * Full-width bands rather than columns because the client asked for them, and
+ * because each of these is a complete thought that wants the whole screen
+ * rather than a third of one.
+ *
+ * The third block is a single line where the other two are paragraphs. It is
+ * given the same band and the same air rather than being padded out to match:
+ * a short statement with room around it reads as deliberate, a padded one reads
+ * as filler.
+ */
+interface Props {
+  /** In the same order as the blocks. */
+  photos: readonly Photo[];
+}
+
+const { photos } = Astro.props;
+---
+
+<section class="masterwork" id="masterwork" aria-labelledby="masterwork-title">
+  {
+    site.masterwork.blocks.map((block, index) => (
+      <div class="masterwork__band u-on-navy" data-masterwork-band>
+        <div class="masterwork__media u-cover" aria-hidden="true">
+          <Image
+            src={photos[index].src}
+            alt=""
+            widths={[900, 1400, 1920]}
+            sizes="100vw"
+            loading="lazy"
+            quality={74}
+          />
+        </div>
+        <div class="masterwork__veil" aria-hidden="true" />
+
+        <div class="masterwork__inner u-container">
+          <h2
+            class="masterwork__title"
+            id={index === 0 ? 'masterwork-title' : undefined}
+            data-reveal-heading
+          >
+            {block.title}
+          </h2>
+          <Divider piece={index === 1 ? 'queen' : 'pawn'} width="min(70vw, 14rem)" />
+          <p class="masterwork__body" data-reveal data-reveal-delay="0.1">
+            {block.body}
+          </p>
+        </div>
+      </div>
+    ))
+  }
+
+  <div class="masterwork__foot u-on-navy">
+    <a class="masterwork__cta u-eyebrow" href={site.masterwork.ctaHref}>
+      {site.masterwork.cta}
+    </a>
+  </div>
+</section>
+
+<style>
+  .masterwork__band {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: clamp(26rem, 62svh, 40rem);
+    padding-block: var(--space-xl);
+    overflow: clip;
+    isolation: isolate;
+    text-align: center;
+  }
+
+  .masterwork__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  /**
+   * Heavier than a photographic section would normally take. These bands are
+   * carrying paragraphs rather than a display line, and body copy over
+   * photography needs a real ground under it, not a tint.
+   */
+  .masterwork__veil {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--navy-deep) 74%, transparent),
+      color-mix(in srgb, var(--navy-abyss) 66%, transparent)
+    );
+  }
+
+  .masterwork__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-s);
+    max-width: 60rem;
+  }
+
+  .masterwork__title {
+    font-size: var(--step-4);
+  }
+
+  /*
+   * A shadow rather than a heavier veil. One of the three grounds is a sunrise
+   * that is already dark, so a wash deep enough to carry body copy over the
+   * bright mural turned that band almost black. The shadow does the work per
+   * glyph instead of flattening the photograph behind it.
+   */
+  .masterwork__body {
+    max-width: 56ch;
+    font-size: var(--step-1);
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--cream) 92%, transparent);
+    text-shadow: 0 1px 18px color-mix(in srgb, var(--navy-abyss) 85%, transparent);
+  }
+
+  .masterwork__title {
+    text-shadow: 0 2px 26px color-mix(in srgb, var(--navy-abyss) 70%, transparent);
+  }
+
+  .masterwork__foot {
+    display: grid;
+    place-items: center;
+    padding-block: var(--space-l);
+    background: var(--navy-abyss);
+  }
+
+  .masterwork__cta {
+    padding: 1.05rem 2.6rem;
+    color: var(--gold-light);
+    border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent);
+    transition:
+      background-color 0.35s var(--ease-out),
+      color 0.35s var(--ease-out),
+      border-color 0.35s var(--ease-out);
+  }
+
+  .masterwork__cta:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy-abyss);
+  }
+</style>
