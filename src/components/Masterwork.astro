@@ -6,17 +6,22 @@ import type { Photo } from '../content/images';
 import Divider from './ornament/Divider.astro';
 
 /**
- * What the marine work in the building actually means — three full-width bands,
- * each on its own sealife ground, and then an invitation to read further.
+ * What the marine work in the building means — three cards that turn to reveal
+ * their text.
  *
- * Full-width bands rather than columns because the client asked for them, and
- * because each of these is a complete thought that wants the whole screen
- * rather than a third of one.
+ * This replaced three stacked full-width bands. Those were the client's first
+ * instruction and they were built that way, but at the width the client
+ * actually browses at each band was a screen of photograph carrying four lines
+ * of copy, and three of them in a row made the page feel padded rather than
+ * considered. Cards say the same three things in a third of the height.
  *
- * The third block is a single line where the other two are paragraphs. It is
- * given the same band and the same air rather than being padded out to match:
- * a short statement with room around it reads as deliberate, a padded one reads
- * as filler.
+ * The turn is on hover where there is a pointer, and on tap where there is not.
+ * A card that only responds to hover is inert on a phone, and these carry real
+ * copy rather than decoration — the back of the card is not optional content.
+ *
+ * Each card is a button rather than a div: it is interactive, it holds content
+ * that is otherwise hidden, and a keyboard visitor has to be able to reach it.
+ * `aria-expanded` says which way it is facing.
  */
 interface Props {
   /** In the same order as the blocks. */
@@ -26,40 +31,51 @@ interface Props {
 const { photos } = Astro.props;
 ---
 
-<section class="masterwork" id="masterwork" aria-labelledby="masterwork-title">
-  {
-    site.masterwork.blocks.map((block, index) => (
-      <div class="masterwork__band u-on-navy" data-masterwork-band>
-        <div class="masterwork__media u-cover" aria-hidden="true">
-          <Image
-            src={photos[index].src}
-            alt=""
-            widths={[900, 1400, 1920]}
-            sizes="100vw"
-            loading="lazy"
-            quality={74}
-          />
-        </div>
-        <div class="masterwork__veil" aria-hidden="true" />
+<section class="masterwork u-on-navy" id="masterwork" aria-labelledby="masterwork-title">
+  <div class="masterwork__head u-container">
+    <h2 class="masterwork__heading" id="masterwork-title" data-reveal-heading>
+      Ocean-Inspired Masterwork
+    </h2>
+    <Divider piece="queen" width="min(70vw, 14rem)" class="masterwork__crest" />
+  </div>
 
-        <div class="masterwork__inner u-container">
-          <h2
-            class="masterwork__title"
-            id={index === 0 ? 'masterwork-title' : undefined}
-            data-reveal-heading
+  <ul class="masterwork__grid u-container">
+    {
+      site.masterwork.blocks.map((block, index) => (
+        <li class="masterwork__cell">
+          <button
+            class="masterwork__card"
+            type="button"
+            aria-expanded="false"
+            data-flip-card
           >
-            {block.title}
-          </h2>
-          <Divider piece={index === 1 ? 'queen' : 'pawn'} width="min(70vw, 14rem)" />
-          <p class="masterwork__body" data-reveal data-reveal-delay="0.1">
-            {block.body}
-          </p>
-        </div>
-      </div>
-    ))
-  }
+            <span class="masterwork__face masterwork__face--front">
+              <span class="masterwork__media u-cover" aria-hidden="true">
+                <Image
+                  src={photos[index].src}
+                  alt=""
+                  widths={[600, 900, 1200]}
+                  sizes="(min-width: 64rem) 32vw, 90vw"
+                  loading="lazy"
+                  quality={76}
+                />
+              </span>
+              <span class="masterwork__scrim" aria-hidden="true" />
+              <span class="masterwork__title">{block.title}</span>
+              <span class="masterwork__hint u-eyebrow" aria-hidden="true">Read more</span>
+            </span>
 
-  <div class="masterwork__foot u-on-navy">
+            <span class="masterwork__face masterwork__face--back">
+              <span class="masterwork__back-title u-eyebrow">{block.title}</span>
+              <span class="masterwork__body">{block.body}</span>
+            </span>
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="masterwork__foot">
     <a class="masterwork__cta u-eyebrow" href={site.masterwork.ctaHref}>
       {site.masterwork.cta}
     </a>
@@ -67,15 +83,74 @@ const { photos } = Astro.props;
 </section>
 
 <style>
-  .masterwork__band {
-    position: relative;
+  .masterwork {
+    padding-block: var(--space-2xl);
+  }
+
+  .masterwork__head {
     display: grid;
-    place-items: center;
-    min-height: clamp(26rem, 62svh, 40rem);
-    padding-block: var(--space-xl);
-    overflow: clip;
-    isolation: isolate;
+    justify-items: center;
+    gap: var(--space-s);
+    margin-block-end: var(--space-xl);
     text-align: center;
+  }
+
+  .masterwork__heading {
+    font-size: var(--step-4);
+  }
+
+  .masterwork__crest {
+    color: var(--gold);
+  }
+
+  .masterwork__grid {
+    display: grid;
+    gap: clamp(1.25rem, 2.5vw, 2.25rem);
+    list-style: none;
+    margin: 0;
+    padding-inline: var(--gutter);
+  }
+
+  @media (min-width: 64rem) {
+    .masterwork__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .masterwork__cell {
+    /* The perspective lives on the cell, not the card: on the card itself the
+       rotation is flattened and the turn reads as a wipe. */
+    perspective: 1400px;
+  }
+
+  .masterwork__card {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    padding: 0;
+    text-align: left;
+    transform-style: preserve-3d;
+    transition: transform 0.85s var(--ease-in-out);
+  }
+
+  .masterwork__card[aria-expanded='true'] {
+    transform: rotateY(180deg);
+  }
+
+  .masterwork__face {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    overflow: clip;
+    backface-visibility: hidden;
+    border: 1px solid color-mix(in srgb, var(--gold) 38%, transparent);
+  }
+
+  .masterwork__face--front {
+    align-content: end;
+    gap: var(--space-2xs);
+    padding: var(--space-m);
   }
 
   .masterwork__media {
@@ -84,56 +159,51 @@ const { photos } = Astro.props;
     z-index: -2;
   }
 
-  /**
-   * Heavier than a photographic section would normally take. These bands are
-   * carrying paragraphs rather than a display line, and body copy over
-   * photography needs a real ground under it, not a tint.
-   */
-  .masterwork__veil {
+  .masterwork__scrim {
     position: absolute;
     inset: 0;
     z-index: -1;
     background: linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--navy-deep) 74%, transparent),
-      color-mix(in srgb, var(--navy-abyss) 66%, transparent)
+      to top,
+      color-mix(in srgb, var(--navy-abyss) 92%, transparent) 0%,
+      color-mix(in srgb, var(--navy-deep) 55%, transparent) 55%,
+      color-mix(in srgb, var(--navy-deep) 25%, transparent) 100%
     );
   }
 
-  .masterwork__inner {
-    display: grid;
-    justify-items: center;
+  .masterwork__title {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.12;
+    color: var(--cream);
+  }
+
+  .masterwork__hint {
+    color: var(--gold-light);
+  }
+
+  .masterwork__face--back {
+    align-content: center;
     gap: var(--space-s);
-    max-width: 60rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    background: var(--navy-deep);
+    transform: rotateY(180deg);
   }
 
-  .masterwork__title {
-    font-size: var(--step-4);
+  .masterwork__back-title {
+    color: var(--gold-light);
   }
 
-  /*
-   * A shadow rather than a heavier veil. One of the three grounds is a sunrise
-   * that is already dark, so a wash deep enough to carry body copy over the
-   * bright mural turned that band almost black. The shadow does the work per
-   * glyph instead of flattening the photograph behind it.
-   */
   .masterwork__body {
-    max-width: 56ch;
-    font-size: var(--step-1);
-    line-height: 1.65;
-    color: color-mix(in srgb, var(--cream) 92%, transparent);
-    text-shadow: 0 1px 18px color-mix(in srgb, var(--navy-abyss) 85%, transparent);
-  }
-
-  .masterwork__title {
-    text-shadow: 0 2px 26px color-mix(in srgb, var(--navy-abyss) 70%, transparent);
+    font-size: var(--step-0);
+    line-height: 1.7;
+    color: var(--ink-muted);
   }
 
   .masterwork__foot {
     display: grid;
     place-items: center;
-    padding-block: var(--space-l);
-    background: var(--navy-abyss);
+    margin-block-start: var(--space-xl);
   }
 
   .masterwork__cta {
@@ -150,5 +220,31 @@ const { photos } = Astro.props;
     background: var(--gold);
     border-color: var(--gold);
     color: var(--navy-abyss);
+  }
+
+  /**
+   * Without the turn, both faces have to be readable — a card that cannot flip
+   * must not be a card with its content hidden behind it.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .masterwork__card {
+      aspect-ratio: auto;
+      transform: none !important;
+      transform-style: flat;
+    }
+
+    .masterwork__face {
+      position: static;
+      backface-visibility: visible;
+      transform: none !important;
+    }
+
+    .masterwork__face--front {
+      aspect-ratio: 4 / 3;
+    }
+
+    .masterwork__hint {
+      display: none;
+    }
   }
 </style>
