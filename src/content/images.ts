@@ -231,6 +231,41 @@ export const images = {
     'A mosaic wall of a coral reef: fish moving among red, orange and green corals in deep blue water.',
   ),
 
+  /**
+   * The Beliefs rows, in the client's requested order.
+   *
+   * These are the photographs from the folder the client pointed at, mapped as
+   * agreed: the crowned turtle for purpose, the sun ceiling for curiosity, the
+   * clam shell for creativity, the sea god for storytelling, the manta ray for
+   * what comes next.
+   *
+   * The reef wall is deliberately absent — it is the ground the whole descent
+   * sits on, and using it again a few hundred pixels further down would read as
+   * a repeat rather than a return.
+   */
+  beliefRows: [
+    photo(
+      crownedTurtle,
+      'A painted sea turtle wearing a jewelled crown, swimming through deep blue water.',
+    ),
+    photo(
+      sunCeiling,
+      'A ceiling painted with a blazing orange sun, a cascading crystal chandelier falling from its centre.',
+    ),
+    photo(
+      clamShell,
+      'A giant clam shell in close view, its mantle rippling in bands of gold, cream and deep blue.',
+    ),
+    photo(
+      seaGod,
+      'A mural of a sea god with long flowing hair rising through turquoise water, small fish drifting past.',
+    ),
+    photo(
+      mantaRay,
+      'A mosaic of a manta ray gliding through deep blue water beneath a shoal of small silver fish.',
+    ),
+  ] as const satisfies readonly Photo[],
+
   /** The view the page closes on. */
   poolToOcean: photo(
     poolToOcean,
