@@ -86,6 +86,32 @@ field, the title "Enter The Queen's Gambit", and the CONTACT US button.
 
 **Footer** — cream, centred Monogram, address, contact, and a return-to-top control.
 
+## Ornament
+
+**Ornament** — the gold marks the castle direction is made of: the Crowned Numeral,
+the Divider, the Corners. All of it is drawn rather than placed, and all of it is
+decorative — it carries no information the copy does not, and is hidden from
+assistive technology.
+
+**Crowned Numeral** — a numeral beneath a crown, ringed, at the head of a Belief.
+The digits are drawn as paths rather than typed, because a text node cannot be
+stroked on.
+
+**Divider** — a rule with a chess piece at its centre and wings tapering either
+side, set beneath section labels.
+
+**Corners** — gold brackets at the four corners of a band. Corners rather than a
+full border: a closed rectangle reads as a box drawn around content, corners read
+as content being framed.
+
+**Surface** — the ground a section sits on, either navy or cream. A section
+declares its Surface and the semantic roles — ink, accent, rule — re-point
+themselves. Components do not choose colours.
+
+**Paper** — the cream Surface. Used only by the two writing sections, the Story
+and the Manifesto, where a reader wants paper rather than night. Not a general
+alternate ground.
+
 ## Motion
 
 **Scrub** — motion whose progress is bound to scroll position rather than to elapsed

@@ -1,0 +1,90 @@
+---
+/**
+ * A numeral beneath a crown, ringed — the mark the client's mockup puts at the
+ * head of each belief.
+ *
+ * Drawn rather than set: the crown, the ring and the digit are all strokable
+ * paths, so DrawSVG can stroke them on as the row arrives. That is the whole
+ * reason ornament here is a component and not an image — it participates in the
+ * page instead of decorating it, the same way the Queen and the reef do.
+ *
+ * The digits are drawn as paths rather than typed as text for the same reason:
+ * a text node cannot be stroked on. They are hidden from assistive technology
+ * because the number is ordinal decoration — the ordered list around them
+ * already conveys the sequence, and "1" announced before every belief is noise.
+ */
+interface Props {
+  /** 1-based. Only 1–9 are drawn. */
+  value: number;
+  size?: string;
+  class?: string;
+}
+
+const { value, size = '3.5rem', class: className } = Astro.props;
+
+/*
+ * Single-stroke digit paths on a 24×32 box, centred on the ring. Kept
+ * deliberately geometric: at ornament size a faithful serif numeral turns to
+ * mush, whereas a drawn one reads at a glance and strokes on cleanly.
+ */
+const DIGITS: Record<number, string> = {
+  1: 'M8 10 L12 7 L12 25',
+  2: 'M6 11 C6 7 11 5 15 7 C19 9 19 14 15 17 L6 25 L18 25',
+  3: 'M6 8 C10 5 17 6 17 11 C17 14 14 16 11 16 C14 16 18 18 18 21 C18 26 10 28 6 24',
+  4: 'M15 25 L15 6 L5 19 L19 19',
+  5: 'M17 6 L8 6 L7 15 C11 13 17 14 17 20 C17 25 10 28 6 24',
+  6: 'M17 7 C11 5 6 10 6 18 C6 23 9 26 12 26 C16 26 18 23 18 20 C18 16 15 14 12 15 C9 15 7 17 6 19',
+  7: 'M6 6 L18 6 L10 26',
+  8: 'M12 15 C8 15 6 12 7 9 C9 5 15 5 17 9 C18 12 16 15 12 15 C8 15 5 18 6 22 C8 27 16 27 18 22 C19 18 16 15 12 15 Z',
+  9: 'M7 25 C13 27 18 22 18 14 C18 9 15 6 12 6 C8 6 6 9 6 12 C6 16 9 18 12 17 C15 17 17 15 18 13',
+};
+
+const digit = DIGITS[value] ?? DIGITS[1];
+---
+
+<svg
+  class:list={['numeral', className]}
+  viewBox="0 0 64 78"
+  fill="none"
+  role="presentation"
+  aria-hidden="true"
+  style={`height:${size}`}
+  data-ornament
+>
+  <g
+    stroke="currentColor"
+    stroke-width="1.6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    {/*
+      The crown: three points on a band, each tipped with a bead. Sized to sit
+      close to the ring's own width — drawn narrower it reads as a tiara
+      perched on top rather than as a crown belonging to the mark.
+    */}
+    <path
+      d="M16 25 L19 8 L26 17 L32 4 L38 17 L45 8 L48 25"
+      stroke-width="1.9"
+      data-ornament-part></path>
+    <path d="M15 25 H49" stroke-width="1.9" data-ornament-part></path>
+    <circle cx="19" cy="6" r="2.3" data-ornament-part></circle>
+    <circle cx="32" cy="2.6" r="2.5" data-ornament-part></circle>
+    <circle cx="45" cy="6" r="2.3" data-ornament-part></circle>
+
+    {/* The ring the numeral sits in. */}
+    <circle cx="32" cy="51" r="21" data-ornament-part></circle>
+
+    {/* The numeral. */}
+    <g transform="translate(20 35)" stroke-width="2.1">
+      <path d={digit} data-ornament-part></path>
+    </g>
+  </g>
+</svg>
+
+<style>
+  .numeral {
+    width: auto;
+    flex: none;
+    color: var(--accent);
+  }
+</style>

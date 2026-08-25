@@ -159,15 +159,36 @@ button {
   object-fit: cover;
 }
 
-/* Sections on the deep navy ground: the Intro, the Rooms and the Beliefs. */
+/**
+ * Surfaces.
+ *
+ * A section declares which ground it is on and everything inside adapts:
+ * `--ink`, `--accent` and `--rule` are re-pointed rather than each component
+ * choosing colours for itself. That is what stops a section quietly inventing
+ * its own palette — the thing that let two visual languages onto this page in
+ * the first place.
+ *
+ * Navy is the default surface. Cream is for the two writing sections, where a
+ * reader wants paper rather than night.
+ */
 .u-on-navy {
+  --ink: var(--cream);
+  --ink-muted: color-mix(in srgb, var(--cream) 72%, transparent);
+  --accent: var(--gold);
+  --rule: color-mix(in srgb, var(--gold) 42%, transparent);
+
   background: var(--navy);
-  color: var(--cream);
+  color: var(--ink);
 }
 
 .u-on-cream {
+  --ink: var(--navy-deep);
+  --ink-muted: color-mix(in srgb, var(--navy-deep) 72%, transparent);
+  --accent: var(--gold-deep);
+  --rule: color-mix(in srgb, var(--gold-deep) 45%, transparent);
+
   background: var(--cream);
-  color: var(--navy);
+  color: var(--ink);
 }
 
 /* Reduced motion ----------------------------------------------------------- */

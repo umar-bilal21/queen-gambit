@@ -1,0 +1,93 @@
+---
+/**
+ * Gold brackets at the four corners of a band — the framing the client's
+ * mockups put around each belief row.
+ *
+ * Absolutely positioned over whatever it is placed in, so it needs a positioned
+ * parent and nothing else. Four separate corner marks rather than a full border:
+ * a complete rectangle reads as a box drawn around the content, whereas corners
+ * read as the content being framed, which is the difference between a table and
+ * a plaque.
+ */
+interface Props {
+  /** Length of each bracket arm. */
+  arm?: string;
+  class?: string;
+}
+
+const { arm = '2.25rem', class: className } = Astro.props;
+---
+
+<div class:list={['corners', className]} aria-hidden="true" style={`--arm:${arm}`}>
+  <svg viewBox="0 0 40 40" fill="none" class="corners__mark corners__mark--tl" data-ornament>
+    <path
+      d="M1 39 L1 9 C1 4.6 4.6 1 9 1 L39 1"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      data-ornament-part></path>
+  </svg>
+  <svg viewBox="0 0 40 40" fill="none" class="corners__mark corners__mark--tr" data-ornament>
+    <path
+      d="M1 39 L1 9 C1 4.6 4.6 1 9 1 L39 1"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      data-ornament-part></path>
+  </svg>
+  <svg viewBox="0 0 40 40" fill="none" class="corners__mark corners__mark--bl" data-ornament>
+    <path
+      d="M1 39 L1 9 C1 4.6 4.6 1 9 1 L39 1"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      data-ornament-part></path>
+  </svg>
+  <svg viewBox="0 0 40 40" fill="none" class="corners__mark corners__mark--br" data-ornament>
+    <path
+      d="M1 39 L1 9 C1 4.6 4.6 1 9 1 L39 1"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      data-ornament-part></path>
+  </svg>
+</div>
+
+<style>
+  .corners {
+    position: absolute;
+    inset: clamp(0.6rem, 1.4vw, 1.25rem);
+    pointer-events: none;
+    color: var(--accent);
+  }
+
+  .corners__mark {
+    position: absolute;
+    width: var(--arm);
+    height: var(--arm);
+  }
+
+  /* One drawing, rotated into each corner. */
+  .corners__mark--tl {
+    inset-block-start: 0;
+    inset-inline-start: 0;
+  }
+
+  .corners__mark--tr {
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    transform: rotate(90deg);
+  }
+
+  .corners__mark--br {
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    transform: rotate(180deg);
+  }
+
+  .corners__mark--bl {
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    transform: rotate(270deg);
+  }
+</style>

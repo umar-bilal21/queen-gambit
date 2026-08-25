@@ -1,0 +1,65 @@
+---
+/**
+ * A rule with a chess piece at its centre, wings tapering to either side — the
+ * ornament the client's mockups set beneath section labels.
+ *
+ * Strokable, like every other ornament here, so it draws itself on.
+ *
+ * The piece defaults to the pawn: it is the simplest silhouette, so it survives
+ * being drawn small, and it is the piece a gambit sacrifices — which is the
+ * whole idea the building is named for.
+ */
+interface Props {
+  piece?: 'pawn' | 'queen' | 'bishop';
+  /** Overall width. The wings absorb whatever is left over. */
+  width?: string;
+  class?: string;
+}
+
+const { piece = 'pawn', width = 'min(100%, 16rem)', class: className } = Astro.props;
+
+const PIECES: Record<NonNullable<Props['piece']>, string> = {
+  pawn: 'M100 6 C103 6 105 8 105 11 C105 13 104 14 103 15 C106 17 107 20 107 22 L93 22 C93 20 94 17 97 15 C96 14 95 13 95 11 C95 8 97 6 100 6 Z M91 26 L109 26 L107 22 L93 22 Z',
+  queen:
+    'M92 9 L94 20 L100 12 L106 20 L108 9 M91 24 L109 24 L108 20 L92 20 Z M93 24 L94 28 L106 28 L107 24',
+  bishop:
+    'M100 5 C102 5 103 7 103 8 C105 11 107 15 107 19 L93 19 C93 15 95 11 97 8 C97 7 98 5 100 5 Z M92 23 L108 23 L107 19 L93 19 Z',
+};
+---
+
+<svg
+  class:list={['divider', className]}
+  viewBox="0 0 200 32"
+  fill="none"
+  role="presentation"
+  aria-hidden="true"
+  preserveAspectRatio="xMidYMid meet"
+  style={`width:${width}`}
+  data-ornament
+>
+  <g
+    stroke="currentColor"
+    stroke-width="1.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    {/*
+      Rules either side, each stopped by a small diamond. An earlier draft used
+      arrowheads and they read as literal greater-than signs bracketing the
+      piece — a diamond is a full stop rather than a direction.
+    */}
+    <path d="M6 16 H72" data-ornament-part></path>
+    <path d="M128 16 H194" data-ornament-part></path>
+    <path d="M78 16 L82 12 L86 16 L82 20 Z" data-ornament-part></path>
+    <path d="M114 16 L118 12 L122 16 L118 20 Z" data-ornament-part></path>
+
+    <path d={PIECES[piece]} data-ornament-part></path>
+  </g>
+</svg>
+
+<style>
+  .divider {
+    height: auto;
+    color: var(--accent);
+  }
+</style>

@@ -54,16 +54,44 @@
   --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Helvetica, Arial, sans-serif;
 
-  /* Palette. */
-  --navy: #0b1e30;
-  --navy-deep: #071522;
-  --navy-soft: #16324c;
+  /**
+   * Palette — the castle direction.
+   *
+   * Midnight navy and gold, from the client's mockups. The earlier scheme was
+   * navy, cream and light aqua: tasteful, and it did not believe the word
+   * "Castle" in its own copy. See ADR 0005.
+   *
+   * Cream survives, but its job has narrowed. It is no longer an alternate
+   * ground used wherever a section wanted relief — it is the ground for the two
+   * writing sections specifically, where a reader needs paper rather than
+   * night. Everything else is navy.
+   *
+   * Aqua survives in one place only: the colour the Story's words fade to once
+   * they have been read. It is doing a specific job there and nothing else.
+   */
+
+  /* Grounds, deepest to lightest. */
+  --navy-abyss: #04101d;
+  --navy-deep: #071624;
+  --navy: #0a1c2e;
+  --navy-soft: #14304a;
+
   --cream: #f2eade;
   --cream-deep: #e8dccb;
   --white: #ffffff;
+
+  /**
+   * Gold. Three values, because one is never enough: a base for ornament and
+   * rules, a lighter one for anything that has to read as lit against navy, and
+   * a deeper one for gold on cream, where the base is too pale to hold.
+   */
+  --gold: #c2a15f;
+  --gold-light: #e2c98f;
+  --gold-deep: #9a7c42;
+
+  /* Kept for the Story's recolour, and for nothing else. */
   --aqua: #8fcfd6;
   --aqua-deep: #4a9aa6;
-  --coral: #e0846b;
 
   /*
    * Where the Story's words land once they have been read. Pure --aqua is the
@@ -75,10 +103,18 @@
   --aqua-faded: color-mix(in srgb, var(--aqua) 62%, var(--aqua-deep));
 
   /* Semantic roles. */
-  --ground: var(--white);
-  --ink: var(--navy);
-  --ink-inverse: var(--cream);
-  --rule: color-mix(in srgb, var(--navy) 14%, transparent);
+  --ground: var(--navy);
+  --ink: var(--cream);
+  --ink-muted: color-mix(in srgb, var(--cream) 72%, transparent);
+  --accent: var(--gold);
+  --rule: color-mix(in srgb, var(--gold) 42%, transparent);
+
+  /* The same roles inverted, for the cream writing sections. */
+  --ground-paper: var(--cream);
+  --ink-paper: var(--navy-deep);
+  --ink-paper-muted: color-mix(in srgb, var(--navy-deep) 72%, transparent);
+  --accent-paper: var(--gold-deep);
+  --rule-paper: color-mix(in srgb, var(--gold-deep) 45%, transparent);
 
   /* Fluid type scale. Every size is viewport-aware so nothing overflows at
      375px and nothing looks stranded at 1920px. */

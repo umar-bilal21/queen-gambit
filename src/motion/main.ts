@@ -10,6 +10,7 @@ import { initAnchors } from './anchors';
 
 import './sections/intro';
 import './sections/reveal';
+import './sections/ornament';
 import './sections/header';
 import './sections/menu';
 import './sections/hero';
