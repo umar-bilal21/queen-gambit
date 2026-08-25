@@ -10,16 +10,16 @@ import Beliefs from '../components/Beliefs.astro';
 import Gallery from '../components/Gallery.astro';
 import Enter from '../components/Enter.astro';
 import Footer from '../components/Footer.astro';
+import { images } from '../content/images';
 
 /**
  * The homepage. Nine sections in document order: Intro, Hero, Story, Reef,
  * Rooms, Beliefs, Gallery, Enter, Footer.
  *
- * Photographs are passed in as slots by the image-pipeline ticket, so each
- * section owns its composition while the page owns which image goes where.
+ * The page decides which photograph goes where; each section decides how to
+ * render it. That split keeps image sizing next to the layout that determines
+ * it, and keeps this file readable as a table of contents.
  */
-
-const GALLERY_COUNT = 8;
 ---
 
 <Base>
@@ -27,13 +27,13 @@ const GALLERY_COUNT = 8;
   <Header />
 
   <main id="main">
-    <Hero />
+    <Hero photo={images.hero} />
     <Story />
     <Reef />
-    <Rooms />
-    <Beliefs />
-    <Gallery count={GALLERY_COUNT} />
-    <Enter />
+    <Rooms photos={images.rooms} />
+    <Beliefs photos={images.beliefs} />
+    <Gallery photos={images.gallery} />
+    <Enter left={images.enter.left} right={images.enter.right} />
   </main>
 
   <Footer />

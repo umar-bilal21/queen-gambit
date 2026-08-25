@@ -1,5 +1,8 @@
 ---
+import { Image } from 'astro:assets';
+
 import { site } from '../content/site';
+import type { Photo } from '../content/images';
 
 /**
  * Three interiors on deep navy, each named in caps above its photograph.
@@ -10,11 +13,12 @@ import { site } from '../content/site';
  * Deep navy rather than the near-black of the reference site, so the page holds
  * one palette and the Intro's navy pays off again here.
  */
-
 interface Props {
-  /** Room images, in the same order as the names. Supplied by the page. */
-  images?: readonly unknown[];
+  /** In the same order as the room names. */
+  photos: readonly Photo[];
 }
+
+const { photos } = Astro.props;
 ---
 
 <section class="rooms u-on-navy" id="rooms" aria-labelledby="rooms-title">
@@ -27,7 +31,14 @@ interface Props {
           <li class="rooms__item" data-room={index} style={`--i:${index}`}>
             <p class="rooms__name u-eyebrow">{room.name}</p>
             <div class="rooms__frame">
-              <slot name={`room-${index}`} />
+              <Image
+                src={photos[index].src}
+                alt={photos[index].alt}
+                widths={[400, 640, 900]}
+                sizes="(min-width: 52rem) 30vw, 90vw"
+                loading="lazy"
+                quality={80}
+              />
             </div>
           </li>
         ))

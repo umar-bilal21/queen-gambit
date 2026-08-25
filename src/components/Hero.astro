@@ -1,19 +1,35 @@
 ---
+import { Image } from 'astro:assets';
+
 import { site } from '../content/site';
+import type { Photo } from '../content/images';
 
 /**
  * One committed photograph, drifting slowly, carrying the largest words on the
  * site. Not a slideshow: the line lands harder against a single image, and it
  * keeps the Hero honest as the page's largest contentful paint.
  *
- * The image itself arrives in the image-pipeline ticket; this establishes the
- * frame, the type hierarchy and the parallax hooks.
+ * The Hero photograph is eager and high-priority: it is the page's largest
+ * contentful paint, and the Intro's reveal must never land on an empty frame.
  */
+interface Props {
+  photo: Photo;
+}
+
+const { photo } = Astro.props;
 ---
 
 <section class="hero" id="hero" aria-labelledby="hero-title">
   <div class="hero__media" data-hero-media>
-    <slot name="media" />
+    <Image
+      src={photo.src}
+      alt={photo.alt}
+      widths={[640, 1024, 1600, 2048]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      quality={82}
+    />
   </div>
   <div class="hero__scrim" aria-hidden="true"></div>
 

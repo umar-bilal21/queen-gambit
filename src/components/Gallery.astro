@@ -1,5 +1,8 @@
 ---
+import { Image } from 'astro:assets';
+
 import { site } from '../content/site';
+import type { Photo } from '../content/images';
 
 /**
  * The property, seen properly: a display title, then the photography travelling
@@ -13,10 +16,10 @@ import { site } from '../content/site';
  */
 
 interface Props {
-  count: number;
+  photos: readonly Photo[];
 }
 
-const { count } = Astro.props;
+const { photos } = Astro.props;
 ---
 
 <section class="gallery" id="gallery" aria-labelledby="gallery-title" data-gallery>
@@ -27,9 +30,16 @@ const { count } = Astro.props;
 
   <ul class="gallery__rail" data-gallery-rail tabindex="0" aria-label="Castle photographs">
     {
-      Array.from({ length: count }, (_, index) => (
+      photos.map((image, index) => (
         <li class="gallery__item" data-gallery-item={index}>
-          <slot name={`gallery-${index}`} />
+          <Image
+            src={image.src}
+            alt={image.alt}
+            widths={[400, 700, 1000]}
+            sizes="(min-width: 52rem) 34vw, 80vw"
+            loading="lazy"
+            quality={80}
+          />
         </li>
       ))
     }

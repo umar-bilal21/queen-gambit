@@ -1,5 +1,8 @@
 ---
+import { Image } from 'astro:assets';
+
 import { site } from '../content/site';
+import type { Photo } from '../content/images';
 
 /**
  * Five convictions on deep navy, with a photograph washing in behind whichever
@@ -16,6 +19,12 @@ import { site } from '../content/site';
  *
  * No arrow affordance: the client asked for the reference's arrow to go.
  */
+interface Props {
+  /** In the same order as the Beliefs. */
+  photos: readonly Photo[];
+}
+
+const { photos } = Astro.props;
 ---
 
 <section class="beliefs u-on-navy" id="beliefs" aria-labelledby="beliefs-title" data-beliefs>
@@ -27,7 +36,14 @@ import { site } from '../content/site';
             data-belief-photo={index}
             data-active={index === 0 ? 'true' : 'false'}
           >
-          <slot name={`belief-${index}`} />
+          <Image
+            src={photos[index].src}
+            alt=""
+            widths={[900, 1400, 1920]}
+            sizes="100vw"
+            loading="lazy"
+            quality={72}
+          />
         </div>
       ))
     }

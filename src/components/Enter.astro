@@ -1,5 +1,8 @@
 ---
+import { Image } from 'astro:assets';
+
 import { site, contactHref } from '../content/site';
+import type { Photo } from '../content/images';
 
 /**
  * The close: two photographs combined into one full-bleed field, an invitation,
@@ -9,12 +12,36 @@ import { site, contactHref } from '../content/site';
  * to make contact should not have to hunt for an address, and a form here would
  * mean a backend and a spam problem in a pitch that has neither.
  */
+interface Props {
+  left: Photo;
+  right: Photo;
+}
+
+const { left, right } = Astro.props;
 ---
 
 <section class="enter" id="enter" aria-labelledby="enter-title">
   <div class="enter__media" aria-hidden="true">
-    <div class="enter__pane enter__pane--left"><slot name="enter-left" /></div>
-    <div class="enter__pane enter__pane--right"><slot name="enter-right" /></div>
+    <div class="enter__pane enter__pane--left">
+      <Image
+        src={left.src}
+        alt=""
+        widths={[640, 1024, 1400]}
+        sizes="60vw"
+        loading="lazy"
+        quality={78}
+      />
+    </div>
+    <div class="enter__pane enter__pane--right">
+      <Image
+        src={right.src}
+        alt=""
+        widths={[640, 1024, 1400]}
+        sizes="60vw"
+        loading="lazy"
+        quality={78}
+      />
+    </div>
     <div class="enter__scrim"></div>
   </div>
 
