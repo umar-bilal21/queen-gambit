@@ -28,9 +28,9 @@ const { photos } = Astro.props;
     <ul class="rooms__list">
       {
         site.rooms.items.map((room, index) => (
-          <li class="rooms__item" data-room={index} style={`--i:${index}`}>
+          <li class="rooms__item" data-room>
             <p class="rooms__name u-eyebrow">{room.name}</p>
-            <div class="rooms__frame">
+            <div class="rooms__frame u-cover">
               <Image
                 src={photos[index].src}
                 alt={photos[index].alt}
@@ -90,9 +90,6 @@ const { photos } = Astro.props;
   }
 
   .rooms__frame :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
     transition: transform 0.9s var(--ease-out);
   }
 
@@ -108,11 +105,7 @@ const { photos } = Astro.props;
     }
 
     /* Staggered rather than aligned, so the row reads as composed rather than
-       as a grid. The middle frame drops; the outer two sit high. */
-    .rooms__item {
-      transform: translateY(calc(var(--i) * 0rem));
-    }
-
+       as a grid. The middle frame drops furthest; the third sits between. */
     .rooms__item:nth-child(2) {
       margin-block-start: clamp(3rem, 7vw, 6rem);
     }

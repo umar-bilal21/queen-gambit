@@ -22,7 +22,7 @@ const { left, right } = Astro.props;
 
 <section class="enter" id="enter" aria-labelledby="enter-title">
   <div class="enter__media" aria-hidden="true">
-    <div class="enter__pane enter__pane--left">
+    <div class="enter__pane enter__pane--left u-cover">
       <Image
         src={left.src}
         alt=""
@@ -32,7 +32,7 @@ const { left, right } = Astro.props;
         quality={78}
       />
     </div>
-    <div class="enter__pane enter__pane--right">
+    <div class="enter__pane enter__pane--right u-cover">
       <Image
         src={right.src}
         alt=""
@@ -78,13 +78,7 @@ const { left, right } = Astro.props;
     overflow: clip;
   }
 
-  .enter__pane :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /**
+    /**
    * The two photographs must read as one field, not as a diptych with a seam.
    *
    * Feathering both inward edges does not work: across the overlap neither

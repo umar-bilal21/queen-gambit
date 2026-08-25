@@ -6,6 +6,8 @@ import {
   type IntroEvent,
   type IntroState,
 } from '../state';
+import { lockScroll, unlockScroll } from '../scrollLock';
+import { INTRO_FAILSAFE_MS } from '../layout';
 
 /**
  * The arrival.
@@ -26,13 +28,31 @@ function initIntro({ reduced }: MotionContext): void {
 
   let state: IntroState = createIntroState({ prefersReducedMotion: reduced });
 
+  let locked = false;
+
   const finish = (): void => {
     root.dataset.introState = 'done';
     root.remove();
-    document.body.style.removeProperty('overflow');
+    if (locked) unlockScroll();
   };
 
   if (isIntroFinished(state)) {
+    finish();
+    return;
+  }
+
+  /*
+   * The overlay may already be gone.
+   *
+   * The stylesheet fades it out on a timer so that a bundle which never
+   * arrives cannot leave the Castle unreachable. If the bundle arrives *after*
+   * that timer, the visitor has already been shown the Hero — and setting
+   * `data-intro-state="running"` below would cancel the CSS animation, snap
+   * the navy overlay back over the page, and play the whole timeline with the
+   * body locked. Rather than a continuous arrival that would be the page
+   * yanked backwards. So if we are late, we are done.
+   */
+  if (performance.now() >= INTRO_FAILSAFE_MS) {
     finish();
     return;
   }
@@ -47,7 +67,8 @@ function initIntro({ reduced }: MotionContext): void {
    * The page must not scroll underneath the Intro. A visitor who scrolls during
    * it would otherwise arrive at the Hero already halfway down the Story.
    */
-  document.body.style.overflow = 'hidden';
+  lockScroll();
+  locked = true;
 
   const parts = gsap.utils.toArray<SVGElement>('[data-queen] [data-queen-part]');
   const line = root.querySelector<HTMLElement>('[data-intro-line]');
@@ -97,6 +118,13 @@ function initIntro({ reduced }: MotionContext): void {
     state = next;
 
     if (state === 'skipped') {
+      /*
+       * Play first. The timeline may be paused waiting on the Hero photograph
+       * to decode, and tweening the timeScale of a paused timeline does
+       * nothing — skip would silently do nothing on exactly the slow
+       * connection where a visitor most wants it.
+       */
+      timeline.play();
       /*
        * Fast-forward rather than cut. A visitor who skips still gets the reveal
        * — they just get it quickly — which keeps the Hero's entrance intact

@@ -19,6 +19,7 @@ function initBeliefs(_context: MotionContext): void {
   const section = document.querySelector<HTMLElement>('[data-beliefs]');
   if (!section) return;
 
+  const list = section.querySelector<HTMLElement>('[data-beliefs-list]');
   const rows = Array.from(section.querySelectorAll<HTMLElement>('[data-belief]'));
   const photos = Array.from(section.querySelectorAll<HTMLElement>('[data-belief-photo]'));
   if (rows.length === 0) return;
@@ -41,12 +42,13 @@ function initBeliefs(_context: MotionContext): void {
   };
 
   ScrollTrigger.create({
-    trigger: section,
     /*
-     * The range is measured against the list rather than the section so that
-     * the heading and introduction above it do not consume two of the five
-     * rows' worth of scroll before the first photograph appears.
+     * The list, not the section. Measuring the whole section hands the eyebrow,
+     * title and introduction above it a share of the scroll range, so by the
+     * time the first row is being read the progress is already into the second
+     * or third — the photograph leads the row instead of matching it.
      */
+    trigger: list ?? section,
     start: 'top center',
     end: 'bottom center',
     onUpdate: (self) => {

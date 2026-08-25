@@ -17,8 +17,6 @@ import { shouldSmoothScroll } from './environment';
 export interface SmoothScroll {
   /** Scroll to an element or offset, respecting whichever scroller is active. */
   scrollTo(target: string | HTMLElement | number, options?: { offset?: number }): void;
-  /** Current scroll position, from whichever scroller is active. */
-  destroy(): void;
 }
 
 /** A no-op standing in for Lenis where smooth scrolling is not wanted. */
@@ -36,7 +34,6 @@ function nativeScroller(): SmoothScroll {
       const top = element.getBoundingClientRect().top + window.scrollY + offset;
       window.scrollTo({ top, behavior: 'smooth' });
     },
-    destroy() {},
   };
 }
 
@@ -70,9 +67,6 @@ export function createSmoothScroll(): SmoothScroll {
   return {
     scrollTo(target, options) {
       lenis.scrollTo(target, { offset: options?.offset ?? 0 });
-    },
-    destroy() {
-      lenis.destroy();
     },
   };
 }

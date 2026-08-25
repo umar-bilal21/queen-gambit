@@ -1,3 +1,4 @@
+import { HEADER_HEIGHT } from './layout';
 import type { SmoothScroll } from './smoothScroll';
 
 /**
@@ -11,8 +12,6 @@ import type { SmoothScroll } from './smoothScroll';
  * The header is fixed and would otherwise cover the top of whatever section you
  * arrive at, hence the offset.
  */
-
-const HEADER_CLEARANCE = -72;
 
 export function initAnchors(scroller: SmoothScroll): void {
   document.addEventListener('click', (event) => {
@@ -34,7 +33,7 @@ export function initAnchors(scroller: SmoothScroll): void {
     if (!destination) return;
 
     event.preventDefault();
-    scroller.scrollTo(destination, { offset: HEADER_CLEARANCE });
+    scroller.scrollTo(destination, { offset: -HEADER_HEIGHT });
 
     /*
      * Scrolling somewhere is not the same as going somewhere. Without this a

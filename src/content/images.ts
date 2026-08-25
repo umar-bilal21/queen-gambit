@@ -37,6 +37,21 @@ import galleryElevation from '../assets/images/gallery-castle-elevation.jpg';
 import enterColonnade from '../assets/images/enter-ocean-colonnade.jpg';
 import enterEvening from '../assets/images/enter-castle-evening.jpg';
 
+/**
+ * How the Hero photograph is generated.
+ *
+ * Shared deliberately: the document head preloads this image and the Hero
+ * section renders it, and if the two disagree by so much as a quality setting
+ * they resolve to different files — the preload then fetches an image nobody
+ * displays and the visible one starts from scratch, which is worse than not
+ * preloading at all.
+ */
+export const HERO_IMAGE = {
+  widths: [640, 1024, 1600, 2048],
+  sizes: '100vw',
+  quality: 82,
+} as const;
+
 export interface Photo {
   readonly src: ImageMetadata;
   readonly alt: string;

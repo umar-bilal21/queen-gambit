@@ -1,7 +1,6 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
-import { SplitText } from 'gsap/SplitText';
 
 import { prefersReducedMotion, whenImagesSettled } from './environment';
 import { createSmoothScroll, type SmoothScroll } from './smoothScroll';
@@ -14,7 +13,12 @@ import { createSmoothScroll, type SmoothScroll } from './smoothScroll';
  * and this is the one place to look when asking what the page is doing.
  */
 
-gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, SplitText);
+/*
+ * SplitText is deliberately absent: the Story's words are split into elements
+ * at build time, so they are real text in the HTML rather than something a
+ * plugin has to reconstruct at runtime.
+ */
+gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
 
 export interface MotionContext {
   readonly scroller: SmoothScroll;

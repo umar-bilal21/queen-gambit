@@ -4,8 +4,7 @@ import Monogram from './Monogram.astro';
 
 /**
  * Transparent over the Hero, condensing to solid navy once the visitor scrolls
- * past it. The condensing is driven by the motion island (ticket 06); this
- * ticket establishes the markup, the anchors and the small-screen menu.
+ * past it. The condensing itself is driven by the motion island.
  *
  * Every link resolves to a section that exists on this page. There are no inner
  * pages, and a dead link in a pitch is a leak you then have to explain.
@@ -23,7 +22,7 @@ import Monogram from './Monogram.astro';
         {
           site.nav.map((item) => (
             <li>
-              <a class="header__link u-eyebrow" href={item.href} data-nav-link>
+              <a class="header__link u-eyebrow" href={item.href}>
                 {item.label}
               </a>
             </li>
@@ -58,7 +57,7 @@ import Monogram from './Monogram.astro';
       {
         site.nav.map((item) => (
           <li>
-            <a class="header__menu-link" href={item.href} data-nav-link data-menu-link>
+            <a class="header__menu-link" href={item.href} data-menu-link>
               {item.label}
             </a>
           </li>

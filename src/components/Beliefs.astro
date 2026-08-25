@@ -32,8 +32,8 @@ const { photos } = Astro.props;
     {
       site.beliefs.items.map((_, index) => (
         <div
-            class="beliefs__photo"
-            data-belief-photo={index}
+            class="beliefs__photo u-cover"
+            data-belief-photo
             data-active={index === 0 ? 'true' : 'false'}
           >
           <Image
@@ -57,12 +57,12 @@ const { photos } = Astro.props;
       <p class="beliefs__intro">{site.beliefs.intro}</p>
     </header>
 
-    <ol class="beliefs__list">
+    <ol class="beliefs__list" data-beliefs-list>
       {
         site.beliefs.items.map((belief, index) => (
           <li
             class="beliefs__row"
-            data-belief={index}
+            data-belief
             data-active={index === 0 ? 'true' : 'false'}
           >
             <span class="beliefs__index u-eyebrow" aria-hidden="true">
@@ -104,13 +104,7 @@ const { photos } = Astro.props;
     opacity: 1;
   }
 
-  .beliefs__photo :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /**
+    /**
    * The effect must never cost the visitor the words. This scrim is heavy
    * enough that the row copy clears contrast requirements against any
    * photograph we put behind it, and it is part of the design rather than an
