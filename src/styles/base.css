@@ -1,0 +1,157 @@
+/**
+ * Base styles. Reset, typographic defaults, and the accessibility floor every
+ * section is built on.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* Lenis drives scrolling on desktop; native smooth-scroll here would fight
+     it. Anchor navigation is handled explicitly in the motion island. */
+  scroll-behavior: auto;
+}
+
+body {
+  min-height: 100svh;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* The page is a vertical sequence of full-width bands; nothing should ever
+     produce a horizontal scrollbar on the document itself. Sections that
+     travel sideways clip internally instead. */
+  overflow-x: clip;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--aqua);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Utilities ---------------------------------------------------------------- */
+
+.u-container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* The letterspaced all-caps label that recurs in every section: the Hero
+   subtitle, OUR BELIEFS, the Room names, the footer links. */
+.u-eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+
+.u-eyebrow--wide {
+  letter-spacing: var(--tracking-caps-wide);
+}
+
+.u-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.u-skip-link {
+  position: absolute;
+  top: var(--space-s);
+  left: var(--space-s);
+  z-index: 200;
+  padding: var(--space-2xs) var(--space-s);
+  background: var(--navy);
+  color: var(--cream);
+  transform: translateY(-200%);
+}
+
+.u-skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Sections on the deep navy ground: the Intro, the Rooms and the Beliefs. */
+.u-on-navy {
+  background: var(--navy);
+  color: var(--cream);
+}
+
+.u-on-cream {
+  background: var(--cream);
+  color: var(--navy);
+}
+
+/* Reduced motion ----------------------------------------------------------- */
+
+/**
+ * The rule here is that a reduced-motion visitor sees *finished* compositions,
+ * never half-played ones. Scrubbed sequences resolve to their end state rather
+ * than being deleted, so nothing is missing — only the movement is.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

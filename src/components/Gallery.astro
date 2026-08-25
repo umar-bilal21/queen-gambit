@@ -1,0 +1,100 @@
+---
+import { site } from '../content/site';
+
+/**
+ * The property, seen properly: a display title, then the photography travelling
+ * horizontally as the visitor scrolls vertically.
+ *
+ * The rail is a real overflow-scroll container rather than a transformed strip.
+ * That buys three things at once: it is swipeable on touch with no code, it is
+ * keyboard-scrollable, and if the motion island never boots the section is
+ * still a perfectly usable horizontal scroller instead of a frozen row. The
+ * island scrubs `scrollLeft` on top of that rather than replacing it.
+ */
+
+interface Props {
+  count: number;
+}
+
+const { count } = Astro.props;
+---
+
+<section class="gallery" id="gallery" aria-labelledby="gallery-title" data-gallery>
+  <div class="gallery__head u-container">
+    <p class="u-eyebrow u-eyebrow--wide gallery__eyebrow">{site.gallery.eyebrow}</p>
+    <h2 class="gallery__title" id="gallery-title">{site.gallery.title}</h2>
+  </div>
+
+  <ul class="gallery__rail" data-gallery-rail tabindex="0" aria-label="Castle photographs">
+    {
+      Array.from({ length: count }, (_, index) => (
+        <li class="gallery__item" data-gallery-item={index}>
+          <slot name={`gallery-${index}`} />
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .gallery {
+    background: var(--cream);
+    color: var(--navy);
+    padding-block: var(--space-2xl) var(--space-xl);
+    overflow: clip;
+  }
+
+  .gallery__head {
+    display: grid;
+    gap: var(--space-s);
+    margin-block-end: var(--space-l);
+  }
+
+  .gallery__eyebrow {
+    color: var(--aqua-deep);
+  }
+
+  .gallery__title {
+    font-size: var(--step-4);
+    font-style: italic;
+  }
+
+  .gallery__rail {
+    display: flex;
+    gap: clamp(0.75rem, 2vw, 1.75rem);
+    list-style: none;
+    margin: 0;
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .gallery__rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery__item {
+    flex: none;
+    width: clamp(15rem, 34vw, 30rem);
+    aspect-ratio: 4 / 3;
+    overflow: clip;
+    scroll-snap-align: center;
+    background: var(--cream-deep);
+  }
+
+  /* A tall frame every third image, so the rail has rhythm rather than reading
+     as a filmstrip of identical rectangles. */
+  .gallery__item:nth-child(3n) {
+    width: clamp(11rem, 24vw, 21rem);
+    aspect-ratio: 3 / 4;
+    align-self: center;
+  }
+
+  .gallery__item :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

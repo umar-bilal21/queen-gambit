@@ -1,0 +1,104 @@
+---
+/**
+ * Hand-authored reef line work: coral fans, seaweed and turtles.
+ *
+ * Single consistent stroke weight throughout, matching the Queen in the Intro,
+ * so the two sections read as one hand rather than two sources. Every path is
+ * strokable so DrawSVG can draw the reef in as the visitor arrives.
+ *
+ * Decorative: it carries nothing the copy does not already say, so it is hidden
+ * from assistive technology entirely.
+ */
+interface Props {
+  /** Which edge this instance sits on — the composition mirrors. */
+  side: 'left' | 'right';
+  class?: string;
+}
+
+const { side, class: className } = Astro.props;
+---
+
+<svg
+  class:list={['reef-art', `reef-art--${side}`, className]}
+  viewBox="0 0 220 420"
+  fill="none"
+  role="presentation"
+  aria-hidden="true"
+  preserveAspectRatio="xMidYMax meet"
+  data-reef-art
+>
+  <g
+    stroke="currentColor"
+    stroke-width="2.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    {/* Branching coral. */}
+    <path d="M60 420 C58 380 52 356 44 334" data-reef-part></path>
+    <path d="M44 334 C38 316 40 300 50 288" data-reef-part></path>
+    <path d="M44 334 C34 326 22 328 16 340" data-reef-part></path>
+    <path d="M50 288 C46 272 50 258 60 250" data-reef-part></path>
+    <path d="M50 288 C62 284 72 290 74 302" data-reef-part></path>
+    <path d="M60 250 C56 238 62 228 72 224" data-reef-part></path>
+    <path d="M60 250 C50 244 40 248 36 258" data-reef-part></path>
+
+    {/* A second, shorter coral behind it. */}
+    <path d="M104 420 C102 392 98 372 92 356" data-reef-part></path>
+    <path d="M92 356 C88 342 92 330 102 324" data-reef-part></path>
+    <path d="M92 356 C82 350 72 354 68 364" data-reef-part></path>
+    <path d="M102 324 C100 312 106 302 116 300" data-reef-part></path>
+
+    {/* Seaweed. */}
+    <path d="M150 420 C158 392 146 372 154 344 C160 322 150 306 156 286" data-reef-part
+    ></path>
+    <path d="M172 420 C178 398 168 382 174 360 C179 342 171 330 176 314" data-reef-part
+    ></path>
+    <path d="M192 420 C197 402 189 390 194 374" data-reef-part></path>
+
+    {/* Sea floor. */}
+    <path d="M0 418 C40 410 78 414 118 410 C158 406 190 412 220 408" data-reef-part
+    ></path>
+
+    {/*
+      A turtle, seen from above — the one the copy names. Drawn at the top of
+      the composition so it reads as travelling across the section rather than
+      sitting in the coral.
+    */}
+    <g data-reef-part="turtle" transform="translate(96 92) rotate(-12)">
+      <ellipse cx="0" cy="0" rx="30" ry="25" data-reef-part></ellipse>
+      <ellipse cx="0" cy="0" rx="18" ry="14" data-reef-part></ellipse>
+      <path d="M0 -25 L0 -14 M0 25 L0 14 M-30 0 L-18 0 M30 0 L18 0" data-reef-part
+      ></path>
+      <path d="M-13 -20 L-8 -11 M13 -20 L8 -11 M-13 20 L-8 11 M13 20 L8 11" data-reef-part
+      ></path>
+
+      {/* Head. */}
+      <path d="M-30 -6 C-40 -10 -46 -6 -45 0 C-44 6 -37 8 -30 5" data-reef-part></path>
+
+      {/* Flippers. */}
+      <path d="M-16 -22 C-24 -34 -20 -44 -10 -42 C-3 -40 -2 -30 -6 -23" data-reef-part
+      ></path>
+      <path d="M14 -21 C22 -32 32 -30 33 -21 C34 -13 24 -10 18 -14" data-reef-part
+      ></path>
+      <path d="M-14 22 C-22 32 -18 41 -9 40 C-3 39 -2 31 -5 24" data-reef-part></path>
+      <path d="M15 20 C24 28 33 26 34 18 C35 11 26 8 20 12" data-reef-part></path>
+    </g>
+
+    {/* Bubbles. */}
+    <circle cx="176" cy="252" r="4" data-reef-part></circle>
+    <circle cx="190" cy="230" r="2.6" data-reef-part></circle>
+    <circle cx="180" cy="212" r="1.8" data-reef-part></circle>
+  </g>
+</svg>
+
+<style>
+  .reef-art {
+    width: 100%;
+    height: 100%;
+    color: color-mix(in srgb, var(--navy) 26%, transparent);
+  }
+
+  .reef-art--right {
+    transform: scaleX(-1);
+  }
+</style>

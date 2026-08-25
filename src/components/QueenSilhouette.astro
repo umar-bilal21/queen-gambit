@@ -1,0 +1,78 @@
+---
+/**
+ * The Queen, hand-authored as line work.
+ *
+ * The client's reference for this was a ChatGPT share link that renders only in
+ * JavaScript and could not be read, so this is drawn rather than reproduced.
+ *
+ * Built from separate strokable paths rather than one filled silhouette, for
+ * two reasons: DrawSVG can stroke each part in sequence so the piece assembles
+ * crown-first as the Intro plays, and the single consistent stroke weight is
+ * the same visual language as the Reef section's coral and turtles — which is
+ * what stops the Intro reading as a preamble bolted onto the front of the site.
+ *
+ * Order of the paths below is the order they draw in.
+ */
+interface Props {
+  class?: string;
+  size?: string;
+}
+
+const { class: className, size = 'min(38vh, 20rem)' } = Astro.props;
+---
+
+<svg
+  class:list={['queen', className]}
+  viewBox="0 0 200 340"
+  fill="none"
+  role="presentation"
+  aria-hidden="true"
+  style={`height:${size}`}
+  data-queen
+>
+  <g
+    stroke="currentColor"
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    {/* The five finials. */}
+    <circle cx="60" cy="44" r="7" data-queen-part="finial" />
+    <circle cx="80" cy="32" r="7" data-queen-part="finial" />
+    <circle cx="100" cy="25" r="8" data-queen-part="finial" />
+    <circle cx="120" cy="32" r="7" data-queen-part="finial" />
+    <circle cx="140" cy="44" r="7" data-queen-part="finial" />
+
+    {/* The coronet. */}
+    <path
+      d="M56 78 L60 51 L80 67 L100 35 L120 67 L140 51 L144 78"
+      data-queen-part="crown"></path>
+    <path d="M54 78 H146" data-queen-part="crown"></path>
+    <path d="M57 92 H143" data-queen-part="crown"></path>
+
+    {/* Neck and collar. */}
+    <path d="M74 92 C80 108 82 120 82 132" data-queen-part="neck"></path>
+    <path d="M126 92 C120 108 118 120 118 132" data-queen-part="neck"></path>
+    <path d="M70 132 H130" data-queen-part="neck"></path>
+    <path d="M68 146 H132" data-queen-part="neck"></path>
+
+    {/* The skirt, flaring to the hem. */}
+    <path d="M68 146 C56 190 44 236 38 272" data-queen-part="body"></path>
+    <path d="M132 146 C144 190 156 236 162 272" data-queen-part="body"></path>
+    <path d="M38 272 Q100 288 162 272" data-queen-part="body"></path>
+
+    {/* Plinth and base. */}
+    <path d="M38 272 L44 288" data-queen-part="base"></path>
+    <path d="M162 272 L156 288" data-queen-part="base"></path>
+    <path d="M44 288 H156" data-queen-part="base"></path>
+    <path d="M44 288 L34 307" data-queen-part="base"></path>
+    <path d="M156 288 L166 307" data-queen-part="base"></path>
+    <path d="M34 307 H166" data-queen-part="base"></path>
+  </g>
+</svg>
+
+<style>
+  .queen {
+    width: auto;
+  }
+</style>

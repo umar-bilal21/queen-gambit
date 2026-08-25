@@ -1,0 +1,187 @@
+---
+import { site } from '../content/site';
+
+/**
+ * Five convictions on deep navy, with a photograph washing in behind whichever
+ * one the visitor is reading.
+ *
+ * Scroll-driven first, hover second. The brief said "when you hover over it
+ * photo appear as you scroll down", which is two triggers in one sentence; the
+ * resolution is that scroll position sets the Active row so the section
+ * performs itself for someone who never moves their mouse — which is exactly
+ * what the client will do — and hover takes over where a fine pointer exists.
+ *
+ * The decision itself lives in `activeBeliefIndex` in the motion module, where
+ * its boundary conditions are tested. Nothing here reimplements it.
+ *
+ * No arrow affordance: the client asked for the reference's arrow to go.
+ */
+---
+
+<section class="beliefs u-on-navy" id="beliefs" aria-labelledby="beliefs-title" data-beliefs>
+  <div class="beliefs__backdrop" aria-hidden="true">
+    {
+      site.beliefs.items.map((_, index) => (
+        <div
+            class="beliefs__photo"
+            data-belief-photo={index}
+            data-active={index === 0 ? 'true' : 'false'}
+          >
+          <slot name={`belief-${index}`} />
+        </div>
+      ))
+    }
+    <div class="beliefs__scrim"></div>
+  </div>
+
+  <div class="beliefs__inner u-container">
+    <header class="beliefs__head">
+      <p class="u-eyebrow u-eyebrow--wide beliefs__eyebrow">{site.beliefs.eyebrow}</p>
+      <h2 class="beliefs__title" id="beliefs-title">{site.beliefs.title}</h2>
+      <p class="beliefs__intro">{site.beliefs.intro}</p>
+    </header>
+
+    <ol class="beliefs__list">
+      {
+        site.beliefs.items.map((belief, index) => (
+          <li
+            class="beliefs__row"
+            data-belief={index}
+            data-active={index === 0 ? 'true' : 'false'}
+          >
+            <span class="beliefs__index u-eyebrow" aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <h3 class="beliefs__row-title u-eyebrow">{belief.title}</h3>
+            <p class="beliefs__row-body">{belief.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .beliefs {
+    position: relative;
+    padding-block: var(--space-2xl);
+    overflow: clip;
+    isolation: isolate;
+  }
+
+  .beliefs__backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .beliefs__photo {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.7s var(--ease-out);
+  }
+
+  /* Set by the motion island. Exactly one row is Active at a time, so exactly
+     one photograph is ever visible. */
+  .beliefs__photo[data-active='true'] {
+    opacity: 1;
+  }
+
+  .beliefs__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /**
+   * The effect must never cost the visitor the words. This scrim is heavy
+   * enough that the row copy clears contrast requirements against any
+   * photograph we put behind it, and it is part of the design rather than an
+   * apology — the photographs are meant to read as submerged.
+   */
+  .beliefs__scrim {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--navy) 84%, transparent);
+  }
+
+  .beliefs__inner {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .beliefs__head {
+    display: grid;
+    gap: var(--space-s);
+    max-width: 54rem;
+  }
+
+  .beliefs__eyebrow {
+    color: var(--aqua);
+  }
+
+  .beliefs__title {
+    font-family: var(--font-sans);
+    font-size: var(--step-3);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+  }
+
+  .beliefs__intro {
+    max-width: var(--measure);
+    color: color-mix(in srgb, var(--cream) 78%, transparent);
+  }
+
+  .beliefs__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-block-start: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
+  }
+
+  .beliefs__row {
+    display: grid;
+    gap: var(--space-xs);
+    padding-block: clamp(1.75rem, 4vw, 3rem);
+    border-block-end: 1px solid color-mix(in srgb, var(--cream) 18%, transparent);
+    opacity: 0.5;
+    transition: opacity 0.5s var(--ease-out);
+  }
+
+  .beliefs__row[data-active='true'] {
+    opacity: 1;
+  }
+
+  /* Without the island — no JavaScript, or reduced motion — every row reads at
+     full strength rather than half of them looking broken. */
+  @media (prefers-reduced-motion: reduce) {
+    .beliefs__row {
+      opacity: 1;
+    }
+  }
+
+  .beliefs__index {
+    color: var(--aqua);
+  }
+
+  .beliefs__row-title {
+    font-size: var(--step-1);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+  }
+
+  .beliefs__row-body {
+    max-width: var(--measure);
+    color: color-mix(in srgb, var(--cream) 80%, transparent);
+  }
+
+  @media (min-width: 52rem) {
+    .beliefs__row {
+      grid-template-columns: 4rem minmax(0, 22ch) minmax(0, 1fr);
+      align-items: baseline;
+      gap: clamp(1.5rem, 4vw, 4rem);
+    }
+  }
+</style>

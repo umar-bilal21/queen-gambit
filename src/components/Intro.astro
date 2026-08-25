@@ -1,0 +1,105 @@
+---
+import { site } from '../content/site';
+import QueenSilhouette from './QueenSilhouette.astro';
+
+/**
+ * The arrival.
+ *
+ * A fixed ~3.5s timeline over deep navy — art direction, not instrumentation.
+ * There is no progress bar and no percentage because there is no honest
+ * progress to report: the page is interactive in well under a second, so a bar
+ * would either flash past or lie (ADR 0003).
+ *
+ * It is rendered as real markup rather than injected by script so that a
+ * visitor with JavaScript disabled sees the Castle rather than a blank navy
+ * screen — the `data-intro` element is removed by the motion island once its
+ * timeline finishes, and CSS alone dismisses it if the island never boots.
+ */
+---
+
+<div class="intro" data-intro role="presentation">
+  <div class="intro__stage">
+    <QueenSilhouette class="intro__queen" />
+    <p class="intro__line u-eyebrow u-eyebrow--wide" data-intro-line>
+      {site.intro.line}
+    </p>
+  </div>
+
+  <button class="intro__skip u-eyebrow" type="button" data-intro-skip>
+    {site.intro.skipLabel}
+  </button>
+</div>
+
+<style>
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: grid;
+    place-items: center;
+    background: var(--navy);
+    color: var(--cream);
+  }
+
+  .intro[data-intro-state='done'] {
+    display: none;
+  }
+
+  .intro__stage {
+    display: grid;
+    justify-items: center;
+    gap: clamp(1.75rem, 5vh, 3.25rem);
+    padding-inline: var(--gutter);
+  }
+
+  .intro__line {
+    max-width: 32ch;
+    text-align: center;
+    line-height: 1.9;
+    color: color-mix(in srgb, var(--cream) 88%, transparent);
+  }
+
+  .intro__skip {
+    position: absolute;
+    inset-block-end: clamp(1.5rem, 5vh, 3rem);
+    inset-inline-end: var(--gutter);
+    padding: 0.5rem 0.25rem;
+    color: color-mix(in srgb, var(--cream) 60%, transparent);
+    transition: color 0.3s var(--ease-out);
+  }
+
+  .intro__skip:hover {
+    color: var(--cream);
+  }
+
+  /**
+   * Two fallbacks, both deliberate.
+   *
+   * Reduced motion: the Intro never appears at all. A visitor who has asked the
+   * system to avoid motion should not be held for three and a half seconds by
+   * an animation, and there is nothing in it they need.
+   *
+   * No JavaScript: the island never boots, so nothing would ever remove the
+   * overlay. This keyframe dismisses it on the same schedule the timeline would
+   * have, so the page is still reachable.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .intro {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .intro {
+      animation: intro-failsafe 0.4s var(--ease-out) calc(var(--intro-duration) + 2s)
+        forwards;
+    }
+  }
+
+  @keyframes intro-failsafe {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+</style>

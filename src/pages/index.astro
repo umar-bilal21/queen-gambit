@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import Intro from '../components/Intro.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Story from '../components/Story.astro';
+import Reef from '../components/Reef.astro';
+import Rooms from '../components/Rooms.astro';
+import Beliefs from '../components/Beliefs.astro';
+import Gallery from '../components/Gallery.astro';
+import Enter from '../components/Enter.astro';
+import Footer from '../components/Footer.astro';
+
+/**
+ * The homepage. Nine sections in document order: Intro, Hero, Story, Reef,
+ * Rooms, Beliefs, Gallery, Enter, Footer.
+ *
+ * Photographs are passed in as slots by the image-pipeline ticket, so each
+ * section owns its composition while the page owns which image goes where.
+ */
+
+const GALLERY_COUNT = 8;
+---
+
+<Base>
+  <Intro />
+  <Header />
+
+  <main id="main">
+    <Hero />
+    <Story />
+    <Reef />
+    <Rooms />
+    <Beliefs />
+    <Gallery count={GALLERY_COUNT} />
+    <Enter />
+  </main>
+
+  <Footer />
+</Base>

@@ -1,0 +1,117 @@
+---
+import { site } from '../content/site';
+
+/**
+ * Three interiors on deep navy, each named in caps above its photograph.
+ *
+ * Name above image is the client's explicit instruction, and it is the better
+ * order anyway: you read what the room is, then you see it.
+ *
+ * Deep navy rather than the near-black of the reference site, so the page holds
+ * one palette and the Intro's navy pays off again here.
+ */
+
+interface Props {
+  /** Room images, in the same order as the names. Supplied by the page. */
+  images?: readonly unknown[];
+}
+---
+
+<section class="rooms u-on-navy" id="rooms" aria-labelledby="rooms-title">
+  <div class="rooms__inner u-container">
+    <h2 class="rooms__heading" id="rooms-title">{site.rooms.heading}</h2>
+
+    <ul class="rooms__list">
+      {
+        site.rooms.items.map((room, index) => (
+          <li class="rooms__item" data-room={index} style={`--i:${index}`}>
+            <p class="rooms__name u-eyebrow">{room.name}</p>
+            <div class="rooms__frame">
+              <slot name={`room-${index}`} />
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .rooms {
+    padding-block: var(--space-2xl);
+  }
+
+  .rooms__inner {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .rooms__heading {
+    font-size: var(--step-4);
+    text-align: center;
+    font-style: italic;
+  }
+
+  .rooms__list {
+    display: grid;
+    gap: var(--space-l);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .rooms__item {
+    display: grid;
+    gap: var(--space-s);
+    align-content: start;
+  }
+
+  .rooms__name {
+    color: color-mix(in srgb, var(--cream) 80%, transparent);
+    min-height: 3em;
+  }
+
+  .rooms__frame {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: clip;
+    background: color-mix(in srgb, var(--cream) 8%, transparent);
+  }
+
+  .rooms__frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s var(--ease-out);
+  }
+
+  .rooms__item:hover .rooms__frame :global(img) {
+    transform: scale(1.04);
+  }
+
+  @media (min-width: 52rem) {
+    .rooms__list {
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(1.5rem, 3vw, 3rem);
+      align-items: start;
+    }
+
+    /* Staggered rather than aligned, so the row reads as composed rather than
+       as a grid. The middle frame drops; the outer two sit high. */
+    .rooms__item {
+      transform: translateY(calc(var(--i) * 0rem));
+    }
+
+    .rooms__item:nth-child(2) {
+      margin-block-start: clamp(3rem, 7vw, 6rem);
+    }
+
+    .rooms__item:nth-child(3) {
+      margin-block-start: clamp(1rem, 2.5vw, 2.5rem);
+    }
+
+    .rooms__name {
+      min-height: 0;
+    }
+  }
+</style>

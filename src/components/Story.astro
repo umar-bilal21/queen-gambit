@@ -1,0 +1,85 @@
+---
+import { site } from '../content/site';
+
+/**
+ * The section where the visitor's reading pace and the page's motion become the
+ * same thing: the words recolour one by one from navy to aqua, bound to scroll
+ * position rather than played on a timer, so scrolling back up runs it
+ * backwards and the effect is never spent.
+ *
+ * Splitting happens here at build time rather than in the browser. Doing it in
+ * markup means the words are real text in the HTML — selectable, searchable,
+ * and read in the right order by a screen reader — and it means the section
+ * renders correctly at full contrast when the motion island never boots.
+ *
+ * Each word is wrapped, not each character: per-character recolouring reads as
+ * a glitch at this size, and it multiplies the element count by five.
+ */
+
+const words = (text: string) => text.split(/\s+/).filter(Boolean);
+
+const leadWords = words(site.story.lead);
+---
+
+<section class="story" id="story" aria-labelledby="story-title">
+  <div class="story__inner u-container">
+    <span class="story__mark" aria-hidden="true">✦</span>
+
+    <h2 class="story__lead" id="story-title" data-story-block>
+      {
+        leadWords.map((word) => (
+          <>
+            <span class="story__word" data-story-word>
+              {word}
+            </span>{' '}
+          </>
+        ))
+      }
+    </h2>
+  </div>
+</section>
+
+<style>
+  .story {
+    background: var(--white);
+    color: var(--navy);
+    padding-block: var(--space-2xl);
+  }
+
+  .story__inner {
+    display: grid;
+    gap: var(--space-l);
+    max-width: 72rem;
+  }
+
+  .story__mark {
+    font-size: var(--step-1);
+    color: var(--aqua-deep);
+  }
+
+  .story__lead {
+    font-size: var(--step-3);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    max-width: 26ch;
+  }
+
+  /**
+   * The starting colour is full navy, not the faded aqua.
+   *
+   * That matters: if the island never boots, or the visitor has reduced motion
+   * on, every word stays at full contrast and the passage is completely
+   * legible. The animation's job is to fade words *away* ahead of the read, not
+   * to fade them in — so the accessible state is also the default state.
+   */
+  .story__word {
+    color: var(--navy);
+    transition: color 0.1s linear;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .story__word {
+      color: var(--navy) !important;
+    }
+  }
+</style>

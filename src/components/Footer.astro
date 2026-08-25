@@ -1,0 +1,113 @@
+---
+import { site } from '../content/site';
+import Monogram from './Monogram.astro';
+
+/**
+ * Cream ground, monogram alone, the practical details.
+ *
+ * No telephone number and no social links: neither exists anywhere in the
+ * client's materials, and inventing them would be worse than omitting them.
+ *
+ * The email reads "landmark" directly beneath copy reading "Castle". That is
+ * the client's real working address; the inconsistency is deliberate and
+ * reported to them rather than hidden behind an invented one (ADR 0004).
+ */
+---
+
+<footer class="footer u-on-cream" id="footer">
+  <div class="footer__inner u-container">
+    <div class="footer__mark">
+      <Monogram size="4.5rem" label={null} />
+      <p class="footer__name u-eyebrow u-eyebrow--wide">The Queen’s Gambit Castle</p>
+    </div>
+
+    <address class="footer__address">
+      {site.contact.address.map((line) => <span>{line}</span>)}
+    </address>
+
+    <div class="footer__contact">
+      <a class="footer__email" href={`mailto:${site.contact.email}`}>
+        {site.contact.email}
+      </a>
+    </div>
+
+    <button class="footer__top" type="button" data-back-to-top>
+      <span class="u-visually-hidden">{site.footer.backToTop}</span>
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none">
+        <path
+          d="M12 20V4M12 4L5 11M12 4l7 7"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
+
+    <p class="footer__credit">{site.footer.credit}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: var(--space-xl) var(--space-l);
+  }
+
+  .footer__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-m);
+    text-align: center;
+  }
+
+  .footer__mark {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-s);
+  }
+
+  .footer__name {
+    color: color-mix(in srgb, var(--navy) 72%, transparent);
+  }
+
+  .footer__address {
+    display: grid;
+    gap: 0.15rem;
+    font-style: normal;
+    font-size: var(--step--1);
+    letter-spacing: 0.04em;
+    color: color-mix(in srgb, var(--navy) 70%, transparent);
+  }
+
+  .footer__email {
+    font-size: var(--step-0);
+    border-block-end: 1px solid color-mix(in srgb, var(--navy) 30%, transparent);
+    padding-block-end: 2px;
+    transition: border-color 0.3s var(--ease-out);
+  }
+
+  .footer__email:hover {
+    border-color: var(--navy);
+  }
+
+  .footer__top {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    margin-block-start: var(--space-s);
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--cream);
+    transition: transform 0.35s var(--ease-out);
+  }
+
+  .footer__top:hover {
+    transform: translateY(-4px);
+  }
+
+  .footer__credit {
+    margin-block-start: var(--space-m);
+    font-size: var(--step--1);
+    color: color-mix(in srgb, var(--navy) 55%, transparent);
+  }
+</style>

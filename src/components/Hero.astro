@@ -1,0 +1,153 @@
+---
+import { site } from '../content/site';
+
+/**
+ * One committed photograph, drifting slowly, carrying the largest words on the
+ * site. Not a slideshow: the line lands harder against a single image, and it
+ * keeps the Hero honest as the page's largest contentful paint.
+ *
+ * The image itself arrives in the image-pipeline ticket; this establishes the
+ * frame, the type hierarchy and the parallax hooks.
+ */
+---
+
+<section class="hero" id="hero" aria-labelledby="hero-title">
+  <div class="hero__media" data-hero-media>
+    <slot name="media" />
+  </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="hero__content u-container" data-hero-content>
+    <p class="hero__subtitle u-eyebrow">{site.hero.subtitle}</p>
+
+    <h1 class="hero__title" id="hero-title">
+      {site.hero.title.map((line) => <span class="hero__line">{line}</span>)}
+    </h1>
+
+    <p class="hero__attribution">
+      <span class="u-eyebrow">{site.hero.attribution.place}</span>
+      <span class="hero__author">{site.hero.attribution.author}</span>
+    </p>
+  </div>
+
+  <div class="hero__cue u-eyebrow" aria-hidden="true">
+    <span>{site.hero.scrollCue}</span>
+    <span class="hero__cue-rule"></span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    align-content: end;
+    min-height: 100svh;
+    padding-block-end: clamp(4rem, 12vh, 8rem);
+    overflow: clip;
+    background: var(--navy-deep);
+    color: var(--cream);
+    isolation: isolate;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: -8% 0;
+    z-index: -2;
+  }
+
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Without this the display type sits on whatever the photograph happens to
+     be doing. With it, the words are legible over any frame we choose. */
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(
+        to top,
+        color-mix(in srgb, var(--navy-deep) 82%, transparent) 0%,
+        color-mix(in srgb, var(--navy-deep) 38%, transparent) 42%,
+        transparent 70%
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--navy-deep) 45%, transparent) 0%,
+        transparent 30%
+      );
+  }
+
+  .hero__content {
+    display: grid;
+    gap: clamp(1rem, 2.5vh, 1.75rem);
+  }
+
+  .hero__subtitle {
+    max-width: 46ch;
+    color: color-mix(in srgb, var(--cream) 82%, transparent);
+  }
+
+  .hero__title {
+    display: grid;
+    font-size: var(--step-5);
+    font-weight: 300;
+  }
+
+  .hero__line {
+    display: block;
+  }
+
+  .hero__attribution {
+    display: grid;
+    gap: 0.2rem;
+    margin-block-start: var(--space-2xs);
+  }
+
+  .hero__author {
+    font-family: var(--font-display);
+    font-size: var(--step-0);
+    font-style: italic;
+    color: color-mix(in srgb, var(--cream) 78%, transparent);
+  }
+
+  .hero__cue {
+    position: absolute;
+    inset-block-end: clamp(1.25rem, 4vh, 2.5rem);
+    inset-inline-end: var(--gutter);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: color-mix(in srgb, var(--cream) 65%, transparent);
+  }
+
+  .hero__cue-rule {
+    display: block;
+    width: 3rem;
+    height: 1px;
+    background: currentColor;
+    transform-origin: right;
+    animation: cue 2.6s var(--ease-in-out) infinite;
+  }
+
+  @keyframes cue {
+    0%,
+    100% {
+      transform: scaleX(0.35);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .hero__cue {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+/**
+ * The Q/G monogram, hand-authored from the client's logo.
+ *
+ * Used alone, never with the wordmark: the wordmark reads "Landmark" and the
+ * site's copy reads "Castle", so rendering it would put the naming conflict on
+ * screen (ADR 0004). Cropping to the mark sidesteps that and is better design
+ * besides.
+ *
+ * Vector rather than the supplied PNG so it stays crisp at any size, inherits
+ * `currentColor` across the navy header and the cream footer, and weighs
+ * almost nothing.
+ */
+interface Props {
+  /** Rendered height. The mark scales from this. */
+  size?: string;
+  /** Accessible name. Pass null for decorative use beside a text label. */
+  label?: string | null;
+  class?: string;
+}
+
+const { size = '2.25rem', label = "The Queen's Gambit Castle", class: className } = Astro.props;
+const titleId = label ? `monogram-${Math.random().toString(36).slice(2, 8)}` : undefined;
+---
+
+<svg
+  class:list={['monogram', className]}
+  viewBox="0 0 132 96"
+  fill="none"
+  role={label ? 'img' : 'presentation'}
+  aria-labelledby={titleId}
+  aria-hidden={label ? undefined : 'true'}
+  style={`height:${size}`}
+>
+  {label && <title id={titleId}>{label}</title>}
+
+  {/* The Q — a closed ring. */}
+  <circle cx="44" cy="48" r="34" stroke="currentColor" stroke-width="9" />
+
+  {/* The G — a ring opened on its right, closed by an inward bar. */}
+  <path
+    d="M112 30 A34 34 0 1 0 118 48 L88 48"
+    stroke="currentColor"
+    stroke-width="9"
+    stroke-linecap="butt"
+  />
+
+  {/* The crown, sitting on the G's bar. */}
+  <path
+    d="M96 44 L99.5 37 L103 44 L106.5 37 L110 44"
+    stroke="currentColor"
+    stroke-width="4"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+  />
+
+  {/* The lens the two rings make between them, and its eye. */}
+  <path d="M64 20 Q78 48 64 76 Q50 48 64 20 Z" fill="currentColor" />
+  <circle cx="64" cy="35" r="3.4" fill="var(--ground, #fff)" />
+</svg>
+
+<style>
+  .monogram {
+    width: auto;
+    flex: none;
+  }
+</style>

@@ -1,0 +1,110 @@
+/**
+ * Design tokens for The Queen's Gambit Castle.
+ *
+ * Two rules hold this file together:
+ *
+ * 1. Typefaces are referenced only through --font-display and --font-sans.
+ *    Newsreader and Instrument Sans are free stand-ins for the client's paid
+ *    references (Victor Serif and TT Commons Pro). When those are licensed,
+ *    swapping them is a change to two variables and three @font-face blocks —
+ *    nothing else in the codebase names a typeface.
+ *
+ * 2. The same deep navy grounds the Intro, the Rooms and the Beliefs. The
+ *    reference sites use near-black for the latter two; we do not, so the page
+ *    reads as one palette and the Intro's navy pays off again mid-page.
+ */
+
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/newsreader-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Newsreader';
+  font-style: italic;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/newsreader-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/instrument-sans-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* Typefaces — the only place a font name appears. */
+  --font-display: 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', Georgia,
+    serif;
+  --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Helvetica, Arial, sans-serif;
+
+  /* Palette. */
+  --navy: #0b1e30;
+  --navy-deep: #071522;
+  --navy-soft: #16324c;
+  --cream: #f2eade;
+  --cream-deep: #e8dccb;
+  --white: #ffffff;
+  --aqua: #8fcfd6;
+  --aqua-deep: #4a9aa6;
+  --coral: #e0846b;
+
+  /* Semantic roles. */
+  --ground: var(--white);
+  --ink: var(--navy);
+  --ink-inverse: var(--cream);
+  --rule: color-mix(in srgb, var(--navy) 14%, transparent);
+
+  /* Fluid type scale. Every size is viewport-aware so nothing overflows at
+     375px and nothing looks stranded at 1920px. */
+  --step--1: clamp(0.75rem, 0.72rem + 0.15vw, 0.84rem);
+  --step-0: clamp(0.95rem, 0.9rem + 0.25vw, 1.1rem);
+  --step-1: clamp(1.1rem, 1rem + 0.5vw, 1.4rem);
+  --step-2: clamp(1.35rem, 1.15rem + 1vw, 2rem);
+  --step-3: clamp(1.7rem, 1.3rem + 2vw, 3rem);
+  --step-4: clamp(2.1rem, 1.4rem + 3.5vw, 4.5rem);
+  --step-5: clamp(2.6rem, 1.4rem + 6vw, 7rem);
+
+  /* Letterspacing for the all-caps labels that recur across every section. */
+  --tracking-caps: 0.18em;
+  --tracking-caps-wide: 0.28em;
+
+  /* Spacing. */
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1.25rem;
+  --space-m: 2rem;
+  --space-l: clamp(3rem, 6vw, 5rem);
+  --space-xl: clamp(4.5rem, 10vw, 9rem);
+  --space-2xl: clamp(6rem, 14vw, 13rem);
+
+  /* Measure. */
+  --measure: 62ch;
+  --measure-narrow: 46ch;
+
+  /* Layout. */
+  --gutter: clamp(1.25rem, 5vw, 4.5rem);
+  --max-width: 90rem;
+
+  /* Motion. Durations live here so the Intro's total can be reasoned about in
+     one place rather than inferred from scattered tween calls. */
+  --intro-duration: 3.5s;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}

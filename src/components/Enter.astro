@@ -1,0 +1,110 @@
+---
+import { site, contactHref } from '../content/site';
+
+/**
+ * The close: two photographs combined into one full-bleed field, an invitation,
+ * and a contact button that actually works.
+ *
+ * The button is a real mailto with the subject prefilled. A visitor who wants
+ * to make contact should not have to hunt for an address, and a form here would
+ * mean a backend and a spam problem in a pitch that has neither.
+ */
+---
+
+<section class="enter" id="enter" aria-labelledby="enter-title">
+  <div class="enter__media" aria-hidden="true">
+    <div class="enter__pane enter__pane--left"><slot name="enter-left" /></div>
+    <div class="enter__pane enter__pane--right"><slot name="enter-right" /></div>
+    <div class="enter__scrim"></div>
+  </div>
+
+  <div class="enter__inner u-container">
+    <h2 class="enter__title" id="enter-title">{site.enter.title}</h2>
+    <p class="enter__subtitle u-eyebrow">{site.enter.subtitle}</p>
+    <a class="enter__cta u-eyebrow" href={contactHref}>{site.enter.cta}</a>
+  </div>
+</section>
+
+<style>
+  .enter {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: min(85svh, 44rem);
+    padding-block: var(--space-2xl);
+    overflow: clip;
+    background: var(--navy-deep);
+    color: var(--cream);
+    isolation: isolate;
+    text-align: center;
+  }
+
+  .enter__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .enter__pane {
+    position: relative;
+    overflow: clip;
+  }
+
+  .enter__pane :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* The two photographs must read as one field, not as a diptych with a seam
+     down the middle. Feathering the inner edge of each pane does it. */
+  .enter__pane--left {
+    mask-image: linear-gradient(to right, black 62%, transparent 100%);
+  }
+
+  .enter__pane--right {
+    margin-inline-start: -12%;
+    mask-image: linear-gradient(to left, black 62%, transparent 100%);
+  }
+
+  .enter__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: color-mix(in srgb, var(--navy-deep) 62%, transparent);
+  }
+
+  .enter__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-s);
+  }
+
+  .enter__title {
+    font-size: var(--step-4);
+    font-style: italic;
+  }
+
+  .enter__subtitle {
+    max-width: 42ch;
+    color: color-mix(in srgb, var(--cream) 82%, transparent);
+  }
+
+  .enter__cta {
+    margin-block-start: var(--space-s);
+    padding: 1.1rem 2.6rem;
+    background: var(--cream);
+    color: var(--navy);
+    transition:
+      background-color 0.35s var(--ease-out),
+      color 0.35s var(--ease-out),
+      transform 0.35s var(--ease-out);
+  }
+
+  .enter__cta:hover {
+    background: var(--aqua);
+    transform: translateY(-2px);
+  }
+</style>
