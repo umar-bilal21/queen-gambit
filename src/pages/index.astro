@@ -8,6 +8,7 @@ import Masterwork from '../components/Masterwork.astro';
 import Descent from '../components/Descent.astro';
 import Rooms from '../components/Rooms.astro';
 import Beliefs from '../components/Beliefs.astro';
+import Return from '../components/Return.astro';
 import Gallery from '../components/Gallery.astro';
 import Enter from '../components/Enter.astro';
 import Footer from '../components/Footer.astro';
@@ -39,6 +40,8 @@ import { images } from '../content/images';
       <Rooms photos={images.rooms} />
       <Beliefs photos={images.beliefRows} />
     </Descent>
+
+    <Return />
     <Gallery photos={images.gallery} />
     <Enter left={images.enter.left} right={images.enter.right} />
   </main>

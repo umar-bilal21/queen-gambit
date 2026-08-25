@@ -1,0 +1,101 @@
+---
+import { site } from '../content/site';
+import ReefArtwork from './ReefArtwork.astro';
+import Divider from './ornament/Divider.astro';
+
+/**
+ * The Castle's opening passage, returning after the Beliefs.
+ *
+ * This carries the same two paragraphs as the Story. The client asked for that
+ * deliberately, knowing it repeats — so the job here is to make it read as a
+ * return rather than as a block someone pasted twice.
+ *
+ * Three things make it different. The passage is set side by side rather than
+ * as one centred column, so the eye meets a different shape. The reef is a
+ * single wide band across the foot rather than two edge compositions. And the
+ * paragraphs sit at rest — no travelling window, no recolour — because a
+ * refrain is something you have already read, and asking the reader to work
+ * through it a second time at the same pace would be a punishment rather than
+ * an echo.
+ */
+---
+
+<section class="return u-on-cream" id="return" aria-labelledby="return-title">
+  <div class="return__inner u-container">
+    <Divider piece="pawn" width="min(60vw, 11rem)" class="return__crest" />
+
+    <div class="return__columns">
+      <h2 class="return__lead" id="return-title" data-reveal-heading>
+        {site.story.paragraphs[0]}
+      </h2>
+      <p class="return__body" data-reveal data-reveal-delay="0.12">
+        {site.story.paragraphs[1]}
+      </p>
+    </div>
+  </div>
+
+  <div class="return__reef" aria-hidden="true">
+    <ReefArtwork side="left" />
+    <ReefArtwork side="right" />
+  </div>
+</section>
+
+<style>
+  .return {
+    position: relative;
+    padding-block: var(--space-2xl) 0;
+    overflow: clip;
+  }
+
+  .return__inner {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-l);
+  }
+
+  .return__crest {
+    color: var(--accent);
+  }
+
+  .return__columns {
+    display: grid;
+    gap: var(--space-l);
+    max-width: 72rem;
+  }
+
+  .return__lead {
+    font-size: var(--step-3);
+    line-height: 1.24;
+  }
+
+  .return__body {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.6;
+    color: var(--ink-muted);
+  }
+
+  @media (min-width: 60rem) {
+    .return__columns {
+      grid-template-columns: 1.15fr 1fr;
+      align-items: start;
+      gap: clamp(2.5rem, 6vw, 6rem);
+    }
+
+    .return__body {
+      /* Dropped against the lead so the pair reads as one thought continuing,
+         not as two headings competing. */
+      margin-block-start: 0.6rem;
+    }
+  }
+
+  /* One wide band across the foot, rather than the Story's two edge
+     compositions — same artwork, different arrangement. */
+  .return__reef {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: clamp(9rem, 20vw, 15rem);
+    margin-block-start: var(--space-xl);
+    opacity: 0.85;
+  }
+</style>

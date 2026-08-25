@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 
 import { site } from '../content/site';
 import type { Photo } from '../content/images';
+import Divider from './ornament/Divider.astro';
 
 /**
  * The property, seen properly: a display title, then the photography travelling
@@ -22,10 +23,16 @@ interface Props {
 const { photos } = Astro.props;
 ---
 
-<section class="gallery" id="gallery" aria-labelledby="gallery-title" data-gallery>
+<section
+  class="gallery u-on-navy"
+  id="gallery"
+  aria-labelledby="gallery-title"
+  data-gallery
+>
   <div class="gallery__head u-container">
     <p class="u-eyebrow u-eyebrow--wide gallery__eyebrow" data-reveal>{site.gallery.eyebrow}</p>
     <h2 class="gallery__title" id="gallery-title" data-reveal-heading>{site.gallery.title}</h2>
+    <Divider piece="bishop" width="min(60vw, 12rem)" class="gallery__crest" />
   </div>
 
   <ul class="gallery__rail" data-gallery-rail tabindex="0" aria-label="Castle photographs">
@@ -48,8 +55,6 @@ const { photos } = Astro.props;
 
 <style>
   .gallery {
-    background: var(--cream);
-    color: var(--navy);
     padding-block: var(--space-2xl) var(--space-xl);
     overflow: clip;
   }
@@ -61,7 +66,11 @@ const { photos } = Astro.props;
   }
 
   .gallery__eyebrow {
-    color: var(--aqua-deep);
+    color: var(--gold-light);
+  }
+
+  .gallery__crest {
+    color: var(--gold);
   }
 
   .gallery__title {
@@ -93,7 +102,7 @@ const { photos } = Astro.props;
     width: clamp(20rem, 52vw, 46rem);
     aspect-ratio: 16 / 9;
     overflow: clip;
-    background: var(--cream-deep);
+    background: color-mix(in srgb, var(--cream) 8%, transparent);
   }
 
   /* A slightly shorter frame every third image, so the rail has rhythm without
