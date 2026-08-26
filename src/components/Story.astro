@@ -77,7 +77,8 @@ const words = (text: string) => text.split(/\s+/).filter(Boolean);
 
   .story__stage {
     display: grid;
-    place-items: center;
+    align-content: start;
+    justify-items: center;
     padding-block: var(--space-2xl);
     padding-inline: var(--gutter);
     overflow: clip;
@@ -88,7 +89,7 @@ const words = (text: string) => text.split(/\s+/).filter(Boolean);
     position: sticky;
     inset-block-start: 0;
     height: 100svh;
-    padding-block: var(--space-l) 0;
+    padding-block: var(--space-2xl);
   }
 
   /**
@@ -104,7 +105,7 @@ const words = (text: string) => text.split(/\s+/).filter(Boolean);
   }
 
   .story[data-story-pinned='true'] .story__window {
-    height: clamp(19rem, 58svh, 34rem);
+    height: clamp(15rem, 40svh, 28rem);
     overflow: clip;
     /* Text arrives and leaves rather than being cut off at a hard edge. */
     mask-image: linear-gradient(
