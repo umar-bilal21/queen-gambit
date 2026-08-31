@@ -297,8 +297,12 @@ export const images = {
    * hero, and then a ceiling mural, which was distinctive but had nothing to do
    * with the words beside it.
    *
-   * Contact takes the ocean seen between the terrace columns, the view a visitor
-   * is being invited toward, which is the right note above an enquiry form.
+   * Contact takes the marlin at sunrise. It is the only hero on the site that is
+   * not another view of water, so the three pages stop reading as variations on
+   * one photograph — an earlier draft used the ocean between the terrace
+   * columns, which was close enough to the Essence hero to look like the same
+   * picture twice. The warm golds also meet the brand's own, and a sunrise is
+   * the right note over an invitation to get in touch.
    *
    * Neither repeats a photograph used elsewhere on its own page.
    *
@@ -310,8 +314,8 @@ export const images = {
       'The swimming pool framed by tiled columns, its water continuing visually into the Atlantic beyond.',
     ),
     contact: photo(
-      enterColonnade,
-      'The Atlantic seen between two tiled columns from the Castle terrace.',
+      marlinSunrise,
+      'A tall blue glass marlin sculpture on a mosaic plinth, standing against a balustrade as the sun rises over the ocean behind it.',
     ),
   },
 
