@@ -290,17 +290,19 @@ export const images = {
   /**
    * The photograph behind each inner page's opening band.
    *
-   * The Essence takes the building itself, since the page is about what is
-   * inside it. Contact takes the ocean seen between the terrace columns — the
-   * view a visitor is being invited toward, which is the right note above an
-   * enquiry form.
+   * The Essence takes the painted turtle ceiling rather than the building's
+   * exterior. An exterior read as a near-repeat of the homepage hero, and this
+   * page is about the artistry inside — so the image should be something only
+   * this house has. Contact takes the ocean seen between the terrace columns,
+   * the view a visitor is being invited toward, which is the right note above
+   * an enquiry form.
    *
    * Neither repeats a photograph already used elsewhere on its own page.
    */
   pageHero: {
     essence: photo(
-      galleryElevation,
-      "The Castle's ocean elevation seen at an angle, its terraces, columns and blue-tiled roofs stepping down to the lawn.",
+      galleryTurtle,
+      'A large sea turtle painted across a ceiling, its shell patterned in coral and gold.',
     ),
     contact: photo(
       enterColonnade,

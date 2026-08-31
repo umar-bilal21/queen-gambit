@@ -128,13 +128,20 @@ test.describe('the homepage', () => {
     const external = await footer.locator('a[href^="http"]').count();
     expect(external, 'footer should link nowhere off this page').toBe(0);
 
-    // Every in-page link resolves to a section that is actually there.
-    const hrefs = await footer.locator('a[href^="#"]').evaluateAll((nodes) =>
+    /*
+     * The footer carries the site's three pages. Each has to be a real route,
+     * and each has to be built from the deployment base — bare paths 404 on
+     * GitHub Pages, which is what every inner-page nav link did until the
+     * links were made base-aware.
+     */
+    const hrefs = await footer.locator('a[href^="/"]').evaluateAll((nodes) =>
       nodes.map((n) => n.getAttribute('href')!),
     );
-    expect(hrefs.length).toBeGreaterThan(0);
+    expect(hrefs.length, 'the footer should link to the site pages').toBe(3);
+
     for (const href of hrefs) {
-      await expect(page.locator(href), `${href} should exist`).toBeAttached();
+      const response = await page.request.get(href);
+      expect(response.status(), `${href} should resolve`).toBe(200);
     }
   });
 
@@ -237,21 +244,24 @@ test.describe('the homepage', () => {
 });
 
 test.describe('header navigation', () => {
-  test('each link moves the page to its section', async ({ page }, testInfo) => {
+  test('every link goes to a real page', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === 'mobile', 'links live behind the menu on mobile');
 
     await page.goto('/');
     await skipIntro(page);
 
-    for (const [label, id] of [
-      ['The Story', 'story'],
-      ['Our Beliefs', 'beliefs'],
-      ['Gallery', 'gallery'],
-    ] as const) {
-      await page.locator('[data-header]').getByRole('link', { name: label }).click();
-      // Lenis animates, so settle before asserting.
-      await page.waitForTimeout(1600);
-      await expect(page.locator(`#${id}`)).toBeInViewport();
+    /*
+     * The header used to carry in-page anchors, which meant the site's other
+     * two pages could not be reached from the homepage at all. It now carries
+     * the same three destinations everywhere.
+     */
+    for (const label of ['Home', 'The Essence', 'Contact'] as const) {
+      const link = page.locator('[data-header]').getByRole('link', { name: label, exact: true });
+      const href = await link.getAttribute('href');
+      expect(href, `${label} should have an href`).toBeTruthy();
+
+      const response = await page.request.get(href!);
+      expect(response.status(), `${label} → ${href} should resolve`).toBe(200);
     }
   });
 
@@ -268,7 +278,11 @@ test.describe('header navigation', () => {
     await expect(toggle).toHaveAttribute('aria-expanded', 'true');
     await expect(page.locator('[data-menu]')).toBeVisible();
 
-    await page.locator('[data-menu]').getByRole('link', { name: 'Gallery' }).click();
+    /*
+     * Closing, not navigating. The menu links now leave the page, so clicking
+     * one would assert against a document that is being torn down.
+     */
+    await page.keyboard.press('Escape');
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   });
 });

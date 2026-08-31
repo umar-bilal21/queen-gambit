@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 
-import { site } from '../content/site';
+import { site, withBase } from '../content/site';
 import type { Photo } from '../content/images';
 import Monogram from './Monogram.astro';
 
@@ -51,9 +51,9 @@ const { photo } = Astro.props;
     <nav class="footer__nav" aria-label="Footer">
       <ul class="footer__nav-list">
         {
-          site.footer.nav.map((item) => (
+          site.navPages.map((item) => (
             <li>
-              <a class="footer__nav-link u-eyebrow" href={item.href}>
+              <a class="footer__nav-link u-eyebrow" href={withBase(item.path)}>
                 {item.label}
               </a>
             </li>

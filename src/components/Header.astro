@@ -1,5 +1,5 @@
 ---
-import { site, contactHref } from '../content/site';
+import { site, withBase } from '../content/site';
 import Monogram from './Monogram.astro';
 
 /**
@@ -10,19 +10,25 @@ import Monogram from './Monogram.astro';
  * they render it condensed from the start via the `condensed` prop; the motion
  * island finds no `#hero` there and leaves the initial state alone.
  *
- * The links differ by page. The homepage links to its own sections; the inner
- * pages link to Home, The Essence and Contact. Every link must resolve to
- * something real — a dead link in a pitch is a leak you then have to explain.
+ * The same three links on every page: Home, The Essence, Contact. The homepage
+ * used to carry its own nav of in-page anchors instead, which meant the site's
+ * two other pages were unreachable from it and the navigation changed meaning
+ * depending on where you were standing.
+ *
+ * Every href is built from the deployment base. Bare paths 404 on GitHub Pages,
+ * which serves this project from a subdirectory.
  */
 interface Props {
-  /** 'home' links to the page's sections; 'page' links to the site's pages. */
+  /**
+   * The homepage's monogram scrolls to its own top; elsewhere it goes home.
+   */
   variant?: 'home' | 'page';
   /** Start solid navy rather than transparent. Inner pages pass true. */
   condensed?: boolean;
 }
 
 const { variant = 'home', condensed = false } = Astro.props;
-const links = variant === 'page' ? site.navPages : site.nav;
+const links = site.navPages;
 ---
 
 <header
@@ -33,18 +39,18 @@ const links = variant === 'page' ? site.navPages : site.nav;
   <div class="header__inner">
     <a
       class="header__mark"
-      href={variant === 'home' ? '#hero' : '/'}
+      href={variant === 'home' ? '#hero' : withBase('/')}
       aria-label={`${site.name} — home`}
     >
       <Monogram size="2.1rem" label={null} />
     </a>
 
-    <nav class="header__nav" aria-label="Sections">
+    <nav class="header__nav" aria-label="Primary">
       <ul class="header__list">
         {
           links.map((item) => (
             <li>
-              <a class="header__link u-eyebrow" href={item.href}>
+              <a class="header__link u-eyebrow" href={withBase(item.path)}>
                 {item.label}
               </a>
             </li>
@@ -52,15 +58,6 @@ const links = variant === 'page' ? site.navPages : site.nav;
         }
       </ul>
     </nav>
-
-    {/*
-      The homepage links to sections in the centre, so the right-hand CONTACT
-      carries the one cross-page action. Inner pages already link to Contact
-      in the centre nav, so the right-hand button would be a duplicate.
-    */}
-    {variant === 'home' && (
-      <a class="header__contact u-eyebrow" href={contactHref}>Contact</a>
-    )}
 
     <button
       class="header__toggle"
@@ -86,19 +83,12 @@ const links = variant === 'page' ? site.navPages : site.nav;
       {
         links.map((item) => (
           <li>
-            <a class="header__menu-link" href={item.href} data-menu-link>
+            <a class="header__menu-link" href={withBase(item.path)} data-menu-link>
               {item.label}
             </a>
           </li>
         ))
       }
-      {variant === 'home' && (
-        <li>
-          <a class="header__menu-link" href={contactHref} data-menu-link>
-            Contact
-          </a>
-        </li>
-      )}
     </ul>
   </div>
 </header>

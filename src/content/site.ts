@@ -325,19 +325,6 @@ export const site = {
   },
 
   footer: {
-    /*
-     * Only anchors that resolve. The client's mockup also shows EXPERIENCE,
-     * LEGACY and two social icons; there are no such pages and no account
-     * appears anywhere in the material supplied, so they are omitted rather
-     * than rendered dead. Confirmed with the client.
-     */
-    nav: [
-      { label: 'The Story', href: '#story' },
-      { label: 'Our Beliefs', href: '#beliefs' },
-      { label: 'Gallery', href: '#gallery' },
-      { label: 'The Essence', href: '/essence/' },
-      { label: 'Contact', href: '/contact/' },
-    ],
     backToTop: 'Back to top',
     credit: '© 2026 The Queen’s Gambit Castle. All rights reserved.',
   },
@@ -347,23 +334,41 @@ export const site = {
    * this page — there are no inner pages, and a dead link in a pitch is a leak
    * you then have to explain.
    */
-  nav: [
-    { label: 'The Story', href: '#story' },
-    { label: 'Our Beliefs', href: '#beliefs' },
-    { label: 'Gallery', href: '#gallery' },
-  ],
+
 
   /**
    * The inner pages, shown in the header of the Essence and Contact pages.
    * "Home" always resolves to the homepage; the other two are the pages
    * themselves. The homepage header keeps its section links instead.
    */
+  /**
+   * The site's navigation — the same three links on every page, header and
+   * footer alike.
+   *
+   * These are paths rather than finished hrefs: they are joined onto the
+   * deployment's base by `withBase` below. The homepage used to carry a
+   * separate nav of in-page anchors; it now shares this one, so a visitor sees
+   * the same three destinations wherever they are.
+   */
   navPages: [
-    { label: 'Home', href: '/' },
-    { label: 'The Essence', href: '/essence/' },
-    { label: 'Contact', href: '/contact/' },
+    { label: 'Home', path: '/' },
+    { label: 'The Essence', path: '/essence/' },
+    { label: 'Contact', path: '/contact/' },
   ],
 } as const;
+
+/**
+ * Join an internal path onto the deployment's base.
+ *
+ * GitHub Pages serves this project from a subdirectory, so a bare "/essence/"
+ * points at the domain root and 404s — which is exactly what every nav link on
+ * the inner pages was doing live. Astro sets BASE_URL to "/" locally and to
+ * "/queen-gambit/" in CI, so building links from it works in both places.
+ */
+export function withBase(path: string): string {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  return `${base}${path}`;
+}
 
 /** Prefilled mailto for the Enter section's CONTACT US button. */
 export const contactHref = `mailto:${site.contact.email}?subject=${encodeURIComponent(
