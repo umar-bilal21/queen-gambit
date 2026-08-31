@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 
-import { site, contactHref } from '../content/site';
+import { site } from '../content/site';
 import type { Photo } from '../content/images';
 import Monogram from './Monogram.astro';
 
@@ -59,11 +59,6 @@ const { photo } = Astro.props;
             </li>
           ))
         }
-        <li>
-          <a class="footer__nav-link u-eyebrow" href={contactHref}>
-            Contact
-          </a>
-        </li>
       </ul>
     </nav>
 

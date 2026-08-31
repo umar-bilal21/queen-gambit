@@ -47,6 +47,9 @@ import coralWall from '../assets/images/coral-reef-wall.jpg';
 import seaGod from '../assets/images/sea-god-mural.jpg';
 import poolToOcean from '../assets/images/pool-to-ocean.jpg';
 
+// The Essence page's photography — supplied by the client.
+import terracePatience from '../assets/images/terrace-patience-move.jpg';
+
 /**
  * How the Hero photograph is generated.
  *
@@ -283,4 +286,47 @@ export const images = {
       'The Castle exterior, its balconies and pool terrace catching low light.',
     ),
   },
+
+  /**
+   * The Essence page's photography, in the same order as the room blocks.
+   *
+   * Each block shows a row of three photographs beside a details card, as in
+   * the reference the client chose. The first photograph of the terrace block
+   * is the client's own: the marlin fountain over the clam-shell basin that
+   * stands at the centre of the terrace gardens.
+   */
+  essence: [
+    {
+      photos: [
+        photo(
+          terracePatience,
+          'A fountain in the terrace gardens: a blue and gold marlin sculpture leaping from sculpted waves above a clam-shell basin, water arcing from its mouth, palm trees behind.',
+        ),
+        photo(
+          galleryTerrace,
+          'The pool terrace seen from above, its mosaic surround set against the beach and open ocean.',
+        ),
+        photo(
+          galleryHearth,
+          'An outdoor kitchen and bar under a painted ceiling, with blue stools drawn up to a tiled counter.',
+        ),
+      ],
+    },
+    {
+      photos: [
+        photo(
+          roomChamber,
+          'The master chamber, painted floor to ceiling in deep blues and greens. A tufted white headboard and midnight bedspread sit beneath a mural of underwater light.',
+        ),
+        photo(
+          sunCeiling,
+          'A ceiling painted with a blazing orange sun, from whose centre a cascading chandelier of pale blue crystal falls.',
+        ),
+        photo(
+          roomCommand,
+          "A bedroom facing the ocean where a chess set waits on a small table by the window, beneath a ceiling painted with sea turtles gliding overhead.",
+        ),
+      ],
+    },
+  ] as const satisfies readonly { photos: readonly Photo[] }[],
 } as const;

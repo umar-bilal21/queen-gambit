@@ -19,6 +19,7 @@ import './sections/manifesto';
 import './sections/reef';
 import './sections/beliefs';
 import './sections/gallery';
+import './sections/contactForm';
 
 const context = createContext();
 

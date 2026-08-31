@@ -1,0 +1,71 @@
+---
+/**
+ * A chess queen as a small icon — the mark the reference page carries as a
+ * key, translated into the brand's chess identity.
+ *
+ * Line work at a single stroke weight, in the same hand as the Queen
+ * silhouette and the ornament. Rendered as a strokable path so the ornament
+ * motion can draw it on, like every other mark on the site.
+ */
+interface Props {
+  size?: string;
+  class?: string;
+}
+
+const { size = '3rem', class: className } = Astro.props;
+---
+
+<svg
+  class:list={['gambit-mark', className]}
+  viewBox="0 0 64 96"
+  fill="none"
+  role="presentation"
+  aria-hidden="true"
+  style={`height:${size}`}
+  data-ornament
+>
+  <g
+    stroke="currentColor"
+    stroke-width="2.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    {/* The three finials. */}
+    <circle cx="20" cy="14" r="2.6" data-ornament-part></circle>
+    <circle cx="32" cy="9" r="2.8" data-ornament-part></circle>
+    <circle cx="44" cy="14" r="2.6" data-ornament-part></circle>
+
+    {/* The coronet. */}
+    <path
+      d="M17 30 L20 18 L28 27 L32 12 L36 27 L44 18 L47 30"
+      data-ornament-part
+    ></path>
+    <path d="M16 30 H48" data-ornament-part></path>
+
+    {/* The collar. */}
+    <path d="M24 38 C26 46 27 50 27 54" data-ornament-part></path>
+    <path d="M40 38 C38 46 37 50 37 54" data-ornament-part></path>
+    <path d="M23 38 H41" data-ornament-part></path>
+
+    {/* The skirt. */}
+    <path d="M23 38 C16 50 12 60 10 72" data-ornament-part></path>
+    <path d="M41 38 C48 50 52 60 54 72" data-ornament-part></path>
+    <path d="M10 72 Q32 80 54 72" data-ornament-part></path>
+
+    {/* The plinth. */}
+    <path d="M10 72 L8 78" data-ornament-part></path>
+    <path d="M54 72 L56 78" data-ornament-part></path>
+    <path d="M8 78 H56" data-ornament-part></path>
+    <path d="M8 78 L4 86" data-ornament-part></path>
+    <path d="M56 78 L60 86" data-ornament-part></path>
+    <path d="M4 86 H60" data-ornament-part></path>
+  </g>
+</svg>
+
+<style>
+  .gambit-mark {
+    width: auto;
+    flex: none;
+    color: var(--gold-light);
+  }
+</style>

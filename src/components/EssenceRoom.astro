@@ -1,0 +1,307 @@
+---
+import { Image } from 'astro:assets';
+
+import type { RoomExperience } from '../content/site';
+import type { Photo } from '../content/images';
+import Corners from './ornament/Corners.astro';
+import CrownedNumeral from './ornament/CrownedNumeral.astro';
+
+/**
+ * One experience on the Essence page: a name, a row of photographs, and a
+ * cream plaque of numbered highlights — the "Photos | details of room"
+ * arrangement the client chose from the reference.
+ *
+ * The reference's card is a property spec card: a price, a DETAILS button,
+ * numbered facts. These are rooms rather than listings, so there is no price
+ * and nowhere for DETAILS to go. What carries across is the *shape* — cream
+ * plaque, gold framing, an ordered list — and the numbers are set in the same
+ * crowned numerals that number the Beliefs on the homepage. That is the whole
+ * idea: the reference supplies the structure, the site supplies the voice.
+ *
+ * The photographs are framed in gold hairlines rather than sitting bare. In the
+ * reference every image has one, and on a navy ground an unframed photograph
+ * reads as a hole cut in the page rather than as something placed on it.
+ *
+ * The copy runs in two columns beneath. It was a single narrow column, which at
+ * the width this is actually reviewed on left most of the screen empty.
+ */
+interface Props {
+  room: RoomExperience;
+  /** In the same order as the room's copy — three photographs per block. */
+  photos: readonly Photo[];
+  /** Which experience this is, for the plaque's label. */
+  index: number;
+}
+
+const { room, photos } = Astro.props;
+
+const slug = room.name.replace(/\s+/g, '-').toLowerCase();
+---
+
+<section class="room" id={slug} aria-labelledby={`room-${slug}`}>
+  <header class="room__head">
+    <p class="room__location u-eyebrow" data-reveal>{room.location}</p>
+    <h2 class="room__heading" id={`room-${slug}`} data-reveal-heading>
+      {room.heading}
+    </h2>
+    {
+      room.subheading && (
+        <p class="room__subheading" data-reveal data-reveal-delay="0.12">
+          {room.subheading}
+        </p>
+      )
+    }
+  </header>
+
+  <div class="room__layout">
+    <ul class="room__photos">
+      {
+        photos.map((image) => (
+          <li class="room__photo u-cover" data-reveal-image>
+            <Image
+              src={image.src}
+              alt={image.alt}
+              widths={[400, 640, 900]}
+              sizes="(min-width: 64rem) 24vw, (min-width: 40rem) 30vw, 90vw"
+              loading="lazy"
+              quality={80}
+            />
+          </li>
+        ))
+      }
+    </ul>
+
+    <aside class="room__card" aria-labelledby={`highlights-${slug}`}>
+      <Corners class="room__corners" arm="1.35rem" />
+
+      {/*
+        A scallop at the head of the plaque, as the reference has. Decorative,
+        strokable, so the ornament pass draws it on with everything else.
+      */}
+      <svg
+        class="room__shell"
+        viewBox="0 0 48 30"
+        fill="none"
+        role="presentation"
+        aria-hidden="true"
+        data-ornament
+      >
+        <g stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+          <path d="M4 27 C4 13 13 4 24 4 C35 4 44 13 44 27" data-ornament-part></path>
+          <path d="M24 4 L24 27" data-ornament-part></path>
+          <path d="M15 6 L11 26" data-ornament-part></path>
+          <path d="M33 6 L37 26" data-ornament-part></path>
+        </g>
+      </svg>
+
+      <p class="room__card-label u-eyebrow" id={`highlights-${slug}`}>
+        {room.detailsLabel}
+      </p>
+
+      <ol class="room__details">
+        {
+          room.details.map((detail, i) => (
+            <li class="room__detail">
+              <CrownedNumeral value={i + 1} size="2.1rem" class="room__numeral" />
+              <span>{detail}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </aside>
+  </div>
+
+  <div class="room__copy">
+    {room.paragraphs.map((paragraph) => <p class="room__paragraph">{paragraph}</p>)}
+  </div>
+
+  {room.quote && <p class="room__quote">{room.quote}</p>}
+</section>
+
+<style>
+  .room {
+    display: grid;
+    gap: var(--space-l);
+    padding-block: var(--space-2xl);
+  }
+
+  /* Head ------------------------------------------------------------------ */
+
+  .room__head {
+    display: grid;
+    gap: var(--space-xs);
+    justify-items: start;
+  }
+
+  .room__location {
+    color: var(--gold-light);
+  }
+
+  .room__heading {
+    font-size: var(--step-4);
+    text-wrap: balance;
+  }
+
+  .room__subheading {
+    max-width: 52ch;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-style: italic;
+    color: color-mix(in srgb, var(--cream) 78%, transparent);
+  }
+
+  /* Photographs and plaque ------------------------------------------------ */
+
+  .room__layout {
+    display: grid;
+    gap: var(--space-m);
+  }
+
+  .room__photos {
+    display: grid;
+    gap: var(--space-s);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /**
+   * Gold hairline and a soft corner on every frame. On a navy ground an
+   * unframed photograph reads as a hole cut in the page; the frame is what
+   * makes it read as placed.
+   */
+  .room__photo {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: clip;
+    border: 1px solid color-mix(in srgb, var(--gold) 42%, transparent);
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--cream) 6%, transparent);
+  }
+
+  .room__photo :global(img) {
+    transition: transform 1s var(--ease-out);
+  }
+
+  .room__photo:hover :global(img) {
+    transform: scale(1.05);
+  }
+
+  .room__card {
+    position: relative;
+    align-self: start;
+    display: grid;
+    justify-items: center;
+    gap: var(--space-s);
+    padding: clamp(2rem, 3.5vw, 2.75rem) clamp(1.5rem, 3vw, 2.25rem);
+    background: var(--cream);
+    color: var(--navy-deep);
+    border-radius: 6px;
+    text-align: center;
+    isolation: isolate;
+  }
+
+  .room__corners {
+    color: var(--gold-deep);
+  }
+
+  .room__shell {
+    width: 3rem;
+    height: auto;
+    color: var(--gold-deep);
+  }
+
+  .room__card-label {
+    color: color-mix(in srgb, var(--navy-deep) 62%, transparent);
+  }
+
+  .room__details {
+    display: grid;
+    gap: var(--space-xs);
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: start;
+  }
+
+  .room__detail {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-xs);
+    align-items: center;
+    font-size: var(--step--1);
+    line-height: 1.5;
+    color: color-mix(in srgb, var(--navy-deep) 84%, transparent);
+  }
+
+  /* The numerals sit on cream here, so they take the deeper gold. */
+  .room__numeral {
+    color: var(--gold-deep);
+  }
+
+  /* Copy ------------------------------------------------------------------ */
+
+  /*
+   * Block, not grid. Multi-column layout has no effect on a grid container, so
+   * the two-column rule below was silently doing nothing and the copy ran the
+   * full width of the page at about 140 characters a line.
+   */
+  .room__copy {
+    display: block;
+    max-width: var(--measure);
+  }
+
+  .room__copy > * + * {
+    margin-block-start: var(--space-s);
+  }
+
+  .room__paragraph {
+    color: color-mix(in srgb, var(--cream) 86%, transparent);
+    text-wrap: pretty;
+  }
+
+  .room__quote {
+    max-width: 34ch;
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  @media (min-width: 52rem) {
+    .room__layout {
+      grid-template-columns: minmax(0, 1fr) minmax(17rem, 22rem);
+      align-items: start;
+      gap: clamp(2rem, 4vw, 4rem);
+    }
+
+    .room__photos {
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    }
+  }
+
+  /*
+   * Two columns of copy on a wide screen. One column left two thirds of the
+   * viewport empty at the size this is reviewed on.
+   */
+  @media (min-width: 64rem) {
+    .room__copy {
+      max-width: none;
+      columns: 2;
+      column-gap: clamp(2.5rem, 5vw, 5rem);
+    }
+
+    /* In a multi-column flow the top margin on the first paragraph of the
+       second column would push it out of alignment with the first. */
+    .room__copy > * + * {
+      margin-block-start: 0;
+    }
+
+    .room__paragraph {
+      break-inside: avoid;
+      margin-block-end: var(--space-s);
+    }
+  }
+</style>

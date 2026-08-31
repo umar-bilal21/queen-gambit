@@ -1,0 +1,83 @@
+---
+/**
+ * The opening band of an inner page: eyebrow, display title, subtitle.
+ *
+ * Compact by design — inner pages open straight onto their content, so this
+ * is a heading rather than a full-screen moment. The header above it is
+ * condensed navy, and this band continues that ground so the two read as one.
+ */
+interface Props {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+  /**
+   * The Contact reference centres everything under one very large headline;
+   * the Essence page reads left, like the homepage. Without this the page had
+   * two alignments arguing with each other down its length.
+   */
+  align?: 'start' | 'center';
+}
+
+const { eyebrow, title, subtitle, align = 'start' } = Astro.props;
+---
+
+<section class:list={['page-hero', `page-hero--${align}`]} id="page-hero" aria-labelledby="page-hero-title">
+  <div class="page-hero__inner u-container">
+    <p class="page-hero__eyebrow u-eyebrow u-eyebrow--wide" data-reveal>
+      {eyebrow}
+    </p>
+    <h1 class="page-hero__title" id="page-hero-title" data-reveal-heading>
+      {title}
+    </h1>
+    {subtitle && (
+      <p class="page-hero__subtitle" data-reveal data-reveal-delay="0.15">
+        {subtitle}
+      </p>
+    )}
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    padding-block: clamp(7rem, 16vh, 11rem) var(--space-2xl);
+    /* The same step every section on the site closes on. */
+    background: var(--navy-deep);
+    color: var(--cream);
+  }
+
+  .page-hero__inner {
+    display: grid;
+    gap: var(--space-s);
+    justify-items: start;
+  }
+
+  .page-hero--center .page-hero__inner {
+    justify-items: center;
+    text-align: center;
+  }
+
+  /* Centred, the headline is the page's whole opening gesture, so it takes the
+     full measure rather than the narrow one the left-aligned version uses. */
+  .page-hero--center .page-hero__title {
+    max-width: 22ch;
+  }
+
+  .page-hero--center .page-hero__subtitle {
+    max-width: 46ch;
+  }
+
+  .page-hero__eyebrow {
+    color: var(--gold-light);
+  }
+
+  .page-hero__title {
+    font-size: var(--step-5);
+    max-width: 16ch;
+    text-wrap: balance;
+  }
+
+  .page-hero__subtitle {
+    max-width: var(--measure-narrow);
+    color: color-mix(in srgb, var(--cream) 80%, transparent);
+  }
+</style>

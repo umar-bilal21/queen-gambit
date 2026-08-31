@@ -1,4 +1,4 @@
-# The Queen's Gambit Castle — homepage
+# The Queen's Gambit Castle
 
 **Live: <https://umar-bilal21.github.io/queen-gambit/>**
 
@@ -6,10 +6,15 @@ A redesign of the homepage for [thequeensgambithouse.com](https://thequeensgambi
 — an oceanfront castle in New Smyrna Beach, Florida, built as a work of art by
 Frank J. Russo.
 
-This is a **pitch**, not a replacement. It is one route whose job is to win the
-client's approval on a direction. It does not touch the existing WordPress and
-WooCommerce site, it has no CMS, and it has no inner pages — see
-[ADR 0001](docs/adr/0001-astro-over-wordpress.md).
+This is a **pitch**, not a replacement. It does not touch the existing WordPress
+and WooCommerce site and it has no CMS — see
+[ADR 0001](docs/adr/0001-astro-over-wordpress.md). Three routes:
+
+| Route | What it is |
+| --- | --- |
+| `/` | The homepage: Intro, Hero, and the eleven scroll-driven sections. |
+| `/essence/` | "The Essence of The Queen's Gambit Castle": two room experiences — the Oceanfront Terrace and Gardens, and the Door of Perception Master Chamber — each with a photo row and details card. |
+| `/contact/` | The contact page: contact details, the gambit mark, and an inquiry form that submits as a mailto. |
 
 ## Running it
 
@@ -75,9 +80,10 @@ CONTEXT.md            the glossary — normative for vocabulary
 **Two test seams**, deliberately only two. `src/motion/state.ts` holds the only
 real logic (which Belief is Active, the Intro's state machine) and imports
 neither the DOM nor GSAP, so it is unit-tested. Everything observable is covered
-by one Playwright spec against the production build. Visual fidelity is *not*
-tested — it is reviewed by screenshot, because a test that pins pixels fails on
-every legitimate design change and teaches you to ignore it.
+by the Playwright specs against the production build — the homepage suite and
+the inner-pages suite. Visual fidelity is *not* tested — it is reviewed by
+screenshot, because a test that pins pixels fails on every legitimate design
+change and teaches you to ignore it.
 
 ## Decisions worth reading before changing things
 

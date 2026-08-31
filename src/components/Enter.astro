@@ -15,9 +15,12 @@ import type { Photo } from '../content/images';
 interface Props {
   left: Photo;
   right: Photo;
+  title?: string;
+  subtitle?: string;
+  label?: string;
 }
 
-const { left, right } = Astro.props;
+const { left, right, title = site.enter.title, subtitle = site.enter.subtitle, label = site.enter.cta } = Astro.props;
 ---
 
 <section class="enter" id="enter" aria-labelledby="enter-title">
@@ -46,12 +49,12 @@ const { left, right } = Astro.props;
   </div>
 
   <div class="enter__inner u-container">
-    <h2 class="enter__title" id="enter-title" data-reveal-heading>{site.enter.title}</h2>
+    <h2 class="enter__title" id="enter-title" data-reveal-heading>{title}</h2>
     <p class="enter__subtitle u-eyebrow" data-reveal data-reveal-delay="0.12">
-      {site.enter.subtitle}
+      {subtitle}
     </p>
     <a class="enter__cta u-eyebrow" href={contactHref} data-reveal data-reveal-delay="0.24">
-      {site.enter.cta}
+      {label}
     </a>
   </div>
 </section>

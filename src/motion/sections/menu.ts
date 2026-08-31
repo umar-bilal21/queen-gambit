@@ -34,9 +34,15 @@ function initMenu(_context: MotionContext): void {
      * transparent over the Hero photograph and the monogram and toggle sit on
      * bright sky. Closing hands the condensed state back to the scroll trigger,
      * unless the visitor is already past the Hero.
+     *
+     * Inner pages have no Hero and render the header condensed from the start,
+     * so there is nothing to hand back — the bar stays condensed.
      */
     if (open) header?.setAttribute('data-condensed', 'true');
-    else if (window.scrollY < window.innerHeight * HERO_PASSED_RATIO) {
+    else if (
+      document.querySelector('#hero') &&
+      window.scrollY < window.innerHeight * HERO_PASSED_RATIO
+    ) {
       header?.setAttribute('data-condensed', 'false');
     }
   };

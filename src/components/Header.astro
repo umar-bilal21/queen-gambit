@@ -3,24 +3,46 @@ import { site, contactHref } from '../content/site';
 import Monogram from './Monogram.astro';
 
 /**
- * Transparent over the Hero, condensing to solid navy once the visitor scrolls
- * past it. The condensing itself is driven by the motion island.
+ * The fixed header.
  *
- * Every link resolves to a section that exists on this page. There are no inner
- * pages, and a dead link in a pitch is a leak you then have to explain.
+ * On the homepage it is transparent over the Hero, condensing to solid navy
+ * once the visitor scrolls past it. Inner pages have no Hero to sit over, so
+ * they render it condensed from the start via the `condensed` prop; the motion
+ * island finds no `#hero` there and leaves the initial state alone.
+ *
+ * The links differ by page. The homepage links to its own sections; the inner
+ * pages link to Home, The Essence and Contact. Every link must resolve to
+ * something real — a dead link in a pitch is a leak you then have to explain.
  */
+interface Props {
+  /** 'home' links to the page's sections; 'page' links to the site's pages. */
+  variant?: 'home' | 'page';
+  /** Start solid navy rather than transparent. Inner pages pass true. */
+  condensed?: boolean;
+}
+
+const { variant = 'home', condensed = false } = Astro.props;
+const links = variant === 'page' ? site.navPages : site.nav;
 ---
 
-<header class="header" data-header>
+<header
+  class="header"
+  data-header
+  data-condensed={condensed ? 'true' : undefined}
+>
   <div class="header__inner">
-    <a class="header__mark" href="#hero" aria-label={`${site.name} — home`}>
+    <a
+      class="header__mark"
+      href={variant === 'home' ? '#hero' : '/'}
+      aria-label={`${site.name} — home`}
+    >
       <Monogram size="2.1rem" label={null} />
     </a>
 
     <nav class="header__nav" aria-label="Sections">
       <ul class="header__list">
         {
-          site.nav.map((item) => (
+          links.map((item) => (
             <li>
               <a class="header__link u-eyebrow" href={item.href}>
                 {item.label}
@@ -31,7 +53,14 @@ import Monogram from './Monogram.astro';
       </ul>
     </nav>
 
-    <a class="header__contact u-eyebrow" href={contactHref}>Contact</a>
+    {/*
+      The homepage links to sections in the centre, so the right-hand CONTACT
+      carries the one cross-page action. Inner pages already link to Contact
+      in the centre nav, so the right-hand button would be a duplicate.
+    */}
+    {variant === 'home' && (
+      <a class="header__contact u-eyebrow" href={contactHref}>Contact</a>
+    )}
 
     <button
       class="header__toggle"
@@ -55,7 +84,7 @@ import Monogram from './Monogram.astro';
   <div class="header__menu" id="header-menu" data-menu hidden>
     <ul class="header__menu-list">
       {
-        site.nav.map((item) => (
+        links.map((item) => (
           <li>
             <a class="header__menu-link" href={item.href} data-menu-link>
               {item.label}
@@ -63,11 +92,13 @@ import Monogram from './Monogram.astro';
           </li>
         ))
       }
-      <li>
-        <a class="header__menu-link" href={contactHref} data-menu-link>
-          Contact
-        </a>
-      </li>
+      {variant === 'home' && (
+        <li>
+          <a class="header__menu-link" href={contactHref} data-menu-link>
+            Contact
+          </a>
+        </li>
+      )}
     </ul>
   </div>
 </header>
@@ -193,6 +224,15 @@ import Monogram from './Monogram.astro';
   }
 
   .header__menu {
+    /*
+     * A full-height navy panel. Without the height the panel ends where its
+     * links end and the page shows through below it — visible the moment an
+     * inner page's light copy sits behind the menu.
+     */
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 100%;
+    min-height: calc(100svh - 100%);
     background: var(--navy);
     border-block-start: 1px solid color-mix(in srgb, var(--cream) 15%, transparent);
   }

@@ -19,6 +19,21 @@ export interface Room {
   readonly name: string;
 }
 
+/** One experience block on the Essence page: photo row, copy, details card. */
+export interface RoomExperience {
+  readonly name: string;
+  readonly location: string;
+  readonly heading: string;
+  readonly subheading: string;
+  readonly paragraphs: readonly string[];
+  /** The philosophy line, when the block has one. */
+  readonly quote?: string;
+  /** Bullets shown on the details card, in the reference's style. */
+  /** Heads the plaque, so the card says what it is listing. */
+  readonly detailsLabel: string;
+  readonly details: readonly string[];
+}
+
 export const site = {
   /** Used in <title>, structured data, and the Enter section's mailto subject. */
   name: "The Queen's Gambit Castle",
@@ -178,6 +193,112 @@ export const site = {
   },
 
   /**
+   * The Essence page — "Home: The Essence Of The Queen's Gambit Castle"
+   * (issue #30). Two room experiences, each with a photo row and a details
+   * card in the reference's "Photos | details of room" style.
+   */
+  essence: {
+    meta: {
+      title: 'The Essence — The Queen’s Gambit Castle',
+      description:
+        'Oceanfront terrace gardens and the Door of Perception master chamber — the spaces that make The Queen’s Gambit Castle a living work of art on the Florida coast.',
+    },
+    hero: {
+      eyebrow: 'THE ESSENCE',
+      title: 'The Essence of The Queen’s Gambit Castle',
+      subtitle:
+        'TWO SIGNATURE EXPERIENCES — THE OCEANFRONT TERRACE AND GARDENS, AND THE DOOR OF PERCEPTION MASTER CHAMBER',
+      scrollCue: 'Scroll',
+    },
+    rooms: [
+      {
+        name: 'Oceanfront Terrace and Gardens',
+        location: 'OUTDOOR LIVING',
+        heading: 'Oceanfront Terrace and Gardens',
+        subheading: 'Featuring “The Patience Move” — a master’s philosophy in motion',
+        paragraphs: [
+          'Set against sweeping ocean views, the Oceanfront Terrace and Gardens extend The Queen’s Gambit into an immersive outdoor setting designed for gathering, reflection, and entertaining.',
+          'The space brings the estate’s larger chess philosophy into the landscape. Mona, the Divine Goddess of Philosophy, represents strategy and intention, while Norma, Mother Nature, symbolizes balance. Throughout the experience, marine life becomes part of the living chessboard: coral reefs as bishops, fish as pawns, whales as rooks, and sea turtles as knights moving as between land and sea.',
+          'At the center is The Patience Move, a reminder that every meaningful move requires foresight. Through its gardens, oceanfront setting, and symbolic design, the terrace connects luxury real estate with a deeper message of conservation, balance, and protecting the natural world that surrounds the estate.',
+        ],
+        detailsLabel: 'THE TERRACE AT A GLANCE',
+        details: [
+          'Sweeping ocean views',
+          'The Patience Move at its centre',
+          'Mona — Goddess of Philosophy',
+          'Norma — Mother Nature',
+          'Marine-life living chessboard',
+        ],
+      },
+      {
+        name: 'Door of Perception Master Chamber',
+        location: 'MASTER SUITE',
+        heading: 'Door of Perception Master Chamber',
+        subheading: 'Master Suite | New Smyrna Beach',
+        paragraphs: [
+          'The Door of Perception Master Chamber is a private retreat designed to feel immersive, luxurious, and deeply serene. Inspired by themes of perception, reflection, and awakening, the suite brings together custom art, architectural detail, and ocean inspired elements to create a one of a kind residential experience.',
+          'The main wall features Mona, the Goddess of Philosophy, whose painted gaze becomes a striking focal point within the room. Surrounding her, detailed coral imagery and marine inspired artwork bring depth and movement to the space, while a sculptural octopus extends across the ceiling with a jeweled third eye, adding an unexpected layer of artistry and symbolism.',
+          'Peacock mosaics introduce rich color and intricate craftsmanship throughout the suite. In the adjoining space, the Fire Rain chandelier combines glass and light to create the appearance of suspended droplets, giving the room the atmosphere of a private luxury hotel or destination resort.',
+          'Designed for privacy, comfort, and quiet reflection, the master chamber offers an intimate escape within the residence. Every detail has been curated to make the suite feel less like a traditional bedroom and more like a private experiential retreat overlooking the coastal setting of New Smyrna Beach.',
+          'At the heart of the room is a philosophy that reflects its calm and contemplative character:',
+        ],
+        quote: '“Love is not kind. Love is patience.”',
+        detailsLabel: 'THE CHAMBER AT A GLANCE',
+        details: [
+          'Custom art and architecture',
+          'Mona — Goddess of Philosophy',
+          'Sculptural octopus with jeweled third eye',
+          'Peacock mosaics',
+          'Fire Rain chandelier',
+          'Overlooking New Smyrna Beach',
+        ],
+      },
+    ] as const satisfies readonly RoomExperience[],
+    cta: {
+      title: 'Experience the Essence',
+      subtitle: 'FOR PRIVATE VISITS, PARTNERSHIPS, MEDIA AND ALL GENERAL INQUIRIES',
+      label: 'CONTACT US',
+    },
+  },
+
+  /**
+   * The Contact page (issue #31). Follows the reference's single-column
+   * layout: a main heading, contact details, a gambit piece in place of the
+   * key, and a two-column inquiry form. The form submits to a mailto with the
+   * subject prefilled — the pitch has no backend.
+   */
+  contactPage: {
+    meta: {
+      title: 'Contact — The Queen’s Gambit Castle',
+      description:
+        'Connect with The Queen’s Gambit Castle for private events, partnerships, property inquiries, media, or general information.',
+    },
+    hero: {
+      eyebrow: 'CONTACT',
+      title: 'Connect With The Queen’s Gambit',
+      subtitle: 'Step Into The Queen’s Gambit',
+      intro:
+        'For private events, partnerships, property inquiries, media, or general information, connect with our team.',
+    },
+    inquiries: {
+      heading: 'ALL INQUIRIES',
+      email: 'thequeensgambitlandmark@gmail.com',
+      phone: null,
+      location: 'NEW SMYRNA BEACH, FLORIDA',
+    },
+    form: {
+      heading: 'SEND AN INQUIRY',
+      fields: {
+        name: 'FULL NAME',
+        email: 'EMAIL',
+        phone: 'PHONE',
+        message: 'MESSAGE',
+      },
+      submit: 'SUBMIT INQUIRY',
+    },
+  },
+
+  /**
    * The email address reads "landmark" while the copy reads "Castle". That is
    * the client's real working address and the inconsistency is deliberate and
    * reported to them, not papered over with an invented address (ADR 0004).
@@ -202,6 +323,8 @@ export const site = {
       { label: 'The Story', href: '#story' },
       { label: 'Our Beliefs', href: '#beliefs' },
       { label: 'Gallery', href: '#gallery' },
+      { label: 'The Essence', href: '/essence/' },
+      { label: 'Contact', href: '/contact/' },
     ],
     backToTop: 'Back to top',
     credit: '© 2026 The Queen’s Gambit Castle. All rights reserved.',
@@ -216,6 +339,17 @@ export const site = {
     { label: 'The Story', href: '#story' },
     { label: 'Our Beliefs', href: '#beliefs' },
     { label: 'Gallery', href: '#gallery' },
+  ],
+
+  /**
+   * The inner pages, shown in the header of the Essence and Contact pages.
+   * "Home" always resolves to the homepage; the other two are the pages
+   * themselves. The homepage header keeps its section links instead.
+   */
+  navPages: [
+    { label: 'Home', href: '/' },
+    { label: 'The Essence', href: '/essence/' },
+    { label: 'Contact', href: '/contact/' },
   ],
 } as const;
 

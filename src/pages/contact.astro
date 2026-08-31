@@ -1,0 +1,290 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import PageHero from '../components/PageHero.astro';
+import GambitMark from '../components/GambitMark.astro';
+import Footer from '../components/Footer.astro';
+
+import { site, contactHref } from '../content/site';
+import { images } from '../content/images';
+---
+
+<Base
+  title={site.contactPage.meta.title}
+  description={site.contactPage.meta.description}
+  skipTarget="page-hero"
+>
+  <Header variant="page" condensed />
+
+  <main id="main">
+    <PageHero
+      eyebrow={site.contactPage.hero.eyebrow}
+      title={site.contactPage.hero.title}
+      align="center"
+    />
+
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <div class="contact__inner u-container">
+        {/*
+          The subtitle used to appear here as well as in the hero above, so the
+          page said "Step Into The Queen's Gambit" twice within one screen.
+        */}
+        <div class="contact__intro" data-reveal-group>
+          <p class="contact__step u-eyebrow">{site.contactPage.hero.subtitle}</p>
+          <p class="contact__lede">{site.contactPage.hero.intro}</p>
+        </div>
+
+        <div class="contact__details" data-reveal-group>
+          <p class="contact__details-heading u-eyebrow u-eyebrow--wide">
+            {site.contactPage.inquiries.heading}
+          </p>
+
+          <ul class="contact__list">
+            <li>
+              <a class="contact__email" href={contactHref}>
+                {site.contactPage.inquiries.email}
+              </a>
+            </li>
+            {site.contactPage.inquiries.phone && (
+              <li>
+                <a class="contact__phone" href={`tel:${site.contactPage.inquiries.phone}`}>
+                  {site.contactPage.inquiries.phone}
+                </a>
+              </li>
+            )}
+            <li class="contact__location">{site.contactPage.inquiries.location}</li>
+          </ul>
+        </div>
+
+        {/*
+          The reference sets a small key between its details and its form. This
+          is that mark, as a queen — the piece the place is named for.
+        */}
+        <GambitMark class="contact__mark" size="4.5rem" />
+
+        <form
+          class="contact__form"
+          method="post"
+          action={contactHref}
+          data-contact-form
+          data-subject={site.contact.emailSubject}
+        >
+          <p class="contact__form-heading u-eyebrow" id="contact-title">
+            {site.contactPage.form.heading}
+          </p>
+
+          <div class="contact__fields">
+            <label class="contact__field contact__field--name">
+              <span class="u-eyebrow">{site.contactPage.form.fields.name}</span>
+              <input type="text" name="name" autocomplete="name" required />
+            </label>
+
+            <label class="contact__field contact__field--email">
+              <span class="u-eyebrow">{site.contactPage.form.fields.email}</span>
+              <input type="email" name="email" autocomplete="email" required />
+            </label>
+
+            <label class="contact__field contact__field--phone">
+              <span class="u-eyebrow">{site.contactPage.form.fields.phone}</span>
+              <input type="tel" name="phone" autocomplete="tel" />
+            </label>
+
+            <label class="contact__field contact__field--message">
+              <span class="u-eyebrow">{site.contactPage.form.fields.message}</span>
+              <textarea name="message" rows={2} required></textarea>
+            </label>
+          </div>
+
+          <button class="contact__submit u-eyebrow" type="submit">
+            {site.contactPage.form.submit}
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <Footer photo={images.poolToOcean} />
+</Base>
+
+<style>
+  .contact {
+    padding-block: var(--space-2xl);
+    background: var(--navy);
+    color: var(--cream);
+  }
+
+  .contact__inner {
+    display: grid;
+    gap: var(--space-xl);
+    justify-items: center;
+    text-align: center;
+  }
+
+  /* Intro ---------------------------------------------------------------- */
+
+  .contact__intro {
+    display: grid;
+    gap: var(--space-xs);
+    justify-items: center;
+  }
+
+  .contact__step {
+    color: var(--gold-light);
+  }
+
+  .contact__lede {
+    max-width: var(--measure-narrow);
+    color: color-mix(in srgb, var(--cream) 80%, transparent);
+  }
+
+  /* Details -------------------------------------------------------------- */
+
+  .contact__details {
+    display: grid;
+    gap: var(--space-s);
+    justify-items: center;
+  }
+
+  .contact__details-heading {
+    color: var(--gold-light);
+  }
+
+  /*
+   * The mark is a beat between the details and the form, not a section of its
+   * own. It had the largest step on the site above and below it, which left it
+   * stranded in a screen of empty navy.
+   */
+  .contact__mark {
+    color: var(--gold-light);
+    margin-block: calc(var(--space-xl) * -0.62);
+  }
+
+  .contact__list {
+    display: grid;
+    gap: var(--space-xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--step-0);
+  }
+
+  .contact__email,
+  .contact__phone {
+    color: var(--gold-light);
+    border-block-end: 1px solid color-mix(in srgb, var(--gold) 45%, transparent);
+    padding-block-end: 2px;
+    transition: border-color 0.3s var(--ease-out);
+  }
+
+  .contact__email:hover,
+  .contact__phone:hover {
+    border-color: var(--gold);
+  }
+
+  .contact__location {
+    color: var(--ink-muted);
+  }
+
+  /* Form ----------------------------------------------------------------- */
+
+  .contact__form {
+    display: grid;
+    gap: var(--space-l);
+    justify-items: center;
+    width: 100%;
+    max-width: 52rem;
+    padding-block-start: var(--space-s);
+  }
+
+  .contact__form-heading {
+    color: var(--gold-light);
+  }
+
+  .contact__fields {
+    display: grid;
+    gap: var(--space-m);
+    width: 100%;
+  }
+
+  /*
+   * Two to a row, as the reference sets them. Message spans, because a single
+   * line for a message invites a single line of message.
+   */
+  @media (min-width: 44rem) {
+    .contact__fields {
+      grid-template-columns: 1fr 1fr;
+      column-gap: clamp(2rem, 5vw, 4rem);
+    }
+
+    /*
+     * Message sits beside phone rather than spanning, as the reference sets
+     * it. Spanning left an empty cell next to the phone field, which read as a
+     * missing input rather than as breathing room.
+     */
+    .contact__field--message {
+      grid-column: 2;
+      grid-row: 2;
+    }
+  }
+
+  .contact__field {
+    display: grid;
+    gap: var(--space-2xs);
+    text-align: start;
+  }
+
+  .contact__field span {
+    font-size: var(--step--1);
+    letter-spacing: var(--tracking-caps);
+    color: color-mix(in srgb, var(--cream) 68%, transparent);
+  }
+
+  /* The reference's underline inputs, translated to the brand palette. */
+  .contact__field input,
+  .contact__field textarea {
+    width: 100%;
+    padding-block: var(--space-2xs);
+    border: 0;
+    border-block-end: 1px solid color-mix(in srgb, var(--cream) 30%, transparent);
+    border-radius: 0;
+    background: transparent;
+    color: var(--cream);
+    font: inherit;
+    resize: vertical;
+    transition: border-color 0.3s var(--ease-out);
+  }
+
+  .contact__field input:focus,
+  .contact__field textarea:focus {
+    outline: none;
+    border-block-end-color: var(--gold);
+  }
+
+  .contact__field input::placeholder,
+  .contact__field textarea::placeholder {
+    color: color-mix(in srgb, var(--cream) 38%, transparent);
+  }
+
+  .contact__submit {
+    padding: 1.05rem 2.8rem;
+    background: var(--gold);
+    color: var(--navy-abyss);
+    transition:
+      background-color 0.35s var(--ease-out),
+      transform 0.35s var(--ease-out);
+  }
+
+  .contact__submit:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+  }
+
+  /* Two-column fields on wide screens, as in the reference: name/email in the
+     first row, phone/message in the second. */
+  @media (min-width: 52rem) {
+    .contact__fields {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-m);
+    }
+  }
+</style>
