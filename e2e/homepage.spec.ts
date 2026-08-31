@@ -350,7 +350,16 @@ test.describe('small screens', () => {
     await skipIntro(page);
 
     for (const id of SECTIONS) {
-      await page.locator(`#${id}`).scrollIntoViewIfNeeded();
+      /*
+       * Scrolled in the page rather than through `scrollIntoViewIfNeeded`,
+       * which waits for the element to be stable first. Nothing on this page is
+       * ever stable by that definition — the reef drifts continuously, the
+       * gallery rail drifts continuously — so on those sections the wait can
+       * never be satisfied and the test times out having measured nothing.
+       */
+      await page.evaluate((sel) => {
+        document.querySelector(sel)?.scrollIntoView({ block: 'center' });
+      }, `#${id}`);
       await page.waitForTimeout(400);
 
       const { scrollWidth, clientWidth } = await page.evaluate(() => ({
