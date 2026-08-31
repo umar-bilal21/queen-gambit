@@ -288,6 +288,27 @@ export const images = {
   },
 
   /**
+   * The photograph behind each inner page's opening band.
+   *
+   * The Essence takes the building itself, since the page is about what is
+   * inside it. Contact takes the ocean seen between the terrace columns — the
+   * view a visitor is being invited toward, which is the right note above an
+   * enquiry form.
+   *
+   * Neither repeats a photograph already used elsewhere on its own page.
+   */
+  pageHero: {
+    essence: photo(
+      galleryElevation,
+      "The Castle's ocean elevation seen at an angle, its terraces, columns and blue-tiled roofs stepping down to the lawn.",
+    ),
+    contact: photo(
+      enterColonnade,
+      'The Atlantic seen between two tiled columns from the Castle terrace.',
+    ),
+  },
+
+  /**
    * The Essence page's photography, in the same order as the room blocks.
    *
    * Each block shows a row of three photographs beside a details card, as in

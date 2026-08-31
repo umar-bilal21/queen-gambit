@@ -1,15 +1,23 @@
 ---
+import { Image } from 'astro:assets';
+
+import type { Photo } from '../content/images';
+
 /**
- * The opening band of an inner page: eyebrow, display title, subtitle.
+ * The opening band of an inner page: eyebrow, display title, subtitle, over a
+ * photograph of the building.
  *
- * Compact by design — inner pages open straight onto their content, so this
- * is a heading rather than a full-screen moment. The header above it is
- * condensed navy, and this band continues that ground so the two read as one.
+ * Compact by design — inner pages open onto their content rather than a
+ * full-screen moment, so this is a heading with a view behind it rather than a
+ * second hero. The header above it is condensed navy and this band continues
+ * that ground, so the two read as one.
  */
 interface Props {
   eyebrow: string;
   title: string;
   subtitle?: string;
+  /** The view behind the band. Without one it falls back to flat navy. */
+  photo?: Photo;
   /**
    * The Contact reference centres everything under one very large headline;
    * the Essence page reads left, like the homepage. Without this the page had
@@ -18,10 +26,31 @@ interface Props {
   align?: 'start' | 'center';
 }
 
-const { eyebrow, title, subtitle, align = 'start' } = Astro.props;
+const { eyebrow, title, subtitle, photo, align = 'start' } = Astro.props;
 ---
 
-<section class:list={['page-hero', `page-hero--${align}`]} id="page-hero" aria-labelledby="page-hero-title">
+<section
+  class:list={['page-hero', `page-hero--${align}`]}
+  id="page-hero"
+  aria-labelledby="page-hero-title"
+>
+  {
+    photo && (
+      <div class="page-hero__media u-cover" aria-hidden="true">
+        <Image
+          src={photo.src}
+          alt=""
+          widths={[1200, 1800, 2400]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          quality={76}
+        />
+        <div class="page-hero__veil" />
+      </div>
+    )
+  }
+
   <div class="page-hero__inner u-container">
     <p class="page-hero__eyebrow u-eyebrow u-eyebrow--wide" data-reveal>
       {eyebrow}
@@ -29,20 +58,47 @@ const { eyebrow, title, subtitle, align = 'start' } = Astro.props;
     <h1 class="page-hero__title" id="page-hero-title" data-reveal-heading>
       {title}
     </h1>
-    {subtitle && (
-      <p class="page-hero__subtitle" data-reveal data-reveal-delay="0.15">
-        {subtitle}
-      </p>
-    )}
+    {
+      subtitle && (
+        <p class="page-hero__subtitle" data-reveal data-reveal-delay="0.15">
+          {subtitle}
+        </p>
+      )
+    }
   </div>
 </section>
 
 <style>
   .page-hero {
-    padding-block: clamp(7rem, 16vh, 11rem) var(--space-2xl);
-    /* The same step every section on the site closes on. */
+    position: relative;
+    padding-block: clamp(9rem, 22vh, 14rem) var(--space-2xl);
     background: var(--navy-deep);
     color: var(--cream);
+    overflow: clip;
+    isolation: isolate;
+  }
+
+  .page-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  /**
+   * Heavier at the foot than the head. The header sits over the top of this
+   * band, and the type sits at its bottom — so the gradient has to carry the
+   * navigation at one end and a display line at the other, and a flat wash
+   * does neither well.
+   */
+  .page-hero__veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--navy-abyss) 82%, transparent) 0%,
+      color-mix(in srgb, var(--navy-deep) 62%, transparent) 38%,
+      color-mix(in srgb, var(--navy-deep) 88%, transparent) 100%
+    );
   }
 
   .page-hero__inner {
@@ -74,10 +130,12 @@ const { eyebrow, title, subtitle, align = 'start' } = Astro.props;
     font-size: var(--step-5);
     max-width: 16ch;
     text-wrap: balance;
+    text-shadow: 0 2px 30px color-mix(in srgb, var(--navy-abyss) 70%, transparent);
   }
 
   .page-hero__subtitle {
     max-width: var(--measure-narrow);
-    color: color-mix(in srgb, var(--cream) 80%, transparent);
+    color: color-mix(in srgb, var(--cream) 84%, transparent);
+    text-shadow: 0 1px 18px color-mix(in srgb, var(--navy-abyss) 80%, transparent);
   }
 </style>

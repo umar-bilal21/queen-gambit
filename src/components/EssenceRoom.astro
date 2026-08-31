@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 
+import { site } from '../content/site';
 import type { RoomExperience } from '../content/site';
 import type { Photo } from '../content/images';
 import Corners from './ornament/Corners.astro';
@@ -93,6 +94,15 @@ const slug = room.name.replace(/\s+/g, '-').toLowerCase();
           <path d="M33 6 L37 26" data-ornament-part></path>
         </g>
       </svg>
+
+      {
+        room.price && (
+          <p class="room__price">
+            <span class="room__price-label u-eyebrow">{site.essence.priceLabel}</span>
+            <span class="room__price-value">{room.price}</span>
+          </p>
+        )
+      }
 
       <p class="room__card-label u-eyebrow" id={`highlights-${slug}`}>
         {room.detailsLabel}
@@ -211,7 +221,34 @@ const slug = room.name.replace(/\s+/g, '-').toLowerCase();
     color: var(--gold-deep);
   }
 
+  /*
+   * The price leads the plaque, as it does in the reference: a small label over
+   * a large figure. These are placeholders — see the note in the content
+   * module — so the treatment is what matters here, not the number.
+   */
+  .room__price {
+    display: grid;
+    justify-items: center;
+    gap: 0.15rem;
+  }
+
+  .room__price-label {
+    color: var(--gold-deep);
+  }
+
+  .room__price-value {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    line-height: 1;
+    color: var(--navy-deep);
+  }
+
+  /* With a price above it, the list label is a subhead rather than the card's
+     opening line, so it takes a rule to separate the two. */
   .room__card-label {
+    width: 100%;
+    padding-block-start: var(--space-s);
+    border-block-start: 1px solid color-mix(in srgb, var(--gold-deep) 30%, transparent);
     color: color-mix(in srgb, var(--navy-deep) 62%, transparent);
   }
 

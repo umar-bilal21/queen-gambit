@@ -31,6 +31,13 @@ export interface RoomExperience {
   /** Bullets shown on the details card, in the reference's style. */
   /** Heads the plaque, so the card says what it is listing. */
   readonly detailsLabel: string;
+  /**
+   * PLACEHOLDER. The reference card leads on a price and the client asked for
+   * dummy figures to see the treatment. These are invented — they are not
+   * quoted, not approved, and mean nothing. Remove `price` here and the block
+   * disappears from the plaque; nothing else needs touching.
+   */
+  readonly price?: string;
   readonly details: readonly string[];
 }
 
@@ -221,6 +228,7 @@ export const site = {
           'The space brings the estate’s larger chess philosophy into the landscape. Mona, the Divine Goddess of Philosophy, represents strategy and intention, while Norma, Mother Nature, symbolizes balance. Throughout the experience, marine life becomes part of the living chessboard: coral reefs as bishops, fish as pawns, whales as rooks, and sea turtles as knights moving as between land and sea.',
           'At the center is The Patience Move, a reminder that every meaningful move requires foresight. Through its gardens, oceanfront setting, and symbolic design, the terrace connects luxury real estate with a deeper message of conservation, balance, and protecting the natural world that surrounds the estate.',
         ],
+        price: '$1,250,000',
         detailsLabel: 'THE TERRACE AT A GLANCE',
         details: [
           'Sweeping ocean views',
@@ -243,6 +251,7 @@ export const site = {
           'At the heart of the room is a philosophy that reflects its calm and contemplative character:',
         ],
         quote: '“Love is not kind. Love is patience.”',
+        price: '$2,400,000',
         detailsLabel: 'THE CHAMBER AT A GLANCE',
         details: [
           'Custom art and architecture',
@@ -254,6 +263,9 @@ export const site = {
         ],
       },
     ] as const satisfies readonly RoomExperience[],
+    /** Heads the placeholder price, as the reference does. */
+    priceLabel: 'STARTING AT',
+
     cta: {
       title: 'Experience the Essence',
       subtitle: 'FOR PRIVATE VISITS, PARTNERSHIPS, MEDIA AND ALL GENERAL INQUIRIES',
