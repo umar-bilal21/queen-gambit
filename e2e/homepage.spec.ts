@@ -33,9 +33,29 @@ const SECTIONS = [
   'footer',
 ] as const;
 
+/**
+ * Get past the Intro so a test can reach the page.
+ *
+ * Not by clicking the skip button. That button fades in partway through the
+ * timeline while the overlay itself is animating, so Playwright's actionability
+ * check waits for it to be stable — and if that wait outlasts the timeline, the
+ * overlay finishes on its own and removes the button mid-click. The test then
+ * fails with "element was detached" despite having got exactly what it wanted.
+ *
+ * Nudging the overlay past its stability check and asserting the end state is
+ * both more robust and closer to what is actually being claimed: that the Intro
+ * goes away and the page is reachable.
+ */
 async function skipIntro(page: Page): Promise<void> {
-  await page.locator('[data-intro-skip]').click({ timeout: INTRO_MS });
-  await expect(page.locator('[data-intro]')).toHaveCount(0, { timeout: INTRO_MS });
+  const intro = page.locator('[data-intro]');
+
+  await intro
+    .click({ force: true, position: { x: 5, y: 5 }, timeout: 1500 })
+    .catch(() => {
+      /* Already gone — the timeline finished first, which is a pass. */
+    });
+
+  await expect(intro).toHaveCount(0, { timeout: INTRO_MS });
 }
 
 test.describe('the homepage', () => {

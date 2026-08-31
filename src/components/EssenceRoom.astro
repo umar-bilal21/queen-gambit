@@ -176,16 +176,18 @@ const slug = room.name.replace(/\s+/g, '-').toLowerCase();
   }
 
   /**
-   * Gold hairline and a soft corner on every frame. On a navy ground an
-   * unframed photograph reads as a hole cut in the page; the frame is what
-   * makes it read as placed.
+   * Gold hairline on every frame. On a navy ground an unframed photograph
+   * reads as a hole cut in the page; the frame is what makes it read as placed.
+   *
+   * Square corners, like every frame on the homepage. The reference rounds its
+   * own, but nothing else on this site does, and a rounded corner here read as
+   * a different hand rather than as a detail.
    */
   .room__photo {
     position: relative;
     aspect-ratio: 3 / 4;
     overflow: clip;
     border: 1px solid color-mix(in srgb, var(--gold) 42%, transparent);
-    border-radius: 6px;
     background: color-mix(in srgb, var(--cream) 6%, transparent);
   }
 
@@ -206,7 +208,6 @@ const slug = room.name.replace(/\s+/g, '-').toLowerCase();
     padding: clamp(2rem, 3.5vw, 2.75rem) clamp(1.5rem, 3vw, 2.25rem);
     background: var(--cream);
     color: var(--navy-deep);
-    border-radius: 6px;
     text-align: center;
     isolation: isolate;
   }

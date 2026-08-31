@@ -290,19 +290,24 @@ export const images = {
   /**
    * The photograph behind each inner page's opening band.
    *
-   * The Essence takes the painted turtle ceiling rather than the building's
-   * exterior. An exterior read as a near-repeat of the homepage hero, and this
-   * page is about the artistry inside — so the image should be something only
-   * this house has. Contact takes the ocean seen between the terrace columns,
-   * the view a visitor is being invited toward, which is the right note above
-   * an enquiry form.
+   * The Essence takes the pool between its columns running out to the Atlantic,
+   * because that is what the page's own subtitle leads on — the Oceanfront
+   * Terrace and Gardens, the first of the two experiences it describes. Earlier
+   * drafts used the building's exterior, which read as a repeat of the homepage
+   * hero, and then a ceiling mural, which was distinctive but had nothing to do
+   * with the words beside it.
+   *
+   * Contact takes the ocean seen between the terrace columns, the view a visitor
+   * is being invited toward, which is the right note above an enquiry form.
+   *
+   * Neither repeats a photograph used elsewhere on its own page.
    *
    * Neither repeats a photograph already used elsewhere on its own page.
    */
   pageHero: {
     essence: photo(
-      galleryTurtle,
-      'A large sea turtle painted across a ceiling, its shell patterned in coral and gold.',
+      galleryPoolOcean,
+      'The swimming pool framed by tiled columns, its water continuing visually into the Atlantic beyond.',
     ),
     contact: photo(
       enterColonnade,
